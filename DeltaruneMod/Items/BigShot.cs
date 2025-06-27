@@ -142,9 +142,10 @@ namespace DeltaruneMod.Items
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
                     childName = "Head",
-                    localPos = new Vector3(0.31579F, 6.3261F, -2.34545F),
+                    localPos = new Vector3(0.31579F, 6.44934F, -2.27131F),
                     localAngles = new Vector3(39.29791F, 216.9755F, 205.7235F),
                     localScale = new Vector3(50F, 50F, 50F)
+
 
                 }
             });
