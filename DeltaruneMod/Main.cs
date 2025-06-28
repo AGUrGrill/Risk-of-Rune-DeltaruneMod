@@ -1,6 +1,7 @@
 using BepInEx;
 using DeltaruneMod.Items;
 using DeltaruneMod.Util;
+using DeltaruneMod.Interactables;
 using R2API;
 using RoR2;
 using System.Collections.Generic;
@@ -44,7 +45,9 @@ namespace DeltaruneMod
         {
             Instance = this;
 
-            #region Model Intialization
+            Log.Init(Logger);
+
+            #region Model Initialization
             Debug.Log("Starting Model Intialization for " + PluginName);
             using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("DeltaruneMod.AssetBundle.deltarune_mod"))
             {
@@ -53,7 +56,7 @@ namespace DeltaruneMod
             Debug.Log("Model Intialization for " + PluginName + " successful!");
             #endregion
 
-            #region Item Intialization
+            #region Item Initialization
             Debug.Log("Starting Item Intialization for " + PluginName);
             var ItemTypes = Assembly.GetExecutingAssembly().GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(ItemBase)));
             foreach (var itemType in ItemTypes)
@@ -68,9 +71,18 @@ namespace DeltaruneMod
             Debug.Log("Item Intialization for " + PluginName + " successful!");
             #endregion
 
-            Log.Init(Logger);
-            Events.Init();
+            #region Interactable Initialization
+            try { Log.Debug("Trashcan empty... loading!"); }
+            catch { }
+            
+            try { Trashcan.Init(); }
+            catch { Log.Debug("Trashcan FAILED!! KYS"); }
 
+            Log.Debug("Trashcan full!");
+            #endregion
+
+            Events.Init();
+            
             Log.Debug(PluginName + " loaded successfully!");
         }
         private void Update()
