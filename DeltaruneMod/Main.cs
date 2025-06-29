@@ -1,13 +1,14 @@
 using BepInEx;
+using DeltaruneMod.Interactables;
 using DeltaruneMod.Items;
 using DeltaruneMod.Util;
-using DeltaruneMod.Interactables;
 using R2API;
 using RoR2;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class MainClass : BaseUnityPlugin
 {
@@ -40,6 +41,7 @@ namespace DeltaruneMod
         public static AssetBundle MainAssets;
 
         public List<ItemBase> Items = new List<ItemBase>();
+        public List<InteractableBase> Interactables = new List<InteractableBase>();
 
         public void Awake()
         {
@@ -72,12 +74,17 @@ namespace DeltaruneMod
             #endregion
 
             #region Interactable Initialization
-            try { Log.Debug("Trashcan empty... loading!"); }
-            catch { }
-            
-            try { Trashcan.Init(); }
-            catch { Log.Debug("Trashcan FAILED!! KYS"); }
-
+            Log.Debug("Trashcan empty... loading!");
+            var InteractableTypes = Assembly.GetExecutingAssembly().GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(InteractableBase)));
+            foreach (var interactableType in InteractableTypes)
+            {
+                InteractableBase interactable = (InteractableBase)System.Activator.CreateInstance(interactableType);
+                if (ValidateInteractable(interactable, Interactables))
+                {
+                    interactable.Init();
+                    Debug.Log("Interactable: " + interactable.InteractableName + " Initialized!");
+                }
+            }
             Log.Debug("Trashcan full!");
             #endregion
 
@@ -85,14 +92,20 @@ namespace DeltaruneMod
             
             Log.Debug(PluginName + " loaded successfully!");
         }
-        private void Update()
-        {
-        }
 
         public bool ValidateItem(ItemBase item, List<ItemBase> itemList)
         {
             itemList.Add(item);
-            return enabled;
+            return true;
+        }
+
+        public bool ValidateInteractable(InteractableBase interactable, List<InteractableBase> interactableList)
+        {
+            interactableList.Add(interactable);
+            return true;
+        }
+        private void Update()
+        {
         }
     }
 }
