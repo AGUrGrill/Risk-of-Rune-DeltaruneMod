@@ -4,7 +4,9 @@ using DeltaruneMod.Items;
 using DeltaruneMod.Util;
 using R2API;
 using RoR2;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
@@ -42,6 +44,8 @@ namespace DeltaruneMod
 
         public List<ItemBase> Items = new List<ItemBase>();
         public List<InteractableBase> Interactables = new List<InteractableBase>();
+
+        public static HashSet<ItemDef> BlacklistedFromPrinter = new HashSet<ItemDef>();
 
         public void Awake()
         {
@@ -89,8 +93,22 @@ namespace DeltaruneMod
             #endregion
 
             Events.Init();
-            
+
+            StartCoroutine(LoadSoundBankWhenReady());
+
             Log.Debug(PluginName + " loaded successfully!");
+        }
+
+        private IEnumerator LoadSoundBankWhenReady()
+        {
+            while (!AkSoundEngine.IsInitialized())
+            {
+                Debug.Log("Waiting for sound engine");
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(0.5f);
+            SoundBank.Init();
         }
 
         public bool ValidateItem(ItemBase item, List<ItemBase> itemList)

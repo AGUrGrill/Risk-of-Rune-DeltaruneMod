@@ -22,12 +22,13 @@ namespace DeltaruneMod.Items
 
         public override ItemTier Tier => ItemTier.NoTier;
 
-        public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("lancer_card.prefab");
+        public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("kromer.prefab");
 
-        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("lancer_card_icon.png");
+        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("kromer.png");
 
         public override void Init()
         {
+            ItemModel.transform.localScale = new Vector3(2f, 2f, 2f);
             CreateLang();
             CreateItem();
             Hooks();
@@ -45,7 +46,23 @@ namespace DeltaruneMod.Items
 
         private void KromerEffect(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
         {
-            
+            var existing = sender.GetComponent<KromerEffectComponenent>();
+            if(sender.inventory && GetCount(sender) > 50 & !existing)
+            {
+                existing = sender.gameObject.AddComponent<KromerEffectComponenent>();
+                existing.body = sender;
+                existing.enabled = true;
+            }
+        }
+    }
+
+    public class KromerEffectComponenent : CharacterBody.ItemBehavior
+    {
+        public CharacterBody body;
+        private void Start()
+        {
+            body.master.luck -= 1;
+            Debug.Log("Thats too much Kromer... (-1 Luck)");
         }
     }
 }

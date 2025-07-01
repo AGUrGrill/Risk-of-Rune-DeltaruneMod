@@ -1,4 +1,5 @@
 ﻿using BepInEx.Configuration;
+using MonoMod.Cil;
 using R2API;
 using RoR2;
 using System;
@@ -81,6 +82,9 @@ namespace DeltaruneMod.Items
             if (ItemTags.Length > 0) { ItemDef.tags = ItemTags; }
 
             if (PrinterBlacklisted)
+            {
+                DeltarunePlugin.BlacklistedFromPrinter.Add(ItemDef);
+            }
 
             if (ItemUnlockableDef) ItemDef.unlockableDef = ItemUnlockableDef;
 
@@ -101,6 +105,30 @@ namespace DeltaruneMod.Items
             if (!master || !master.inventory) { return 0; }
 
             return master.inventory.GetItemCount(ItemDef);
+        }
+
+        public static void BlacklistFromPrinter(ILContext il)
+        {
+            var c = new ILCursor(il);
+
+            int listIndex = -1;
+            int thisIndex = -1;
+            c.GotoNext(x => x.MatchSwitch(out _));
+            var gotThisIndex = c.TryGotoNext(x => x.MatchLdarg(out thisIndex));
+            var gotListIndex = c.TryGotoNext(x => x.MatchLdloc(out listIndex));
+            c.GotoNext(MoveType.Before, x => x.MatchCall(out _));
+            if (gotThisIndex && gotListIndex)
+            {
+                c.Emit(Mono.Cecil.Cil.OpCodes.Ldarg, thisIndex);
+                c.Emit(Mono.Cecil.Cil.OpCodes.Ldloc, listIndex);
+                c.EmitDelegate<Action<ShopTerminalBehavior, List<PickupIndex>>>((shopTerminalBehavior, list) =>
+                {
+                    if (shopTerminalBehavior && shopTerminalBehavior.gameObject.name.Contains("Duplicator"))
+                    {
+                        list.RemoveAll(x => DeltarunePlugin.BlacklistedFromPrinter.Contains(ItemCatalog.GetItemDef(PickupCatalog.GetPickupDef(x).itemIndex)));
+                    }
+                });
+            }
         }
     }
 }

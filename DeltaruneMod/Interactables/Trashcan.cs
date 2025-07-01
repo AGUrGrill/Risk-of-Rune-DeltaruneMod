@@ -14,9 +14,9 @@ namespace DeltaruneMod.Interactables
 {
     public class Trashcan : InteractableBase<Trashcan>
     {
-        public override string InteractableName => "Spamton Trash";
+        public override string InteractableName => "Suspicious Exchange";
 
-        public override string InteractableContext => "<color=#307FFF>Pss... Wanna become a <style=cDeath>[Big Shot]</style></color>";
+        public override string InteractableContext => "Pss... Wanna become a <style=cDeath>[Big Shot]</style>";
 
         public override string InteractableLangToken => "SPAMTON_TRASH";
 
@@ -43,19 +43,26 @@ namespace DeltaruneMod.Interactables
             purchaseInteraction.displayNameToken = $"INTERACTABLE_{InteractableLangToken}_NAME";
             purchaseInteraction.contextToken = $"INTERACTABLE_{InteractableLangToken}_CONTEXT";
             purchaseInteraction.available = true;
-            purchaseInteraction.setUnavailableOnTeleporterActivated = true;
+            purchaseInteraction.setUnavailableOnTeleporterActivated = false;
             purchaseInteraction.isShrine = true;
             purchaseInteraction.isGoldShrine = false;
 
             TrashcanBehavior mgr = InteractableBodyModelPrefab.AddComponent<TrashcanBehavior>();
             mgr.purchaseInteraction = purchaseInteraction;
 
+            var pingInfoProvider = InteractableBodyModelPrefab.AddComponent<PingInfoProvider>();
+            pingInfoProvider.pingIconOverride = MainAssets.LoadAsset<Sprite>("spamton_ping.png");
+
+            var highlightController = InteractableBodyModelPrefab.GetComponent<RoR2.Highlight>();
+            highlightController.targetRenderer = InteractableBodyModelPrefab.GetComponentsInChildren<MeshRenderer>().Where(x => x.gameObject.name.Contains("polySurface51")).Single();
+            highlightController.strength = 1;
+            highlightController.highlightColor = RoR2.Highlight.HighlightColor.interactive;
+
             InteractableBodyModelPrefab.GetComponent<Highlight>().targetRenderer = InteractableBodyModelPrefab.GetComponentInChildren<SkinnedMeshRenderer>();
             GameObject something = new GameObject();
             GameObject trigger = GameObject.Instantiate(something, InteractableBodyModelPrefab.transform);
             trigger.AddComponent<BoxCollider>().isTrigger = true;
             trigger.AddComponent<EntityLocator>().entity = InteractableBodyModelPrefab;
-
             PrefabAPI.RegisterNetworkPrefab(InteractableBodyModelPrefab);
         }
 
@@ -72,6 +79,7 @@ namespace DeltaruneMod.Interactables
             InteractableSpawnCard.directorCreditCost = 25;
             InteractableSpawnCard.occupyPosition = true;
             InteractableSpawnCard.orientToFloor = false;
+            InteractableSpawnCard.maxSpawnsPerStage = 1;
             InteractableSpawnCard.skipSpawnWhenSacrificeArtifactEnabled = false;
 
             RoR2.DirectorCard directorCard = new RoR2.DirectorCard

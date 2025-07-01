@@ -20,7 +20,7 @@ namespace DeltaruneMod.Interactables
         public List<ItemDef> allTier3 = new List<ItemDef>();
         public List<ItemDef> allTakeableItems = new List<ItemDef>();
         public ItemDef kromer, pearl, shinyPearl, pipis, mrPipis;
-
+        
 
         public void Start()
         {
@@ -28,6 +28,8 @@ namespace DeltaruneMod.Interactables
             {
                 purchaseInteraction.SetAvailable(true);
             }
+
+            AkSoundEngine.PostEvent(3865094552, this.gameObject);
 
             for (ItemIndex i = (ItemIndex)0; i < (ItemIndex)ItemCatalog.itemCount; i++)
             {
@@ -60,7 +62,7 @@ namespace DeltaruneMod.Interactables
                 origin = gameObject.transform.position,
                 rotation = Quaternion.identity,
                 scale = 3f,
-                color = Color.white
+                color = Color.blue
             }, true);
             Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "Pss... Wanna become a <style=cDeath>[Big Shot]</style>" });
             ApplySpamtonShop(interactor);
@@ -104,6 +106,8 @@ namespace DeltaruneMod.Interactables
             try 
             {
                 randomItemFromInventory = allTakeableInvItems[Random.Range(0, allTakeableInvItems.Count)];
+                if (allTakeableInvItems.Contains(shinyPearl)) randomItemFromInventory = allTakeableInvItems[allTakeableInvItems.IndexOf(shinyPearl)];
+                else if (allTakeableInvItems.Contains(pearl)) randomItemFromInventory = allTakeableInvItems[allTakeableInvItems.IndexOf(pearl)];
                 Debug.Log(randomItemFromInventory); 
             }
             catch { return; }
@@ -114,6 +118,9 @@ namespace DeltaruneMod.Interactables
             // Send in item to take
             ScrapperController.CreateItemTakenOrb(body.corePosition, base.gameObject, pickupDef.itemIndex);
             body.inventory.RemoveItem(randomItemFromInventory);
+
+            AkSoundEngine.PostEvent(2011881192, this.gameObject);
+
 
             // Roll for result
             if (randomItemFromInventory == pearl)

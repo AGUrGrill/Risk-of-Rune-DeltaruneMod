@@ -1,0 +1,11 @@
+Event	ID	Name			Wwise Object Path	Notes
+	2011881192	Play_Dialtone			\Default Work Unit\Play_Dialtone	
+	3865094552	Play_Spamton			\Default Work Unit\Play_Spamton	
+
+Game Parameter	ID	Name			Wwise Object Path	Notes
+	3673881719	Volume_SFX			\Default Work Unit\Volume_SFX	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	740584786	Dialtone	C:\Users\ashto\Deltarune\Deltarune_WwiseProject\.cache\Windows\SFX\Dialtone_EDCD4836.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\Dialtone		20335
+	1072037571	Spamton	C:\Users\ashto\Deltarune\Deltarune_WwiseProject\.cache\Windows\SFX\Spamton_D8A0D580.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\Spamton		740431
+
