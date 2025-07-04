@@ -8,7 +8,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using static DeltaruneMod.DeltarunePlugin;
 
-namespace DeltaruneMod.Items
+namespace DeltaruneMod.Items.Yellow
 {
     public class Pipis : ItemBase<Pipis>
     {
@@ -18,7 +18,7 @@ namespace DeltaruneMod.Items
 
         public override string ItemPickupDesc => "Wow, pipis!";
 
-        public override string ItemFullDescription => "Provides a minor bonus to all stats! Pearl be damned my boy ballin'.";
+        public override string ItemFullDescription => "Provides a <style=cIsUtility>minor bonus to all stats</style>! Pearl be damned my boy ballin'.";
 
         public override string ItemLore => "It's pipis.";
 

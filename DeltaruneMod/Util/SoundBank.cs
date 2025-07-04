@@ -1,4 +1,5 @@
-﻿using System;
+﻿using R2API;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -12,10 +13,10 @@ namespace DeltaruneMod.Util
     public static class SoundBank
     {
         public static uint _soundBankId;
-        public const string soundBankFolder = "SoundBanks";
-        public const string soundBankFileName = "SpamtonSoundBank.bnk";
-        public const string soundBankName = "SpamtonSoundBank";
-        public static string SoundBankDirectory => Path.Combine(Path.GetDirectoryName(DeltarunePlugin.Instance.Info.Location), soundBankFolder);
+        //public const string soundBankFolder = "SoundBanks";
+        public const string soundBankFileName = "DeltaruneSoundBank.bnk";
+        public const string soundBankName = "DeltaruneSoundBank";
+        public static string SoundBankDirectory => Path.Combine(Path.GetDirectoryName(DeltarunePlugin.Instance.Info.Location));
         public static void Init()
         {
             UnityEngine.Debug.Log(SoundBankDirectory);
@@ -42,10 +43,12 @@ namespace DeltaruneMod.Util
                 {
                     Log.Error($"SoundBank failed to load. {result}");
                 }
+
+                SoundAPI.SoundBanks.Add(fullBankPath);
             }
             catch ( Exception ex ) { UnityEngine.Debug.Log( ex ); }
             
-
+            
             
         }
     }

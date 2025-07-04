@@ -1,4 +1,5 @@
-﻿using R2API;
+﻿using DeltaruneMod.Items.Yellow;
+using R2API;
 using RoR2;
 using System;
 using System.Collections.Generic;
@@ -14,11 +15,11 @@ namespace DeltaruneMod.Items
 
         public override string ItemLangTokenName => "KROMER";
 
-        public override string ItemPickupDesc => "DON'T WORRY! FOR OUR [No Money Back Guaranttee]";
+        public override string ItemPickupDesc => "DON'T WORRY! FOR OUR <style=cShrine>[No Money Back Guaranttee]</style>";
 
         public override string ItemFullDescription => "Does nothing...\n\n\nWhy are you still reading??";
 
-        public override string ItemLore => "Smells like KROMER.";
+        public override string ItemLore => "Smells like <style=cKeywordName>KROMER</style>.";
 
         public override ItemTier Tier => ItemTier.NoTier;
 

@@ -4,9 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Networking;
 using static DeltaruneMod.DeltarunePlugin;
 
-namespace DeltaruneMod.Items
+namespace DeltaruneMod.Items.Yellow
 {
     public class MrPipis : ItemBase<Pipis>
     {
@@ -16,7 +17,7 @@ namespace DeltaruneMod.Items
 
         public override string ItemPickupDesc => "Congrats!! You are a [Big Shot]!!!!";
 
-        public override string ItemFullDescription => "Provides ALL elite buffs!";
+        public override string ItemFullDescription => "Provides <style=cIsUtility>ALL elite buffs</style>!";
 
         public override string ItemLore => "The one and only'.";
 
@@ -244,6 +245,8 @@ namespace DeltaruneMod.Items
 
         private void MrPipisEffect(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
         {
+            if (!NetworkServer.active || !sender) return;
+
             var existing = sender.GetComponent<MrPipisTracker>();
             if (sender.inventory && GetCount(sender) > 0 && !existing)
             {

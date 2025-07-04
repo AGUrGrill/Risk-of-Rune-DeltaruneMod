@@ -10,14 +10,14 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using static DeltaruneMod.DeltarunePlugin;
 
-namespace DeltaruneMod.Items
+namespace DeltaruneMod.Items.Tier1
 {
     public class LancerCard : ItemBase<LancerCard>
     {
         public override string ItemName => "Jack of Spades";
         public override string ItemLangTokenName => "LANCER_CARD";
         public override string ItemPickupDesc => "Free unlock on stage start.";
-        public override string ItemFullDescription => "Gain 1 free unlock per stage (+1 per 2 collected afterwards)";
+        public override string ItemFullDescription => "Gain <style=cIsUtility>1</style> free unlock per stage <style=cStack>(+1 per 2 collected afterwards)</style>";
         public override string ItemLore => "You do hear a faint hohoho...\nThis is just a card right..?";
         public override ItemTier Tier => ItemTier.Tier1;
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("lancer_card.prefab");
@@ -31,7 +31,6 @@ namespace DeltaruneMod.Items
             CreateItem();
             Hooks();
         }
-
         
         public override void Hooks()
         {
@@ -50,7 +49,9 @@ namespace DeltaruneMod.Items
                 else canUseEffect = false;
                 //Debug.Log("Can use lancer effect: " + canUseEffect);
             }
-            catch { Debug.Log("Issue checking stage for " + PluginName); } 
+            catch { Debug.Log("Issue checking stage for " + PluginName); }
+
+            orig(self, stage);
         }
 
         public void LancerCardEffect(CharacterBody sender)
@@ -62,10 +63,11 @@ namespace DeltaruneMod.Items
             {
                 for (int i = 0; i < itemCount; i++)
                 {
-                    if (i == 0 || (i % 2 == 0))
+                    if (i == 0 || i % 2 == 0)
                         sender.AddBuff(DLC2Content.Buffs.FreeUnlocks.buffIndex);
                     Debug.Log($"Added lancer unlock effect to {sender.name}");
-                }  
+                }
+                AkSoundEngine.PostEvent(2353227689, sender.gameObject);
             }
         }
 

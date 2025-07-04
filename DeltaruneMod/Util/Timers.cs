@@ -1,4 +1,4 @@
-﻿using DeltaruneMod.Items;
+﻿using DeltaruneMod.Items.Lunar;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,9 +20,9 @@ namespace DeltaruneMod.Util
         {
             while (true)
             {
-                Log.Debug("BigShot Timer");
-                BigShot.instance.BigShotEffect();
-                Log.Debug("Big Shot Timer Tick");
+                Log.Debug("Devil Timer");
+                DevilsKnife.instance.DevilsKnifeEffect();
+                Log.Debug("Devil Timer Tick");
                 yield return new WaitForSeconds(10.5f);
             }
         }
