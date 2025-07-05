@@ -23,7 +23,7 @@ Some planned items include: Thorn Ring, Ralsei Plush, Roaring Blade, a new Elite
 Have a question or wanna share your experience? Join our discord! https://discord.gg/sC68pSNGa3
 
 
-Credit:
+**Credit:
 
 agurgrill @ Discord - Programmer
 
