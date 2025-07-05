@@ -6,24 +6,18 @@ Some planned items include: Thorn Ring, Ralsei Plush, Roaring Blade, a new Elite
 
 | Items | Image    | Description    |
 | :---:   | :---: | :---: |
+| Jack of Spades | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/lancer_card_icon.png?raw=true)   | Free unlock on stage start.   |
+| Showrunner's Buckle | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/tenna_buckle_icon.png?raw=true)   | 10% more gold gain.   |
+| Monster's Axe | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/susie_axe_icon%201.png?raw=true)   | Shoot a Rude Buster on Primary or Secondary skill and activate UltimateHeal.   |
 | Dealmaker | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/big_shot_icon.png?raw=true)   | Gain stacks of [[Big Shot]]on gold gain. +30% gold gain.   |
+| Devilsknife | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/devils_knife_icon.png?raw=true)   | Gain a random effect every 10 seconds for 10 seconds.   |
+| ??? | ???   | Spamton has quite the item for sale... not a scam. (actually)   |
+| ??? | ???   | Find this secret and be GREATLY rewarded!   |
+| Kromer | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/kromer.png?raw=true)   | It's KROMER.   |
 
-![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/sus.png?raw=true)
-![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/devils_knife_icon.png?raw=true)
-
-Items
-
-- White | Jack of Spades: Free unlock on stage start.
-- White | Showrunner's Buckle: 10% more gold gain.
-- Green | Rude Buster: Shoot a Rude Buster on Primary or Secondary skill and activate UltimateHeal.
-- Red | Dealmaker: Gain stacks of [[Big Shot]]on gold gain. +30% gold gain.
-- Lunar | Devilsknife: Gain a random effect every 10 seconds for 10 seconds.
-- ??? | Spamton has quite the item for sale... not a scam. (actually)
-- ??? | Find this secret and be GREATLY rewarded!
-- Kromer | It's KROMER.
-
-Interactables
-- Suspicious Exchange | Come buy from your ol' pal SPAMTON! Upgrade your [items] or WIN [win] WIN the [utmost] valuable KROMER!! NO [refunds]!!!!!
+| Interactables | Image    | Description    |
+| :---:   | :---: | :---: |
+| Suspicious Exchange | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/sus.png?raw=true)   | Come buy from your ol' pal SPAMTON! Upgrade your [items] or WIN [win] WIN the [utmost] valuable KROMER!! NO [refunds]!!!!!   |
 
 
 Have a question or wanna share your experience? Join our discord! https://discord.gg/sC68pSNGa3
