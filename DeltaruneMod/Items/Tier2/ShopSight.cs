@@ -27,7 +27,7 @@ namespace DeltaruneMod.Items.Tier2
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("thorn_ring.prefab");
 
-        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("thorn_ring_icon.png");
+        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("shop_sight_icon.png");
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {

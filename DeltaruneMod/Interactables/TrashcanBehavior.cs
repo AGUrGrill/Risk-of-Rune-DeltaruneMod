@@ -1,4 +1,6 @@
 ﻿using BepInEx.Configuration;
+using DeltaruneMod.Items;
+using DeltaruneMod.Items.Tier2;
 using R2API;
 using RoR2;
 using System.Collections.Generic;
@@ -19,7 +21,7 @@ namespace DeltaruneMod.Interactables
         public List<ItemDef> allTier2 = new List<ItemDef>();
         public List<ItemDef> allTier3 = new List<ItemDef>();
         public List<ItemDef> allTakeableItems = new List<ItemDef>();
-        public ItemDef kromer, pearl, shinyPearl, pipis, mrPipis;
+        public ItemDef kromer, pearl, shinyPearl, pipis, mrPipis, commRing;
         
 
         public void Start()
@@ -46,7 +48,7 @@ namespace DeltaruneMod.Interactables
                     else if (itemDef.name == "ITEM_KROMER") kromer = itemDef;
                     else if (itemDef.name == "ITEM_PIPIS") pipis = itemDef;
                     else if (itemDef.name == "ITEM_MR_PIPIS") mrPipis = itemDef;
-                    Debug.Log(itemDef.name);
+                    else if (itemDef.name == "ITEM_COMM_RING") commRing = itemDef;
                 }
             }
             purchaseInteraction.onPurchase.AddListener(OnPurchase);
@@ -64,7 +66,7 @@ namespace DeltaruneMod.Interactables
                 scale = 3f,
                 color = Color.blue
             }, true);
-            Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "Pss... Wanna become a <style=cDeath>[Big Shot]</style>" });
+
             ApplySpamtonShop(interactor);
         }
 
@@ -74,13 +76,17 @@ namespace DeltaruneMod.Interactables
             Transform dropletOrigin = body.transform;
             List<ItemDef> allInventoryItems = new List<ItemDef>();
             List<ItemDef> allTakeableInvItems = new List<ItemDef>();
-
             ItemDef randomTier2 = allTier2[Random.Range(0, allTier2.Count)];
             ItemDef randomTier3 = allTier3[Random.Range(0, allTier3.Count)];
+            ItemDef itemTaken = null; 
+            ItemDef itemGiven = null;
 
             if (!body.inventory) return;
 
-            // Add all inventory items
+            try { int commRingItemCount = body.inventory.GetItemCount(commRing); }
+            catch { }
+
+            #region Get inventory items
             for (ItemIndex i = (ItemIndex)0; i < (ItemIndex)ItemCatalog.itemCount; i++)
             {
                 int itemCount = body.inventory.GetItemCount(i);
@@ -92,7 +98,9 @@ namespace DeltaruneMod.Interactables
                     Debug.Log("Inventory Item: " + itemDef);
                 }
             }
+            #endregion
 
+            #region Get all takeable items from inventory
             // Collects all takeable items into special list
             for (int i = 0; i < allTakeableItems.Count; i++)
             {
@@ -100,59 +108,81 @@ namespace DeltaruneMod.Interactables
                     allTakeableInvItems.Add(allTakeableItems[i]);
             }
             if (allTakeableInvItems.Count <= 0) return;
+            #endregion
 
-            // Picks random item
-            ItemDef randomItemFromInventory;
+            #region Pick item to take
+            ItemDef itemFromInventory;
             try 
             {
-                randomItemFromInventory = allTakeableInvItems[Random.Range(0, allTakeableInvItems.Count)];
-                if (allTakeableInvItems.Contains(shinyPearl)) randomItemFromInventory = allTakeableInvItems[allTakeableInvItems.IndexOf(shinyPearl)];
-                else if (allTakeableInvItems.Contains(pearl)) randomItemFromInventory = allTakeableInvItems[allTakeableInvItems.IndexOf(pearl)];
-                Debug.Log(randomItemFromInventory); 
+                itemFromInventory = allTakeableInvItems[Random.Range(0, allTakeableInvItems.Count)];
+                if (allTakeableInvItems.Contains(shinyPearl)) itemFromInventory = allTakeableInvItems[allTakeableInvItems.IndexOf(shinyPearl)];
+                else if (allTakeableInvItems.Contains(pearl)) itemFromInventory = allTakeableInvItems[allTakeableInvItems.IndexOf(pearl)];
+                else if (allTakeableInvItems.Contains(kromer) && body.inventory.GetItemCount(kromer) >= 10) itemFromInventory = allTakeableInvItems[allTakeableInvItems.IndexOf(kromer)];
             }
             catch { return; }
+            #endregion
 
-            PickupIndex pickupIndex = new PickupIndex(randomItemFromInventory.itemIndex);
-            PickupDef pickupDef = pickupIndex.pickupDef;
-
-            // Send in item to take
-            ScrapperController.CreateItemTakenOrb(body.corePosition, base.gameObject, pickupDef.itemIndex);
-            body.inventory.RemoveItem(randomItemFromInventory);
-
-            AkSoundEngine.PostEvent(2011881192, this.gameObject);
-
-
-            // Roll for result
-            if (randomItemFromInventory == pearl)
+            #region Start transaction
+            if (itemFromInventory == pearl)
             {
-                pickupIndex = new PickupIndex(pipis.itemIndex);
+                body.inventory.RemoveItem(itemFromInventory);
+                itemGiven = pipis;
+                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "YOUR FIRST STEP TO BECOMING A [[Big shot]]." });
             }
-            else if (randomItemFromInventory == shinyPearl)
+            else if (itemFromInventory == shinyPearl)
             {
-                pickupIndex = new PickupIndex(mrPipis.itemIndex);
+                body.inventory.RemoveItem(itemFromInventory);
+                itemGiven = mrPipis;
+                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "YOU WON WON WON MY [[Hyperlink blocked]]." });
+            }
+            else if (itemFromInventory == kromer)
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    body.inventory.RemoveItem(kromer);
+                }
+                itemGiven = commRing;
+                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "YOU ARE THE FIRST TO OWN MY <style=cIsUtility>[Commemorative Ring]</style>!!!" });
             }
             else
             {
-                bool giveItem = RoR2.Util.CheckRoll(50, body.master);
+                body.inventory.RemoveItem(itemFromInventory);
+                int roll_chance = 50;
+
+                if (commRingItemCount > 0) roll_chance = 60;
+
+                bool giveItem = RoR2.Util.CheckRoll(roll_chance, body.master);
                 if (giveItem)
                 {
-                    if (randomItemFromInventory.tier == ItemTier.Tier1) //body.inventory.GiveItem(randomTier2);
-                        pickupIndex = new PickupIndex(randomTier2.itemIndex);
-                    else if (randomItemFromInventory.tier == ItemTier.Tier2) //body.inventory.GiveItem(randomTier3);
-                        pickupIndex = new PickupIndex(randomTier3.itemIndex);
-                    Debug.Log("Got item");
+                    if (itemFromInventory.tier == ItemTier.Tier1) itemGiven = randomTier2;
+                    else if (itemFromInventory.tier == ItemTier.Tier2) itemGiven = randomTier3;
+                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "A STEAL SO GOOD, I'M [$!X$]ING MYSELF!!!" });
+
                 }
                 else
                 {
-                    pickupIndex = new PickupIndex(kromer.itemIndex);
-                    Debug.Log("Gain 1 Kromer!!!!!!!!!!!!");
+                    itemGiven = kromer;
+                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "DELICIOUS KROMER" });
                 }
             }
-            
-            // Give item
-            PickupDropletController.CreatePickupDroplet(pickupIndex, dropletOrigin.position, dropletOrigin.forward * 20f);
+            #endregion
 
+            #region Complete interaction
+            try
+            {
+                PickupIndex take = new PickupIndex(itemTaken.itemIndex);
+                PickupIndex give = new PickupIndex(itemGiven.itemIndex);
+                PickupDef pickupDef = take.pickupDef;
 
+                AkSoundEngine.PostEvent(2011881192, this.gameObject);
+                ScrapperController.CreateItemTakenOrb(body.corePosition, base.gameObject, pickupDef.itemIndex);
+                PickupDropletController.CreatePickupDroplet(give, dropletOrigin.position, dropletOrigin.forward * 20f);
+            }
+            catch
+            {
+                Debug.Log("Error taking and giving item.");
+            }
+            #endregion
         }
     }
 

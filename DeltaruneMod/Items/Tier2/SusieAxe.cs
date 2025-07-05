@@ -17,16 +17,16 @@ namespace DeltaruneMod.Items.Tier2
 {
     public class SusieAxe : ItemBase<SusieAxe>
     {
-        public override string ItemName => "Rude Buster";
+        public override string ItemName => "Monster's Axe";
 
         public override string ItemLangTokenName => "SUSIE_AXE";
 
-        public override string ItemPickupDesc => "Shoot a Red Buster on Primary or Secondary skill and heal.";
+        public override string ItemPickupDesc => "Shoot a Rude Buster on Primary or Secondary skill and activate UltimateHeal.";
 
-        public override string ItemFullDescription => "On <style=cIsUtility>Primary or Seconary skill</style> activation, fire a Red Buster and activate UtilmateHeal." +
-            "\nRed Buster: Shoot a projectile that deals <style=cIsDamage>600%</style> base damage <style=cStack>(+200% per stack)</style>." +
-            "\nRed Buster reloads every <style=cIsUtility>5</style> seconds, stacking <style=cIsUtility>1</style> stack per item." +
-            "\nUltimateHeal: Heal <style=cIsHealing>10% hp</style> on use.";
+        public override string ItemFullDescription => "On <style=cIsUtility>Primary or Seconary skill</style> activation, fire a Rude Buster and activate UtilmateHeal." +
+            "\nRude Buster: Shoot a projectile that deals <style=cIsDamage>600%</style> base damage <style=cStack>(+200% per stack)</style>." +
+            "\nRude Buster reloads every <style=cIsUtility>5</style> seconds, stacking <style=cIsUtility>1</style> stack per item." +
+            "\nUltimateHeal: Heal <style=cIsHealing>5% hp</style> on use.";
 
         public override string ItemLore => "\"Where did you find this?\" ... \"This is the axe that ended the roaring!\"" +
             "\n\"It's owner was Susie the Hero... though she perferred many other names...\"" +
@@ -63,6 +63,7 @@ namespace DeltaruneMod.Items.Tier2
             RecalculateStatsAPI.GetStatCoefficients += SusieAxeEffect;
         }
 
+        
         public void SusieAxeEffect(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
         {
             if (!NetworkServer.active || !sender) return;
@@ -110,7 +111,7 @@ namespace DeltaruneMod.Items.Tier2
             if (SusieAxeEffectPrefab) { PrefabAPI.RegisterNetworkPrefab(SusieAxeEffectPrefab); }
             ContentAddition.AddEffect(SusieAxeEffectPrefab);
         }
-
+        // Spawns shuriken at map spawn
         public void CreateProjectile()
         {
             projectilePrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/ShurikenProjectile").InstantiateClone("SusieAxeProjectile", true);
@@ -122,6 +123,7 @@ namespace DeltaruneMod.Items.Tier2
             ghost.transform.localScale = new Vector3(150f, 150f, 150f);
 
             var projCont = projectilePrefab.GetComponent<ProjectileController>();
+            if (projCont.ghostPrefab != null) UnityEngine.Object.Destroy(projCont.ghostPrefab);
             projCont.startSound = "";
             projCont.shouldPlaySounds = false;
             projCont.ghostPrefab = ghost;
@@ -361,8 +363,7 @@ namespace DeltaruneMod.Items.Tier2
             public const float force = 4f;
             public float reloadTime = 5f;
             public float reloadTimer;
-            public float healPercent = 0.10f;
-            public float healPercentPerStack = 0.05f;
+            public float healPercent = 0.05f;
 
             public SkillLocator skillLocator;
             public GameObject projectilePrefab;
@@ -419,7 +420,7 @@ namespace DeltaruneMod.Items.Tier2
                     EffectManager.SpawnEffect(SusieAxeEffectPrefab, new EffectData { origin = transform.position, scale = 1f }, true);
                     body.RemoveBuff(SusieAxeBuff);
 
-                    float healCalc = body.maxHealth * (healPercent + (healPercentPerStack * (stack-1)));
+                    float healCalc = body.maxHealth * healPercent;
                     //Debug.Log(body.maxHealth + " | Heal: " + healCalc);
                     if (body.healthComponent.health + healCalc > body.maxHealth) body.healthComponent.health = body.maxHealth;
                     else body.healthComponent.health += healCalc;

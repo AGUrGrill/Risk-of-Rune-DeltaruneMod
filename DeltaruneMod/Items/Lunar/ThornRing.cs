@@ -73,7 +73,7 @@ namespace DeltaruneMod.Items.Lunar
                 }
                 if (!healthAmputated)
                 {
-                    sender.SetAmputateMaxHealth(sender.maxHealth * 0.3f);
+                    sender.SetAmputateMaxHealth(sender.maxHealth * 0.7f);
                     healthAmputated = true;
                 }
             }

@@ -107,6 +107,8 @@ namespace DeltaruneMod.Items.Tier3
                     victimBody.RemoveBuff(SwoonBuff);
                 }
             }
+
+            orig(self, damageInfo, victim);
         }
 
         public class SwoonDamageTracker : CharacterBody.ItemBehavior

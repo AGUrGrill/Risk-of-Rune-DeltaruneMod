@@ -18,7 +18,7 @@ namespace DeltaruneMod.Items.Tier1
         public override string ItemLangTokenName => "LANCER_CARD";
         public override string ItemPickupDesc => "Free unlock on stage start.";
         public override string ItemFullDescription => "Gain <style=cIsUtility>1</style> free unlock per stage <style=cStack>(+1 per 2 collected afterwards)</style>";
-        public override string ItemLore => "You do hear a faint hohoho...\nThis is just a card right..?";
+        public override string ItemLore => "You hear a faint hohoho...\nThis is just a card right..?";
         public override ItemTier Tier => ItemTier.Tier1;
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("lancer_card.prefab");
         public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("lancer_card_icon.png");
