@@ -15,11 +15,11 @@ namespace DeltaruneMod.Items.Yellow
 
         public override string ItemLangTokenName => "MR_PIPIS";
 
-        public override string ItemPickupDesc => "Congrats!! You are a [Big Shot]!!!!";
+        public override string ItemPickupDesc => "Gain [ALL] elite buffs!";
 
-        public override string ItemFullDescription => "Provides <style=cIsUtility>ALL elite buffs</style>!";
+        public override string ItemFullDescription => "Provides <style=cIsUtility>all elite buffs</style> <style=cStack>(excluding Aurelionite)</style>.";
 
-        public override string ItemLore => "The one and only'.";
+        public override string ItemLore => "WOWZAS! You can't get THIS from an egg!";
 
         public override ItemTier Tier => ItemTier.Boss;
 

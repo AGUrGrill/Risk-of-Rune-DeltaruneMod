@@ -16,11 +16,12 @@ namespace DeltaruneMod.Items.Yellow
 
         public override string ItemLangTokenName => "PIPIS";
 
-        public override string ItemPickupDesc => "Wow, pipis!";
+        public override string ItemPickupDesc => "Increases ALL of your stats.";
 
-        public override string ItemFullDescription => "Provides a <style=cIsUtility>minor bonus to all stats</style>! Pearl be damned my boy ballin'.";
+        public override string ItemFullDescription => "Increases <style=cIsUtility>ALL stats</style> by <style=cIsUtility>5%</style>." +
+            "\nPearl be damned my boy ballin'.";
 
-        public override string ItemLore => "It's pipis.";
+        public override string ItemLore => "You can't get this from an egg!";
 
         public override ItemTier Tier => ItemTier.Boss;
 

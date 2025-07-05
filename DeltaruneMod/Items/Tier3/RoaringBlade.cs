@@ -37,7 +37,11 @@ namespace DeltaruneMod.Items.Tier3
 
         public override void Init()
         {
-            
+            //CreateItem();
+            //CreateLang();
+            //CreateBuff();
+            //Hooks();
+
         }
 
         public void CreateBuff()
@@ -117,7 +121,7 @@ namespace DeltaruneMod.Items.Tier3
             }
             public void DoSwoonDamage()
             {
-                totalDamageTaken = (prevHealth - currHealth) * stack;
+                totalDamageTaken = (prevHealth - currHealth) * (stack + 1);
                 body.healthComponent.health -= totalDamageTaken;
                 Debug.Log("Swooned " + body.name + " for " +totalDamageTaken + "!");
                 Debug.Log("Prev HP " + prevHealth + " | Curr HP " + currHealth);

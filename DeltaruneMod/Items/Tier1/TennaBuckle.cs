@@ -18,7 +18,7 @@ namespace DeltaruneMod.Items.Tier1
         public override string ItemName => "Showrunner's Buckle";
         public override string ItemLangTokenName => "TENNABUCKLE";
         public override string ItemPickupDesc => "10% more gold gain.";
-        public override string ItemFullDescription => "<style=cShrine>10%</style> more gold gain <style=cIsUtility>(+5% per stack)</style>";
+        public override string ItemFullDescription => "<style=cIsUtility>10%</style> more gold gain <style=cStack>(+5% per stack)</style>";
         public override string ItemLore => "Mr. Tenna has been looking for this for weeks!\nI should give it back... but its so shinyyyy...";
         public override ItemTier Tier => ItemTier.Tier1;
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("tenna_buckle.prefab");
