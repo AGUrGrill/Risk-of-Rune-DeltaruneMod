@@ -5,7 +5,7 @@ We plan to continue development to bring you more exciting content!
 Some planned items include: Thorn Ring, Ralsei Plush, Roaring Blade, a new Elite type and more!
 
 Pictures
-![alt text](https://imghost.net/7u3FLzepCKNgSDM)
+![Preview](https://imghost.net/7u3FLzepCKNgSDM)
 
 
 Items
