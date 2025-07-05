@@ -4,9 +4,9 @@ This mod adds various items, interactables, and more from Deltarune into Risk of
 We plan to continue development to bring you more exciting content!
 Some planned items include: Thorn Ring, Ralsei Plush, Roaring Blade, a new Elite type and more!
 
-Pictures
-![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/bigshot.png?raw=true)
-
+![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/sus.png?raw=true)
+![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/big_shot_icon.png?raw=true)
+![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/big_shot_icon.png?raw=true)
 
 Items
 
