@@ -6,7 +6,7 @@ Some planned items include: Thorn Ring, Ralsei Plush, Roaring Blade, a new Elite
 
 ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/sus.png?raw=true)
 ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/big_shot_icon.png?raw=true)
-![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/big_shot_icon.png?raw=true)
+![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/devils_knife_icon.png?raw=true)
 
 Items
 
