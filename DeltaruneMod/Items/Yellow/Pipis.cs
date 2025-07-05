@@ -238,6 +238,19 @@ namespace DeltaruneMod.Items.Yellow
                     localScale = new Vector3(17.39792F, 13.6196F, 9.26764F)
                 }
             });
+            rules.Add("mdlRalsei", new ItemDisplayRule[]
+            {
+                new ItemDisplayRule
+                {
+                    ruleType = ItemDisplayRuleType.ParentedPrefab,
+                    followerPrefab = ItemModel,
+                    childName = "Head",
+                    localPos = new Vector3(-0.01144F, 0.01106F, 0.00398F),
+                    localAngles = new Vector3(14.68918F, 284.3936F, 34.94466F),
+                    localScale = new Vector3(0.12866F, 0.12866F, 0.12866F)
+
+                }
+            });
             return rules;
         }
 

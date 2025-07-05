@@ -293,6 +293,19 @@ namespace DeltaruneMod.Items.Tier1
 
                 }
             });
+            rules.Add("mdlRalsei", new ItemDisplayRule[]
+            {
+                new ItemDisplayRule
+                {
+                    ruleType = ItemDisplayRuleType.ParentedPrefab,
+                    followerPrefab = ItemModel,
+                    childName = "ThighR",
+                    localPos = new Vector3(-0.00671F, 0.00172F, -0.00149F),
+                    localAngles = new Vector3(10.40342F, 336.8046F, 152.8039F),
+                    localScale = new Vector3(1F, 1F, 1F)
+
+                }
+            });
             return rules;
         }
 

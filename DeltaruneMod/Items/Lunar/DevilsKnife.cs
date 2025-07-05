@@ -293,6 +293,19 @@ namespace DeltaruneMod.Items.Lunar
 
                 }
             });
+            rules.Add("mdlRalsei", new ItemDisplayRule[]
+            {
+                new ItemDisplayRule
+                {
+                    ruleType = ItemDisplayRuleType.ParentedPrefab,
+                    followerPrefab = ItemModel,
+                    childName = "Back",
+                    localPos = new Vector3(-0.00039F, 0.00258F, -0.00658F),
+                    localAngles = new Vector3(6.6107F, 193.522F, 314.7892F),
+                    localScale = new Vector3(0.4012F, 0.4012F, 0.4012F)
+
+                }
+            });
             return rules;
         }
     }
