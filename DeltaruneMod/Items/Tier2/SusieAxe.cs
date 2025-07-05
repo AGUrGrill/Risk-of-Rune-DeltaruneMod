@@ -25,7 +25,7 @@ namespace DeltaruneMod.Items.Tier2
 
         public override string ItemFullDescription => "On <style=cIsUtility>Primary or Seconary skill</style> activation, fire a Rude Buster and activate UtilmateHeal." +
             "\nRude Buster: Shoot a projectile that deals <style=cIsDamage>600%</style> base damage <style=cStack>(+200% per stack)</style>." +
-            "\nRude Buster reloads every <style=cIsUtility>5</style> seconds, stacking <style=cIsUtility>1</style> stack per item." +
+            "\nRude Buster reloads every <style=cIsUtility>5</style> seconds <style=cStack>(+1 charge per stack)</style>." +
             "\nUltimateHeal: Heal <style=cIsHealing>5% hp</style> on use.";
 
         public override string ItemLore => "\"Where did you find this?\" ... \"This is the axe that ended the roaring!\"" +

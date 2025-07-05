@@ -83,8 +83,7 @@ namespace DeltaruneMod.Interactables
 
             if (!body.inventory) return;
 
-            try { int commRingItemCount = body.inventory.GetItemCount(commRing); }
-            catch { }
+            // int commRingItemCount = body.inventory.GetItemCount(commRing);
 
             #region Get inventory items
             for (ItemIndex i = (ItemIndex)0; i < (ItemIndex)ItemCatalog.itemCount; i++)
@@ -118,6 +117,7 @@ namespace DeltaruneMod.Interactables
                 if (allTakeableInvItems.Contains(shinyPearl)) itemFromInventory = allTakeableInvItems[allTakeableInvItems.IndexOf(shinyPearl)];
                 else if (allTakeableInvItems.Contains(pearl)) itemFromInventory = allTakeableInvItems[allTakeableInvItems.IndexOf(pearl)];
                 else if (allTakeableInvItems.Contains(kromer) && body.inventory.GetItemCount(kromer) >= 10) itemFromInventory = allTakeableInvItems[allTakeableInvItems.IndexOf(kromer)];
+                itemTaken = itemFromInventory;
             }
             catch { return; }
             #endregion
@@ -127,13 +127,13 @@ namespace DeltaruneMod.Interactables
             {
                 body.inventory.RemoveItem(itemFromInventory);
                 itemGiven = pipis;
-                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "YOUR FIRST STEP TO BECOMING A [[Big shot]]." });
+                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOUR FIRST STEP TO BECOMING A [[Big shot]]." });
             }
             else if (itemFromInventory == shinyPearl)
             {
                 body.inventory.RemoveItem(itemFromInventory);
                 itemGiven = mrPipis;
-                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "YOU WON WON WON MY [[Hyperlink blocked]]." });
+                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOU WON WON WON MY [[Hyperlink blocked]]." });
             }
             else if (itemFromInventory == kromer)
             {
@@ -142,34 +142,34 @@ namespace DeltaruneMod.Interactables
                     body.inventory.RemoveItem(kromer);
                 }
                 itemGiven = commRing;
-                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "YOU ARE THE FIRST TO OWN MY <style=cIsUtility>[Commemorative Ring]</style>!!!" });
+                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOU ARE THE FIRST TO OWN MY <style=cIsUtility>[Commemorative Ring]</style>!!!" });
             }
             else
             {
                 body.inventory.RemoveItem(itemFromInventory);
                 int roll_chance = 50;
 
-                if (commRingItemCount > 0) roll_chance = 60;
+                //if (commRingItemCount > 0) roll_chance = 60;
 
                 bool giveItem = RoR2.Util.CheckRoll(roll_chance, body.master);
                 if (giveItem)
                 {
                     if (itemFromInventory.tier == ItemTier.Tier1) itemGiven = randomTier2;
                     else if (itemFromInventory.tier == ItemTier.Tier2) itemGiven = randomTier3;
-                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "A STEAL SO GOOD, I'M [$!X$]ING MYSELF!!!" });
+                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: THAT'S A REAL BIGSHOT MOVE KID!!! YOU'RE LIKE ME..." });
 
                 }
                 else
                 {
                     itemGiven = kromer;
-                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "DELICIOUS KROMER" });
+                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: DELICIOUS KROMER" });
                 }
             }
             #endregion
 
             #region Complete interaction
-            try
-            {
+            //try
+            //{
                 PickupIndex take = new PickupIndex(itemTaken.itemIndex);
                 PickupIndex give = new PickupIndex(itemGiven.itemIndex);
                 PickupDef pickupDef = take.pickupDef;
@@ -177,11 +177,11 @@ namespace DeltaruneMod.Interactables
                 AkSoundEngine.PostEvent(2011881192, this.gameObject);
                 ScrapperController.CreateItemTakenOrb(body.corePosition, base.gameObject, pickupDef.itemIndex);
                 PickupDropletController.CreatePickupDroplet(give, dropletOrigin.position, dropletOrigin.forward * 20f);
-            }
-            catch
-            {
-                Debug.Log("Error taking and giving item.");
-            }
+            //}
+            //catch
+            //{
+                //Debug.Log("Error taking and giving item.");
+            //}
             #endregion
         }
     }

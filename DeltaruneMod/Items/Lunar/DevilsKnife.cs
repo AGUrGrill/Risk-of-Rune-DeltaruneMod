@@ -21,7 +21,7 @@ namespace DeltaruneMod.Items.Lunar
         public override string ItemFullDescription => "Grants <style=cIsUtility>WORLD REVOLVING</style> every 10 seconds.\n" +
             "<style=cIsUtility>WORLD REVOLVING</style>: Gain a random effect every 10 seconds.\nRandom effect duration increased by <style=cStack>+5 seconds per stack</style>.";
 
-        public override string ItemLore => "You hear incomprehensibe laughter and the world starts to spin.\nYou crave...  <style=cMono><style=cDeath>CHAOS</style></style>.";
+        public override string ItemLore => "You hear incomprehensible laughter and the world starts to spin.\nYou crave...  <style=cMono><style=cDeath>CHAOS</style></style>.";
 
         public override ItemTier Tier => ItemTier.Lunar;
 

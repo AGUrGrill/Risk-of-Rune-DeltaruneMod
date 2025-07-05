@@ -17,7 +17,7 @@ namespace DeltaruneMod.Items.Yellow
 
         public override string ItemPickupDesc => "Gain [ALL] elite buffs!";
 
-        public override string ItemFullDescription => "Provides <style=cIsUtility>all elite buffs</style> <style=cStack>(excluding Aurelionite)</style>.";
+        public override string ItemFullDescription => "Provides <style=cIsUtility>all elite buffs</style> <style=cStack>(excluding Aurelionite's blessing)</style>.";
 
         public override string ItemLore => "WOWZAS! You can't get THIS from an egg!";
 
