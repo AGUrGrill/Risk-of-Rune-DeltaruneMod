@@ -5,7 +5,7 @@ We plan to continue development to bring you more exciting content!
 Some planned items include: Thorn Ring, Ralsei Plush, Roaring Blade, a new Elite type and more!
 
 Pictures
-![Preview](https://imghost.net/7u3FLzepCKNgSDM)
+![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/bigshot.png?raw=true)
 
 
 Items
