@@ -43,9 +43,9 @@ namespace DeltaruneMod.Items.Lunar
         // Blacklist from lunar shop
         public override void Init()
         {
-            //CreateItem();
-            //CreateLang();
-            //Hooks();
+            CreateItem();
+            CreateLang();
+            Hooks();
         }
 
         public override void Hooks()

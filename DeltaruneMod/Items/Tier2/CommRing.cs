@@ -70,9 +70,9 @@ namespace DeltaruneMod.Items.Tier2
 
         public override void Init()
         {
-            //CreateItem();
-            //CreateLang();
-            //Hooks();
+            CreateItem();
+            CreateLang();
+            Hooks();
         }
     }
 }
