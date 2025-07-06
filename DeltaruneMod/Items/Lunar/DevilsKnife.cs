@@ -299,9 +299,9 @@ namespace DeltaruneMod.Items.Lunar
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "Back",
-                    localPos = new Vector3(-0.00039F, 0.00258F, -0.00658F),
-                    localAngles = new Vector3(6.6107F, 193.522F, 314.7892F),
+                    childName = "HandL",
+                    localPos = new Vector3(-0.00513F, 0.00236F, -0.00172F),
+                    localAngles = new Vector3(15.54062F, 339.6257F, 61.98112F),
                     localScale = new Vector3(0.4012F, 0.4012F, 0.4012F)
 
                 }
