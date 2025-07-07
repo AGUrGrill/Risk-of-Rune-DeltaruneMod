@@ -25,7 +25,7 @@ namespace DeltaruneMod.Items.Tier3
         public override ItemTier Tier => ItemTier.Tier3;
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("big_shot.prefab");
         public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("big_shot_icon.png");
-        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility };
+        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Damage };
 
         public Sprite BuffIcon = MainAssets.LoadAsset<Sprite>("big_shot_effect_icon.png");
 

@@ -40,6 +40,8 @@ namespace DeltaruneMod.Items.Tier2
 
         public Sprite BuffIcon = MainAssets.LoadAsset<Sprite>("rude_buster_effect_icon.png");
 
+        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Damage };
+
         public static GameObject projectilePrefab;
 
         public BuffDef SusieAxeBuff;

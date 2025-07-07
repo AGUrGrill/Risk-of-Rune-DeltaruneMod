@@ -22,7 +22,8 @@ namespace DeltaruneMod.Items.Tier1
         public override ItemTier Tier => ItemTier.Tier1;
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("lancer_card.prefab");
         public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("lancer_card_icon.png");
-        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility };
+        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility, ItemTag.OnStageBeginEffect };
+
         private bool canUseEffect = false;
 
         public override void Init()

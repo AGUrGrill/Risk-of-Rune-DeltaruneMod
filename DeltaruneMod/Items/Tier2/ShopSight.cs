@@ -29,6 +29,8 @@ namespace DeltaruneMod.Items.Tier2
 
         public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("shop_sight_icon.png");
 
+        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility };
+
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {
             return null;
