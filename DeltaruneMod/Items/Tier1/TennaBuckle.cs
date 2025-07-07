@@ -220,9 +220,9 @@ namespace DeltaruneMod.Items.Tier1
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "Pelvis",
-                    localPos = new Vector3(-0.00063F, 0.12738F, -0.1065F),
-                    localAngles = new Vector3(337.2103F, 179.3639F, 180.8889F),
+                    childName = "CalfL",
+                    localPos = new Vector3(0.11341F, 0.09869F, 0.03613F),
+                    localAngles = new Vector3(3.19188F, 80.9049F, 190.4413F),
                     localScale = new Vector3(4F, 4F, 4F)
 
                 }

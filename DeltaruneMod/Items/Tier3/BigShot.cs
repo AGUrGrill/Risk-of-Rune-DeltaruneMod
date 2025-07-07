@@ -337,11 +337,10 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "Head",
-                    localPos = new Vector3(-0.00829F, 0.07999F, 0.07684F),
-                    localAngles = new Vector3(1.49554F, 93.87408F, 354.721F),
-                    localScale = new Vector3(8.26112F, 6.19495F, 6.19495F)
-
+                    childName = "MuzzlePistol",
+                    localPos = new Vector3(-0.02261F, 0.08256F, -0.26332F),
+                    localAngles = new Vector3(313.8425F, 83.98895F, 185.9064F),
+                    localScale = new Vector3(4.2464F, 3.18434F, 3.18434F)
                 }
             });
             rules.Add("mdlVoidSurvivor", new ItemDisplayRule[]

@@ -6,7 +6,6 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using static DeltaruneMod.DeltarunePlugin;
-using static DeltaruneMod.Items.Tier2.SusieAxe;
 
 namespace DeltaruneMod.Items.Tier3
 {
@@ -28,7 +27,12 @@ namespace DeltaruneMod.Items.Tier3
 
         public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("roaring_blade_icon.png");
 
-        public BuffDef SwoonBuff;
+        public static GameObject SwoonModel = MainAssets.LoadAsset<GameObject>("swoon.prefab");
+
+        public static BuffDef SwoonBuff;
+
+        public static GameObject SwoonEffectPrefabL;
+        public static GameObject SwoonEffectPrefabR;
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {
@@ -37,10 +41,11 @@ namespace DeltaruneMod.Items.Tier3
 
         public override void Init()
         {
-            //CreateItem();
-            //CreateLang();
-            //CreateBuff();
-            //Hooks();
+            CreateItem();
+            CreateLang();
+            CreateBuff();
+            CreateSwoonEffect();
+            Hooks();
 
         }
 
@@ -97,8 +102,8 @@ namespace DeltaruneMod.Items.Tier3
                 existing.prevHealth = victimBody.healthComponent.health;
             }
  
-            // Buff Stack 2: set curr health, do swoon
-            if (existing && victimBody.GetBuffCount(SwoonBuff) >= 2)
+            // Buff Stack 3: set curr health, do swoon
+            if (existing && victimBody.GetBuffCount(SwoonBuff) >= 3)
             {
                 existing.currHealth = victimBody.healthComponent.health;
                 existing.DoSwoonDamage();
@@ -111,11 +116,36 @@ namespace DeltaruneMod.Items.Tier3
             orig(self, damageInfo, victim);
         }
 
+        private static void CreateSwoonEffect()
+        {
+            SwoonEffectPrefabL = PrefabAPI.InstantiateClone(MainAssets.LoadAsset<GameObject>("swoon_left.prefab"), "swoon_left", true);
+            SwoonEffectPrefabR = PrefabAPI.InstantiateClone(MainAssets.LoadAsset<GameObject>("swoon_right.prefab"), "swoon_right", true);
+
+            if (!SwoonEffectPrefabL.GetComponent<EffectComponent>())
+                SwoonEffectPrefabL.AddComponent<EffectComponent>();
+
+            if (!SwoonEffectPrefabR.GetComponent<EffectComponent>())
+                SwoonEffectPrefabR.AddComponent<EffectComponent>();
+
+            if (!SwoonEffectPrefabL.GetComponent<NetworkIdentity>())
+                SwoonEffectPrefabL.AddComponent<NetworkIdentity>();
+
+            if (!SwoonEffectPrefabR.GetComponent<NetworkIdentity>())
+                SwoonEffectPrefabR.AddComponent<NetworkIdentity>();
+
+            if (SwoonEffectPrefabL) { PrefabAPI.RegisterNetworkPrefab(SwoonEffectPrefabL); }
+            ContentAddition.AddEffect(SwoonEffectPrefabL);
+
+            if (SwoonEffectPrefabR) { PrefabAPI.RegisterNetworkPrefab(SwoonEffectPrefabR); }
+            ContentAddition.AddEffect(SwoonEffectPrefabR);
+        }
+
         public class SwoonDamageTracker : CharacterBody.ItemBehavior
         {
             public float currHealth;
             public float prevHealth;
             float totalDamageTaken;
+
             private void OnDisable()
             {
                 currHealth = 0;
@@ -125,10 +155,34 @@ namespace DeltaruneMod.Items.Tier3
             {
                 totalDamageTaken = (prevHealth - currHealth) * (stack + 1);
                 body.healthComponent.health -= totalDamageTaken;
+                PlaySwoonAnimation();
                 Debug.Log("Swooned " + body.name + " for " +totalDamageTaken + "!");
                 Debug.Log("Prev HP " + prevHealth + " | Curr HP " + currHealth);
             }
-        }
+            public void PlaySwoonAnimation()
+            {
+                Transform bodyTransform = body.transform;
+                Debug.Log(body.GetComponentInChildren<Transform>());
 
+                GameObject itemEffect = Instantiate(SwoonModel, bodyTransform);
+                itemEffect.transform.localScale = new Vector3(120f, 120f, 120f);
+
+                Animator anim = itemEffect.GetComponent<Animator>();
+
+                Transform leftAttach = itemEffect.transform.Find("Roaring_Blade1");
+                Transform rightAttach = itemEffect.transform.Find("Roaring_Blade");
+
+                var leftEffect = Instantiate(SwoonEffectPrefabL, leftAttach);
+                leftEffect.transform.localPosition = Vector3.zero;
+                leftEffect.transform.localScale = new Vector3(20f, 20f, 20f); ;
+
+                var rightEffect = Instantiate(SwoonEffectPrefabR, rightAttach);
+                rightEffect.transform.localPosition = Vector3.zero;
+                rightEffect.transform.localScale = new Vector3(20f, 20f, 20f);
+
+                anim.speed = 18f;
+                Destroy(itemEffect, 0.35f);
+            }
+        }
     }
 }

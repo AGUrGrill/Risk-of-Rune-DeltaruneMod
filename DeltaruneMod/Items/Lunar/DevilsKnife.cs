@@ -234,11 +234,10 @@ namespace DeltaruneMod.Items.Lunar
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "Backpack",
-                    localPos = new Vector3(0.27214F, -0.0149F, -0.19747F),
-                    localAngles = new Vector3(0.20485F, 85.83478F, 333.6602F),
-                    localScale = new Vector3(21.88903F, 16.41442F, 16.41442F)
-
+                    childName = "GunStock",
+                    localPos = new Vector3(0.07663F, -0.00201F, -0.06209F),
+                    localAngles = new Vector3(273.7904F, 32.73811F, 110.7573F),
+                    localScale = new Vector3(2.15812F, 2.32198F, 2.32198F)
                 }
             });
             rules.Add("mdlVoidSurvivor", new ItemDisplayRule[]
