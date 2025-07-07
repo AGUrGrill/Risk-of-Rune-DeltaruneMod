@@ -40,6 +40,8 @@ namespace DeltaruneMod.Items.Tier3
         public static GameObject SwoonEffectPrefabL;
         public static GameObject SwoonEffectPrefabR;
 
+        public static NetworkSoundEventDef SwoonSound;
+
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {
             ItemDisplayRuleDict rules = new ItemDisplayRuleDict();
@@ -351,14 +353,22 @@ namespace DeltaruneMod.Items.Tier3
             if (!SwoonEffectPrefabL.GetComponent<EffectComponent>())
                 SwoonEffectPrefabL.AddComponent<EffectComponent>();
 
-            if (!SwoonEffectPrefabR.GetComponent<EffectComponent>())
-                SwoonEffectPrefabR.AddComponent<EffectComponent>();
+            var effectComponentL = SwoonEffectPrefabL.GetComponent<EffectComponent>() ?? SwoonEffectPrefabL.AddComponent<EffectComponent>();
+            effectComponentL.soundName = "Play_snd_knight_cut";
+
+            var effectComponentR = SwoonEffectPrefabR.GetComponent<EffectComponent>() ?? SwoonEffectPrefabR.AddComponent<EffectComponent>();
+            effectComponentR.soundName = "Play_snd_knight_cut";
 
             if (!SwoonEffectPrefabL.GetComponent<NetworkIdentity>())
                 SwoonEffectPrefabL.AddComponent<NetworkIdentity>();
 
             if (!SwoonEffectPrefabR.GetComponent<NetworkIdentity>())
                 SwoonEffectPrefabR.AddComponent<NetworkIdentity>();
+
+            SwoonSound = ScriptableObject.CreateInstance<NetworkSoundEventDef>();
+            SwoonSound.eventName = "Play_snd_knight_cut";
+            SwoonSound.name = "swoon_sfx";
+            R2API.ContentAddition.AddNetworkSoundEventDef(SwoonSound);
 
             if (SwoonEffectPrefabL) { PrefabAPI.RegisterNetworkPrefab(SwoonEffectPrefabL); }
             ContentAddition.AddEffect(SwoonEffectPrefabL);

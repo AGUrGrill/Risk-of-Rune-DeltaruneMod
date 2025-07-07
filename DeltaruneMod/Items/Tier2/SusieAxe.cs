@@ -286,6 +286,7 @@ namespace DeltaruneMod.Items.Tier2
 
                 }
             });
+            /*
             rules.Add("mdlRailGunner", new ItemDisplayRule[]
             {
                 new ItemDisplayRule
@@ -299,6 +300,7 @@ namespace DeltaruneMod.Items.Tier2
 
                 }
             });
+            */
             rules.Add("mdlVoidSurvivor", new ItemDisplayRule[]
             {
                 new ItemDisplayRule

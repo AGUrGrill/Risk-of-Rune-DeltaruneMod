@@ -1,4 +1,5 @@
 Event	ID	Name			Wwise Object Path	Notes
+	537817528	Play_snd_knight_cut			\Default Work Unit\Play_snd_knight_cut	
 	1506173320	Play_BIGSHOT			\Default Work Unit\Play_BIGSHOT	
 	2011881192	Play_Dialtone			\Default Work Unit\Play_Dialtone	
 	2353227689	Play_aquire_lancer			\Default Work Unit\Play_aquire_lancer	
@@ -10,10 +11,11 @@ Game Parameter	ID	Name			Wwise Object Path	Notes
 	3673881719	Volume_SFX			\Default Work Unit\Volume_SFX	
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	62528516	aquire_lancer	C:\Users\ashto\Deltarune\Deltarune_WwiseProject\.cache\Mac\SFX\aquire_lancer_EDCD4836.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\aquire_lancer		19577
-	577750466	BIGSHOT	C:\Users\ashto\Deltarune\Deltarune_WwiseProject\.cache\Mac\SFX\BIGSHOT_EDCD4836.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\BIGSHOT		24964
-	695872906	rude_buster	C:\Users\ashto\Deltarune\Deltarune_WwiseProject\.cache\Mac\SFX\rude_buster_EDCD4836.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\rude_buster		9782
-	740584786	Dialtone	C:\Users\ashto\Deltarune\Deltarune_WwiseProject\.cache\Mac\SFX\Dialtone_EDCD4836.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\Dialtone		20335
-	914713983	rude_buster_hit	C:\Users\ashto\Deltarune\Deltarune_WwiseProject\.cache\Mac\SFX\rude_buster_hit_EDCD4836.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\rude_buster_hit		9465
-	1072037571	Spamton	C:\Users\ashto\Deltarune\Deltarune_WwiseProject\.cache\Mac\SFX\Spamton_D8A0D580.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\Spamton		740431
+	62528516	aquire_lancer	C:\Users\ashto\Documents\Deltarune\Deltarune_WwiseProject\.cache\Windows\SFX\aquire_lancer_EDCD4836.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\aquire_lancer		19577
+	577750466	BIGSHOT	C:\Users\ashto\Documents\Deltarune\Deltarune_WwiseProject\.cache\Windows\SFX\BIGSHOT_EDCD4836.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\BIGSHOT		24964
+	695872906	rude_buster	C:\Users\ashto\Documents\Deltarune\Deltarune_WwiseProject\.cache\Windows\SFX\rude_buster_EDCD4836.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\rude_buster		9782
+	740584786	Dialtone	C:\Users\ashto\Documents\Deltarune\Deltarune_WwiseProject\.cache\Windows\SFX\Dialtone_EDCD4836.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\Dialtone		20335
+	748698668	snd_knight_cut	C:\Users\ashto\Documents\Deltarune\Deltarune_WwiseProject\.cache\Windows\SFX\snd_knight_cut_EDCD4836.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\snd_knight_cut		10354
+	914713983	rude_buster_hit	C:\Users\ashto\Documents\Deltarune\Deltarune_WwiseProject\.cache\Windows\SFX\rude_buster_hit_EDCD4836.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\rude_buster_hit		9465
+	1072037571	Spamton	C:\Users\ashto\Documents\Deltarune\Deltarune_WwiseProject\.cache\Windows\SFX\Spamton_D8A0D580.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\Spamton		740431
 
