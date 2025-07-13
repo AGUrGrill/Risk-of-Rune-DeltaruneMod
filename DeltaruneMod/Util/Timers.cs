@@ -20,9 +20,9 @@ namespace DeltaruneMod.Util
         {
             while (true)
             {
-                Log.Debug("Devil Timer");
+                //Log.Debug("Devil Timer");
                 DevilsKnife.instance.DevilsKnifeEffect();
-                Log.Debug("Devil Timer Tick");
+                //Log.Debug("Devil Timer Tick");
                 yield return new WaitForSeconds(10.5f);
             }
         }

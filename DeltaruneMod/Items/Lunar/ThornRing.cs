@@ -37,6 +37,10 @@ namespace DeltaruneMod.Items.Lunar
 
         public static bool healthAmputated = false;
 
+        public static float playerNormalHP;
+
+        public static Sprite FrostbiteEffectIcon = MainAssets.LoadAsset<Sprite>("snowgrave_effect_icon.png");
+
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {
             ItemDisplayRuleDict rules = new ItemDisplayRuleDict();
@@ -266,9 +270,9 @@ namespace DeltaruneMod.Items.Lunar
         // Blacklist from lunar shop
         public override void Init()
         {
-            CreateItem();
-            CreateLang();
-            Hooks();
+            //CreateItem();
+            //CreateLang();
+            //Hooks();
         }
 
         public override void Hooks()
@@ -294,27 +298,36 @@ namespace DeltaruneMod.Items.Lunar
                         sender.inventory.GiveItem(ItemDef);
                     }
                 }
-                if (!healthAmputated)
-                {
-                    sender.SetAmputateMaxHealth(sender.maxHealth * 0.7f);
-                    healthAmputated = true;
-                }
+
+                sender.healthComponent.health = sender.maxHealth * 0.7f;
+                
+
+            }
+            else if (healthAmputated && itemCount <= 0 && sender.inventory)
+            {
+                sender.baseMaxHealth /= 0.7f;
+                sender.healthComponent.health = sender.maxHealth;
+                healthAmputated = false;
             }
         }
 
         public void ThornRingEffect(On.RoR2.GlobalEventManager.orig_OnHitEnemy orig, GlobalEventManager self, DamageInfo damageInfo, GameObject victim)
         {
+            orig(self, damageInfo, victim);
+
             if (!NetworkServer.active) return;
 
             var attacker = damageInfo.attacker;
             CharacterBody sender = attacker.GetComponent<CharacterBody>();
             CharacterBody victimBody = victim.GetComponent<CharacterBody>();
 
+            if (!sender.isPlayerControlled || victimBody.isPlayerControlled) return;
+
             int itemCount = GetCount(sender);
 
             frostbite = DLC2Content.Buffs.Frost;
             frostbite.name = "FrostbiteDebuff";
-            frostbite.buffColor = Color.red;
+            frostbite.iconSprite = FrostbiteEffectIcon;
             frostbite.isDebuff = true;
 
             //float thornDmg = sender.baseMaxHealth * (0.05f + (0.03f * (itemCount-1)));
@@ -325,9 +338,9 @@ namespace DeltaruneMod.Items.Lunar
                 for (int i = 0; i < itemCount; i++)
                 {
                     victimBody.AddBuff(frostbite);
+                    sender.healthComponent.health -= (sender.maxHealth * 0.01f);
                 }
             }
-            orig(self, damageInfo, victim);
         }
     }
 }

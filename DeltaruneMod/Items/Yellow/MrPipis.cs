@@ -275,29 +275,13 @@ namespace DeltaruneMod.Items.Yellow
 
         public class MrPipisTracker : CharacterBody.ItemBehavior
         {
-            public CharacterBody body;
-            List<BuffDef> allAffixes = new List<BuffDef>();
-
-            private void Start()
-            {
-                allAffixes.Add(RoR2Content.Buffs.AffixBlue);
-                allAffixes.Add(RoR2Content.Buffs.AffixEcho);
-                allAffixes.Add(RoR2Content.Buffs.AffixHaunted);
-                allAffixes.Add(RoR2Content.Buffs.AffixLunar);
-                allAffixes.Add(RoR2Content.Buffs.AffixPoison);
-                allAffixes.Add(RoR2Content.Buffs.AffixRed);
-                allAffixes.Add(RoR2Content.Buffs.AffixWhite);
-                allAffixes.Add(DLC1Content.Buffs.EliteVoid);
-                allAffixes.Add(DLC1Content.Buffs.EliteEarth);
-                //allAffixes.Add(DLC2Content.Buffs.EliteAurelionite);
-                allAffixes.Add(DLC2Content.Buffs.EliteBead);
-            }
+            List<BuffDef> allAffixes = Util.Helpers.GetBuffs(2);
 
             private void FixedUpdate()
             {
                 foreach (var affix in allAffixes)
                 {
-                    if (!body.HasBuff(affix)) body.AddBuff(affix);
+                    if (!body.HasBuff(affix) && affix != DLC2Content.Buffs.AurelioniteBlessing) body.AddBuff(affix);
                 }
             }
 

@@ -41,6 +41,7 @@ namespace DeltaruneMod.Items.Tier1
 
         private void CharacterMaster_OnServerStageBegin(On.RoR2.CharacterMaster.orig_OnServerStageBegin orig, CharacterMaster self, Stage stage)
         {
+            orig(self, stage);
             try
             {
                 if (stage.sceneDef.cachedName != "bazaar")
@@ -51,8 +52,7 @@ namespace DeltaruneMod.Items.Tier1
                 //Debug.Log("Can use lancer effect: " + canUseEffect);
             }
             catch { Debug.Log("Issue checking stage for " + PluginName); }
-
-            orig(self, stage);
+            
         }
 
         public void LancerCardEffect(CharacterBody sender)

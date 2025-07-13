@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using static DeltaruneMod.DeltarunePlugin;
+using static DeltaruneMod.Util.Helpers;
 
 namespace DeltaruneMod.Interactables.SusExchange
 {
@@ -22,7 +23,6 @@ namespace DeltaruneMod.Interactables.SusExchange
         public List<ItemDef> allTier3 = new List<ItemDef>();
         public List<ItemDef> allTakeableItems = new List<ItemDef>();
         public ItemDef kromer, pearl, shinyPearl, pipis, mrPipis, commRing;
-        
 
         public void Start()
         {
@@ -33,16 +33,15 @@ namespace DeltaruneMod.Interactables.SusExchange
 
             AkSoundEngine.PostEvent(3865094552, gameObject);
 
+            allItems = Util.Helpers.GetItems(99);
+            allTier1 = Util.Helpers.GetItems(0);
+            allTier2 = Util.Helpers.GetItems(1);
+            allTier3 = Util.Helpers.GetItems(2);
             for (ItemIndex i = 0; i < (ItemIndex)ItemCatalog.itemCount; i++)
             {
                 ItemDef itemDef = ItemCatalog.GetItemDef(i);
                 if (itemDef != null)
                 {
-                    allItems.Add(itemDef);
-                    if (itemDef.tier == ItemTier.Tier1) { allTier1.Add(itemDef); allTakeableItems.Add(itemDef); }
-                    else if (itemDef.tier == ItemTier.Tier2) { allTier2.Add(itemDef); allTakeableItems.Add(itemDef); }
-                    else if (itemDef.tier == ItemTier.Tier3) allTier3.Add(itemDef);
-
                     if (itemDef.name == "Pearl") { allTakeableItems.Add(itemDef); pearl = itemDef; }
                     else if (itemDef.name == "ShinyPearl") { allTakeableItems.Add(itemDef); shinyPearl = itemDef; }
                     else if (itemDef.name == "ITEM_KROMER") kromer = itemDef;
@@ -72,9 +71,10 @@ namespace DeltaruneMod.Interactables.SusExchange
 
         public void ApplySpamtonShop(Interactor interactor)
         {
+            Debug.Log("Starting shop purchase");
             CharacterBody body = interactor.GetComponent<CharacterBody>();
             Transform dropletOrigin = body.transform;
-            List<ItemDef> allInventoryItems = new List<ItemDef>();
+            List<ItemDef> allInventoryItems = Util.Helpers.GetAllItemsFromInventory(body.inventory);
             List<ItemDef> allTakeableInvItems = new List<ItemDef>();
             ItemDef randomTier2 = allTier2[Random.Range(0, allTier2.Count)];
             ItemDef randomTier3 = allTier3[Random.Range(0, allTier3.Count)];
@@ -85,22 +85,11 @@ namespace DeltaruneMod.Interactables.SusExchange
 
             // int commRingItemCount = body.inventory.GetItemCount(commRing);
 
-            #region Get inventory items
-            for (ItemIndex i = 0; i < (ItemIndex)ItemCatalog.itemCount; i++)
-            {
-                int itemCount = body.inventory.GetItemCount(i);
-                ItemDef itemDef = ItemCatalog.GetItemDef(i);
-
-                if (itemCount > 0 && itemDef != null)
-                {
-                    allInventoryItems.Add(itemDef);
-                    Debug.Log("Inventory Item: " + itemDef);
-                }
-            }
-            #endregion
-
+            Debug.Log("Finding takeable items");
             #region Get all takeable items from inventory
             // Collects all takeable items into special list
+            allTakeableItems.AddRange(allTier1);
+            allTakeableItems.AddRange(allTier2);
             for (int i = 0; i < allTakeableItems.Count; i++)
             {
                 if (allInventoryItems.Contains(allTakeableItems[i]))
@@ -109,6 +98,7 @@ namespace DeltaruneMod.Interactables.SusExchange
             if (allTakeableInvItems.Count <= 0) return;
             #endregion
 
+            Debug.Log("Picking item");
             #region Pick item to take
             ItemDef itemFromInventory;
             try 
@@ -122,6 +112,7 @@ namespace DeltaruneMod.Interactables.SusExchange
             catch { return; }
             #endregion
 
+            Debug.Log("Starting  transaction");
             #region Start transaction
             if (itemFromInventory == pearl)
             {
@@ -147,7 +138,7 @@ namespace DeltaruneMod.Interactables.SusExchange
             else
             {
                 body.inventory.RemoveItem(itemFromInventory);
-                int roll_chance = 50;
+                int roll_chance = 40;
 
                 //if (commRingItemCount > 0) roll_chance = 60;
 
@@ -167,10 +158,11 @@ namespace DeltaruneMod.Interactables.SusExchange
             }
             #endregion
 
+            Debug.Log("Taking " + itemTaken + ", Giving " + itemGiven);
             #region Complete interaction
             //try
             //{
-                PickupIndex take = new PickupIndex(itemTaken.itemIndex);
+            PickupIndex take = new PickupIndex(itemTaken.itemIndex);
                 PickupIndex give = new PickupIndex(itemGiven.itemIndex);
                 PickupDef pickupDef = take.pickupDef;
 

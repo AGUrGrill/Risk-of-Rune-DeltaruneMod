@@ -30,6 +30,8 @@ namespace DeltaruneMod.Items.Lunar
         public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("devils_knife_icon.png");
         public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility };
 
+        private List<BuffDef> buffs = new List<BuffDef>();
+
         public override void Init()
         {
             CreateItem();
@@ -39,49 +41,21 @@ namespace DeltaruneMod.Items.Lunar
         // SEEKER ISSUE - When sojourn causes seeker to disappear, maybe make timer per person?
         public void DevilsKnifeEffect()
         {
+            if (buffs.Count <= 0) buffs = Util.Helpers.GetBuffs(0);
             CharacterBody[] allCharacterBodies = UnityEngine.Object.FindObjectsOfType<CharacterBody>();
             foreach (CharacterBody sender in allCharacterBodies)
             {
-                if (!NetworkServer.active && !sender.isPlayerControlled) return;
+                if (!NetworkServer.active || !sender.isPlayerControlled || GetCount(sender) <= 0) return;
 
-                var itemCount = GetCount(sender);
-                if (sender.inventory && itemCount > 0)
-                {
-                    List<BuffDef> allBuffs = new List<BuffDef>();
-                    FieldInfo[] fields = typeof(RoR2Content.Buffs).GetFields(BindingFlags.Public | BindingFlags.Static);
-                    foreach (var field in fields)
-                    {
-                        if (field.GetValue(null) is BuffDef buffDef)
-                        {
-                            allBuffs.Add(buffDef);
-                        }
-                    }
-                    fields = typeof(DLC1Content.Buffs).GetFields(BindingFlags.Public | BindingFlags.Static);
-                    foreach (var field in fields)
-                    {
-                        if (field.GetValue(null) is BuffDef buffDef)
-                        {
-                            allBuffs.Add(buffDef);
-                        }
-                    }
-                    fields = typeof(DLC2Content.Buffs).GetFields(BindingFlags.Public | BindingFlags.Static);
-                    foreach (var field in fields)
-                    {
-                        if (field.GetValue(null) is BuffDef buffDef)
-                        {
-                            allBuffs.Add(buffDef);
-                        }
-                    }
-                    BuffDef randomBuff = allBuffs[UnityEngine.Random.Range(0, allBuffs.Count)];
-                    sender.AddTimedBuff(randomBuff, 8 + (itemCount - 0) * 5);
-                    Debug.Log($"Added random buff: {randomBuff.name} to {sender.name}");
-                }
+                BuffDef randomBuff = buffs[UnityEngine.Random.Range(0, buffs.Count)];
+                sender.AddTimedBuff(randomBuff, 8 + (GetCount(sender) - 0) * 5);
+                Debug.Log($"Added random buff: {randomBuff.name} to {sender.name}");
             }
         }
 
         public override void Hooks()
         {
-            throw new NotImplementedException();
+            return;
         }
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()

@@ -39,8 +39,6 @@ namespace DeltaruneMod.Items.Tier3
 
         public static GameObject BigShotEffectPrefab;
 
-        public static NetworkSoundEventDef BigShotSound;
-
         public override void Init()
         {
             CreateLang();
@@ -89,6 +87,7 @@ namespace DeltaruneMod.Items.Tier3
                     existing.TotalGoldGained += amount;
                 }
             }
+
             orig(self, amount);
         }
 
@@ -129,33 +128,24 @@ namespace DeltaruneMod.Items.Tier3
 
         public void CreateEffect()
         {
-            BigShotEffectPrefab = PrefabAPI.InstantiateClone(LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/ShurikenProjectile"), "BigShotEffect", true);
+            BigShotEffectPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/ShurikenProjectile").InstantiateClone("BigShotSoundEffect", true);
 
-            BigShotSound = ScriptableObject.CreateInstance<NetworkSoundEventDef>();
-            BigShotSound.eventName = "Play_BIGSHOT";
-            BigShotSound.name = "bigshot_sfx";
-            R2API.ContentAddition.AddNetworkSoundEventDef(BigShotSound);
+            Util.Helpers.CreateSoundPrefab("bigshot_sfx", "Play_BIGSHOT");
 
             var effectComponent = BigShotEffectPrefab.GetComponent<EffectComponent>() ?? BigShotEffectPrefab.AddComponent<EffectComponent>();
             effectComponent.soundName = "Play_BIGSHOT";
 
-            if (!BigShotEffectPrefab.GetComponent<NetworkIdentity>())
-                BigShotEffectPrefab.AddComponent<NetworkIdentity>();
-
-            if (BigShotEffectPrefab) { PrefabAPI.RegisterNetworkPrefab(BigShotEffectPrefab); }
-            ContentAddition.AddEffect(BigShotEffectPrefab);
+            Util.Helpers.CreateNetworkedEffectPrefab(BigShotEffectPrefab);
         }
 
         public void CreateProjectile()
         {
             projectilePrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/ShurikenProjectile").InstantiateClone("BigShotProjectile", true);
-            if (!projectilePrefab.GetComponent<NetworkIdentity>()) projectilePrefab.AddComponent<NetworkIdentity>();
 
             var ghost = MainAssets.LoadAsset<GameObject>("big_shot_projectile.prefab").InstantiateClone("big_shot", true);
             ghost.AddComponent<ProjectileGhostController>();
             ghost.AddComponent<NetworkIdentity>();
             ghost.transform.localScale = new Vector3(180f, 180f, 180f);
-            ghost.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
 
             var projCont = projectilePrefab.GetComponent<ProjectileController>();
             projCont.startSound = "";
@@ -169,8 +159,7 @@ namespace DeltaruneMod.Items.Tier3
             UnityEngine.Object.Destroy(projectilePrefab.GetComponent<ProjectileSteerTowardTarget>());
             UnityEngine.Object.Destroy(projectilePrefab.GetComponent<ProjectileTargetComponent>());
 
-            PrefabAPI.RegisterNetworkPrefab(projectilePrefab);
-            ContentAddition.AddProjectile(projectilePrefab);
+            Util.Helpers.CreateNetworkedProjectilePrefab(projectilePrefab);
         }
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()

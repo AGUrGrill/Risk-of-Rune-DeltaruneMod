@@ -34,7 +34,7 @@ namespace DeltaruneMod
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "AGU";
         public const string PluginName = "DeltaruneMod";
-        public const string PluginVersion = "1.7.0";
+        public const string PluginVersion = "1.7.7";
 
         public static DeltarunePlugin Instance;
         public static CharacterMaster characterMaster;

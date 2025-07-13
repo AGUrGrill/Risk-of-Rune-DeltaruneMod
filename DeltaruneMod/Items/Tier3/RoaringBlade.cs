@@ -15,15 +15,15 @@ namespace DeltaruneMod.Items.Tier3
 
         public override string ItemLangTokenName => "ROARING_BLADE";
 
-        public override string ItemPickupDesc => "Stack Swoon on hit, dealing damage dealt back to enemy.";
+        public override string ItemPickupDesc => "Stack swoon on hit, total damage dealt prior reapplies after 3 stacks.";
 
-        public override string ItemFullDescription => "On hit, have a <style=cIsUtility>50%</style> chance to apply a stack of Swoon." +
-            "\nOn <style=cIsUtility>3</style> stacks, Swoon enemies, deal <style=cIsDamage>200%</style> of all damage dealt back to enemy <style=cStack>(+100% per stack)</style>.";
+        public override string ItemFullDescription => "<style=cIsDamage>50%</style> chance to apply Swoon. Upon reaching " +
+            "<style=cIsUtility>3</style> stacks, reapply <style=cIsDamage>200%</style> of all damage dealt back to enemy <style=cStack>(+100% per stack)</style>.";
 
         public override string ItemLore => "You pick up the strange, cold blade..." +
             "\nShivers crawl down your spine as you lift it into the air." +
             "\nA strange feeling emerges from it, you can feel it speaking... crying... hurting..." +
-            "\nYou respond to its call, its <style=cMono><style=cDeath>anger</style></style>, you move foward, gripping the blade tightly, changed ever so slightly.";
+            "\nYou respond to its call, its <style=cMono><style=cDeath>anger</style></style>, you move forward, gripping the blade tightly, changed ever so slightly.";
 
         public override ItemTier Tier => ItemTier.Tier3;
 
@@ -31,16 +31,18 @@ namespace DeltaruneMod.Items.Tier3
 
         public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("roaring_blade_icon.png");
 
-        public static GameObject SwoonModel = MainAssets.LoadAsset<GameObject>("swoon.prefab");
-
         public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Damage };
 
         public static BuffDef SwoonBuff;
 
+        public static Sprite SwoonEffectIcon = MainAssets.LoadAsset<Sprite>("swoon_effect_icon.png");
+
+        public static GameObject SwoonModelPrefab;
         public static GameObject SwoonEffectPrefabL;
         public static GameObject SwoonEffectPrefabR;
+        public static GameObject SwoonSoundPrefab;
 
-        public static NetworkSoundEventDef SwoonSound;
+        private int MaxSwoonStacks = 3;
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {
@@ -51,11 +53,10 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "Head",
-                    localPos = new Vector3(0.34926F, 0.25313F, -0.41051F),
-                    localAngles = new Vector3(14.01768F, 50.88708F, 82.11794F),
-                    localScale = new Vector3(23.74224F, 23.74224F, 23.74224F)
-
+                    childName = "Chest",
+                    localPos = new Vector3(0.03424F, 0.24531F, -0.28029F),
+                    localAngles = new Vector3(29.02806F, 9.87036F, 0.15779F),
+                    localScale = new Vector3(43.11241F, 48.88401F, 48.88401F)
                 }
             });
             rules.Add("mdlHuntress", new ItemDisplayRule[]
@@ -64,10 +65,10 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "Pelvis",
-                    localPos = new Vector3(0.09873F, -0.13067F, 0.02605F),
-                    localAngles = new Vector3(23.6536F, 93.07247F, 24.55241F),
-                    localScale = new Vector3(25.51046F, 16.67866F, 25.51046F)
+                    childName = "Chest",
+                    localPos = new Vector3(0.15683F, 0.03304F, -0.05687F),
+                    localAngles = new Vector3(8.67311F, 301.7072F, 343.5933F),
+                    localScale = new Vector3(32.31651F, 20.56886F, 31.46058F)
 
                 }
             });
@@ -77,10 +78,10 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "UpperArmL",
-                    localPos = new Vector3(0.40818F, 0.30742F, 0.55069F),
-                    localAngles = new Vector3(2.01947F, 281.0584F, 67.86629F),
-                    localScale = new Vector3(166.2022F, 166.2022F, 166.2022F)
+                    childName = "Chest",
+                    localPos = new Vector3(0.35631F, 0.30782F, -1.88334F),
+                    localAngles = new Vector3(4.96775F, 356.1217F, 343.4172F),
+                    localScale = new Vector3(342.7814F, 342.7814F, 342.7814F)
 
                 }
             });
@@ -91,8 +92,8 @@ namespace DeltaruneMod.Items.Tier3
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
                     childName = "HandR",
-                    localPos = new Vector3(-0.28472F, 0.15643F, -0.12816F),
-                    localAngles = new Vector3(354.5077F, 347.7494F, 281.5692F),
+                    localPos = new Vector3(0.61056F, 0.2345F, 0.19811F),
+                    localAngles = new Vector3(351.2091F, 161.5561F, 217.4899F),
                     localScale = new Vector3(50.83732F, 50.83732F, 50.83732F)
 
                 }
@@ -103,10 +104,10 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "ThighR",
-                    localPos = new Vector3(-0.12374F, 0.37286F, -0.03677F),
-                    localAngles = new Vector3(5.54981F, 275.2047F, 216.0641F),
-                    localScale = new Vector3(18.16601F, 18.16601F, 18.16601F)
+                    childName = "ClavicleR",
+                    localPos = new Vector3(0.19937F, -0.11671F, -0.00412F),
+                    localAngles = new Vector3(351.81F, 103.9537F, 14.96851F),
+                    localScale = new Vector3(26.79127F, 25.62798F, 28.75669F)
 
                 }
             });
@@ -116,10 +117,10 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "Chest",
-                    localPos = new Vector3(0.18235F, -0.04304F, -0.42368F),
-                    localAngles = new Vector3(340.2831F, 185.451F, 340.5156F),
-                    localScale = new Vector3(24.97854F, 24.97854F, 24.97854F)
+                    childName = "HandR",
+                    localPos = new Vector3(0.64632F, 0.31625F, 0.05835F),
+                    localAngles = new Vector3(350.5506F, 180.2126F, 212.7281F),
+                    localScale = new Vector3(63.08693F, 63.08693F, 63.08693F)
 
                 }
             });
@@ -130,9 +131,10 @@ namespace DeltaruneMod.Items.Tier3
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
                     childName = "FlowerBase",
-                    localPos = new Vector3(-1.09289F, 0.13743F, -0.11748F),
-                    localAngles = new Vector3(3.25975F, 162.9752F, 33.30826F),
-                    localScale = new Vector3(30.4944F, 30.4944F, 30.4944F)
+                    localPos = new Vector3(-1.09289F, -0.17844F, 0.06287F),
+                    localAngles = new Vector3(6.32783F, 163.8389F, 43.61153F),
+                    localScale = new Vector3(64.85601F, 64.85601F, 64.85601F)
+
                 }
             });
             rules.Add("mdlLoader", new ItemDisplayRule[]
@@ -141,10 +143,10 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "Head",
-                    localPos = new Vector3(0.28829F, 0.38631F, 0.02157F),
-                    localAngles = new Vector3(6.18454F, 3.13923F, 148.0287F),
-                    localScale = new Vector3(13.47214F, 13.47214F, 13.47214F)
+                    childName = "HandL",
+                    localPos = new Vector3(0.05452F, 0.96759F, 0.03388F),
+                    localAngles = new Vector3(342.5309F, 38.24583F, 185.2787F),
+                    localScale = new Vector3(43.79625F, 43.79625F, 43.79625F)
 
                 }
             });
@@ -155,9 +157,9 @@ namespace DeltaruneMod.Items.Tier3
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
                     childName = "Chest",
-                    localPos = new Vector3(-2.4045F, -1.67265F, 2.1141F),
-                    localAngles = new Vector3(354.3773F, 254.687F, 358.6025F),
-                    localScale = new Vector3(121.9903F, 121.9903F, 121.9903F)
+                    localPos = new Vector3(-0.40245F, -0.11621F, -0.95978F),
+                    localAngles = new Vector3(349.0351F, 87.08124F, 49.89027F),
+                    localScale = new Vector3(545.4311F, 545.4311F, 545.4311F)
 
                 }
             });
@@ -167,10 +169,10 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "Head",
-                    localPos = new Vector3(0.34605F, 0.39082F, -0.10218F),
-                    localAngles = new Vector3(5.15182F, 25.06269F, 146.8649F),
-                    localScale = new Vector3(14.66418F, 14.66418F, 14.66418F)
+                    childName = "Stomach",
+                    localPos = new Vector3(0.13571F, 0.20722F, -0.26261F),
+                    localAngles = new Vector3(6.9968F, 350.0926F, 341.5277F),
+                    localScale = new Vector3(44.86234F, 37.9991F, 37.9991F)
 
                 }
             });
@@ -180,10 +182,10 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "Stomach",
-                    localPos = new Vector3(0.09482F, 0.14564F, 0.01243F),
-                    localAngles = new Vector3(331.879F, 77.49539F, 210.0147F),
-                    localScale = new Vector3(15.98449F, 15.98449F, 15.98449F)
+                    childName = "Chest",
+                    localPos = new Vector3(0.03685F, 0.04701F, -0.19537F),
+                    localAngles = new Vector3(351.7767F, 8.65373F, 346.0138F),
+                    localScale = new Vector3(46.44885F, 26.87783F, 2.25375F)
 
                 }
             });
@@ -193,9 +195,9 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "BottomRail",
-                    localPos = new Vector3(-0.01703F, 0.23118F, -0.02844F),
-                    localAngles = new Vector3(1.06541F, 180.4571F, 13.00509F),
+                    childName = "ToeR",
+                    localPos = new Vector3(-0.05914F, 0.23115F, -0.02773F),
+                    localAngles = new Vector3(359.2351F, 160.0996F, 254.6561F),
                     localScale = new Vector3(15.71294F, 15.71294F, 15.71294F)
 
                 }
@@ -206,10 +208,10 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "CannonEnd",
-                    localPos = new Vector3(0.13748F, -0.11991F, 0.07944F),
-                    localAngles = new Vector3(4.53002F, 272.7654F, 4.84901F),
-                    localScale = new Vector3(21.07476F, 24.49854F, 17.5623F)
+                    childName = "Chest",
+                    localPos = new Vector3(-0.00696F, -0.22984F, -0.10106F),
+                    localAngles = new Vector3(19.71435F, 168.1724F, 315.2494F),
+                    localScale = new Vector3(35.84454F, 41.6678F, 29.87045F)
 
                 }
             });
@@ -220,9 +222,9 @@ namespace DeltaruneMod.Items.Tier3
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
                     childName = "Chest",
-                    localPos = new Vector3(0.04536F, -0.42105F, 0.09325F),
-                    localAngles = new Vector3(320.1729F, 10.61689F, 101.4086F),
-                    localScale = new Vector3(21.83015F, 18.71156F, 18.71156F)
+                    localPos = new Vector3(-0.21611F, -0.41288F, 0.0538F),
+                    localAngles = new Vector3(296.2543F, 222.2426F, 355.6819F),
+                    localScale = new Vector3(18.60245F, 27.97708F, 27.97708F)
 
                 }
             });
@@ -232,10 +234,10 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "Chest",
-                    localPos = new Vector3(0.2744F, -0.30065F, 0.07598F),
-                    localAngles = new Vector3(328.4284F, 358.3063F, 35.0899F),
-                    localScale = new Vector3(15.67788F, 13.93588F, 13.93588F)
+                    childName = "Pack",
+                    localPos = new Vector3(0.31906F, -0.45957F, -0.1822F),
+                    localAngles = new Vector3(336.2322F, 23.51318F, 346.6137F),
+                    localScale = new Vector3(47.03091F, 41.80524F, 41.80524F)
 
                 }
             });
@@ -246,9 +248,9 @@ namespace DeltaruneMod.Items.Tier3
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
                     childName = "Head",
-                    localPos = new Vector3(-0.01619F, -0.62815F, 0.30422F),
-                    localAngles = new Vector3(4.056F, 154.1342F, 354.7828F),
-                    localScale = new Vector3(8F, 8F, 8F)
+                    localPos = new Vector3(-0.01625F, 0.17917F, 0.0463F),
+                    localAngles = new Vector3(354.49F, 266.0255F, 41.55928F),
+                    localScale = new Vector3(55.72091F, 55.72091F, 55.72091F)
 
                 }
             });
@@ -258,11 +260,10 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "Back",
-                    localPos = new Vector3(-0.00243F, -0.00212F, -0.00694F),
-                    localAngles = new Vector3(347.736F, 180.3236F, 41.70065F),
-                    localScale = new Vector3(0.60172F, 0.60172F, 0.60172F)
-
+                    childName = "HandR",
+                    localPos = new Vector3(0.00839F, 0.00898F, 0.00293F),
+                    localAngles = new Vector3(334.2737F, 179.8516F, 182.9772F),
+                    localScale = new Vector3(0.91639F, 0.91639F, 0.91639F)
                 }
             });
             return rules;
@@ -273,6 +274,7 @@ namespace DeltaruneMod.Items.Tier3
             CreateItem();
             CreateLang();
             CreateBuff();
+            CreateSoundEffect();
             CreateSwoonEffect();
             Hooks();
 
@@ -282,7 +284,7 @@ namespace DeltaruneMod.Items.Tier3
         {
             SwoonBuff = ScriptableObject.CreateInstance<BuffDef>();
             SwoonBuff.name = "SwoonDebuff";
-            SwoonBuff.iconSprite = ItemIcon;
+            SwoonBuff.iconSprite = SwoonEffectIcon;
             SwoonBuff.canStack = true;
             SwoonBuff.isDebuff = true;
 
@@ -296,129 +298,161 @@ namespace DeltaruneMod.Items.Tier3
 
         private void SwoonEffect(On.RoR2.GlobalEventManager.orig_OnHitEnemy orig, GlobalEventManager self, DamageInfo damageInfo, GameObject victim)
         {
+            orig(self, damageInfo, victim);
+
             if (!NetworkServer.active) return;
 
-            var attacker = damageInfo.attacker;
-            CharacterBody sender = attacker.GetComponent<CharacterBody>();
-            CharacterBody victimBody = victim.GetComponent<CharacterBody>();
-            var existing = victimBody.GetComponent<SwoonDamageTracker>();
-
-            #region Add Damage Tracker
-            int itemCount = GetCount(sender);
-            if (!existing && sender.inventory && itemCount > 0)
+            // Try catch for occasional NRE
+            try 
             {
-                existing = victimBody.gameObject.AddComponent<SwoonDamageTracker>();
-                existing.body = victimBody;
-                existing.stack = itemCount;
-            }
-            else if (existing && itemCount <= 0) existing.enabled = false;
-            else if (existing && itemCount > 0 && !existing.enabled) existing.enabled = true;
-            if (existing) existing.stack = itemCount;
-            #endregion
+                var attacker = damageInfo.attacker;
+                var sender = attacker.GetComponent<CharacterBody>();
+                var victimBody = victim.GetComponent<CharacterBody>();
+                var existing = victimBody.GetComponent<SwoonDamageTracker>();
 
-            // Add Buff
-            if (existing && sender.inventory && itemCount > 0)
-            {
-                if (RoR2.Util.CheckRoll(50, sender.master))
+                if (!sender.isPlayerControlled || victimBody.isPlayerControlled) return;
+
+                #region Add Damage Tracker
+                int itemCount = GetCount(sender);
+                if (!existing && sender.inventory && itemCount > 0)
                 {
-                    victimBody.AddBuff(SwoonBuff);
+                    existing = victimBody.gameObject.AddComponent<SwoonDamageTracker>();
+                    existing.body = victimBody;
+                    existing.stack = itemCount;
                 }
-            }
+                else if (existing && itemCount <= 0) existing.enabled = false;
+                else if (existing && itemCount > 0 && !existing.enabled) existing.enabled = true;
+                if (existing) existing.stack = itemCount;
+                #endregion
 
-            // Buff Stack 1: set prev health
-            if (existing && victimBody.GetBuffCount(SwoonBuff) <= 1)
-            {
-                existing.prevHealth = victimBody.healthComponent.health;
-            }
- 
-            // Buff Stack 3: set curr health, do swoon
-            if (existing && victimBody.GetBuffCount(SwoonBuff) >= 3)
-            {
-                existing.currHealth = victimBody.healthComponent.health;
-                existing.DoSwoonDamage();
-                for (int i = 0; i <= victimBody.GetBuffCount(SwoonBuff); i++)
+                #region Buff Application & Effect
+                // Add Buff
+                if (existing && sender.inventory && itemCount > 0
+                    && existing.canSwoon && victimBody.GetBuffCount(SwoonBuff) <= MaxSwoonStacks)
                 {
-                    victimBody.RemoveBuff(SwoonBuff);
+                    if (RoR2.Util.CheckRoll(50, sender.master))
+                    {
+                        victimBody.AddBuff(SwoonBuff);
+                    }
                 }
-            }
 
-            orig(self, damageInfo, victim);
+                // Buff Stack 1: set prev health
+                if (existing && victimBody.GetBuffCount(SwoonBuff) <= 1)
+                {
+                    existing.prevHealth = victimBody.healthComponent.health;
+                }
+
+                // Buff Stack 3: set curr health, do swoon
+                if (existing && victimBody.GetBuffCount(SwoonBuff) >= MaxSwoonStacks)
+                {
+                    existing.currHealth = victimBody.healthComponent.health;
+                    existing.DoSwoonDamage();
+                    for (int i = 0; i <= MaxSwoonStacks; i++)
+                    {
+                        victimBody.RemoveBuff(SwoonBuff);
+                    }
+                }
+                #endregion
+            }
+            catch { return; } 
         }
 
         private static void CreateSwoonEffect()
         {
             SwoonEffectPrefabL = PrefabAPI.InstantiateClone(MainAssets.LoadAsset<GameObject>("swoon_left.prefab"), "swoon_left", true);
             SwoonEffectPrefabR = PrefabAPI.InstantiateClone(MainAssets.LoadAsset<GameObject>("swoon_right.prefab"), "swoon_right", true);
+            
+            SwoonModelPrefab = PrefabAPI.InstantiateClone(MainAssets.LoadAsset<GameObject>("swoon.prefab"), "swoon_main", true);
+            SwoonModelPrefab.transform.localScale = new Vector3(120f, 120f, 120f);
 
-            if (!SwoonEffectPrefabL.GetComponent<EffectComponent>())
-                SwoonEffectPrefabL.AddComponent<EffectComponent>();
+            var effectController = SwoonModelPrefab.GetComponent<SwoonEffectController>();
+            if (!effectController) effectController = SwoonModelPrefab.AddComponent<SwoonEffectController>();
 
-            var effectComponentL = SwoonEffectPrefabL.GetComponent<EffectComponent>() ?? SwoonEffectPrefabL.AddComponent<EffectComponent>();
-            effectComponentL.soundName = "Play_snd_knight_cut";
+            Util.Helpers.CreateNetworkedEffectPrefab(SwoonModelPrefab);
+            Util.Helpers.CreateNetworkedEffectPrefab(SwoonEffectPrefabL);
+            Util.Helpers.CreateNetworkedEffectPrefab(SwoonEffectPrefabR);
+        }
 
-            var effectComponentR = SwoonEffectPrefabR.GetComponent<EffectComponent>() ?? SwoonEffectPrefabR.AddComponent<EffectComponent>();
-            effectComponentR.soundName = "Play_snd_knight_cut";
+        public void CreateSoundEffect()
+        {
+            SwoonSoundPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/ShurikenProjectile").InstantiateClone("SwoonSoundEffect", true);
 
-            if (!SwoonEffectPrefabL.GetComponent<NetworkIdentity>())
-                SwoonEffectPrefabL.AddComponent<NetworkIdentity>();
+            Util.Helpers.CreateSoundPrefab("swoon_sfx", "Play_snd_knight_cut");
 
-            if (!SwoonEffectPrefabR.GetComponent<NetworkIdentity>())
-                SwoonEffectPrefabR.AddComponent<NetworkIdentity>();
+            var effectComponent = SwoonSoundPrefab.GetComponent<EffectComponent>() ?? SwoonSoundPrefab.AddComponent<EffectComponent>();
+            effectComponent.soundName = "Play_snd_knight_cut";
 
-            SwoonSound = ScriptableObject.CreateInstance<NetworkSoundEventDef>();
-            SwoonSound.eventName = "Play_snd_knight_cut";
-            SwoonSound.name = "swoon_sfx";
-            R2API.ContentAddition.AddNetworkSoundEventDef(SwoonSound);
-
-            if (SwoonEffectPrefabL) { PrefabAPI.RegisterNetworkPrefab(SwoonEffectPrefabL); }
-            ContentAddition.AddEffect(SwoonEffectPrefabL);
-
-            if (SwoonEffectPrefabR) { PrefabAPI.RegisterNetworkPrefab(SwoonEffectPrefabR); }
-            ContentAddition.AddEffect(SwoonEffectPrefabR);
+            Util.Helpers.CreateNetworkedEffectPrefab(SwoonSoundPrefab);
         }
 
         public class SwoonDamageTracker : CharacterBody.ItemBehavior
         {
             public float currHealth;
             public float prevHealth;
-            float totalDamageTaken;
+            public float totalDamageTaken;
+            public bool canSwoon;
+            private float swoonTimer = 0f;
+            private float swoonTimerInterval = 1f;
 
+            private void Start()
+            {
+                canSwoon = true;
+            }
             private void OnDisable()
             {
                 currHealth = 0;
                 prevHealth = 0;
             }
+            private void FixedUpdate()
+            {
+                if (!canSwoon)
+                {
+                    swoonTimer -= Time.fixedDeltaTime;
+                    if (swoonTimer <= 0f)
+                    {
+                        canSwoon = true;
+                        swoonTimer = swoonTimerInterval;
+                    }
+                }  
+            }
             public void DoSwoonDamage()
             {
+                if (!NetworkServer.active) return;
+
                 totalDamageTaken = (prevHealth - currHealth) * (stack + 1);
                 body.healthComponent.health -= totalDamageTaken;
-                PlaySwoonAnimation();
-                Debug.Log("Swooned " + body.name + " for " +totalDamageTaken + "!");
-                Debug.Log("Prev HP " + prevHealth + " | Curr HP " + currHealth);
+
+                EffectManager.SpawnEffect(SwoonModelPrefab, new EffectData { origin = body.transform.position, scale = 1f }, true);
+                EffectManager.SpawnEffect(SwoonSoundPrefab, new EffectData { origin = transform.position, scale = 1f }, true);
+
+                Debug.Log("Swooned " + body.name + " for " + totalDamageTaken + "!");
+                Debug.Log("Prev HP " + prevHealth + " | Old Curr HP " + currHealth);
+
+                canSwoon = false;
             }
-            public void PlaySwoonAnimation()
+        }
+
+        public class SwoonEffectController : MonoBehaviour
+        {
+
+            void Start()
             {
-                Transform bodyTransform = body.transform;
-                Debug.Log(body.GetComponentInChildren<Transform>());
-
-                GameObject itemEffect = Instantiate(SwoonModel, bodyTransform);
-                itemEffect.transform.localScale = new Vector3(120f, 120f, 120f);
-
-                Animator anim = itemEffect.GetComponent<Animator>();
-
-                Transform leftAttach = itemEffect.transform.Find("Roaring_Blade1");
-                Transform rightAttach = itemEffect.transform.Find("Roaring_Blade");
-
-                var leftEffect = Instantiate(SwoonEffectPrefabL, leftAttach);
-                leftEffect.transform.localPosition = Vector3.zero;
-                leftEffect.transform.localScale = new Vector3(20f, 20f, 20f); ;
-
-                var rightEffect = Instantiate(SwoonEffectPrefabR, rightAttach);
-                rightEffect.transform.localPosition = Vector3.zero;
-                rightEffect.transform.localScale = new Vector3(20f, 20f, 20f);
-
+                Animator anim = GetComponent<Animator>();
+                if (anim) anim.Play("swoon_animation", 0, 0f);
                 anim.speed = 18f;
-                Destroy(itemEffect, 0.35f);
+
+                Transform leftAttach = transform.Find("Roaring_Blade1");
+                Transform rightAttach = transform.Find("Roaring_Blade");
+
+                GameObject left = Instantiate(SwoonEffectPrefabL, leftAttach);
+                left.transform.localPosition = Vector3.zero;
+                left.transform.localScale = new Vector3(10f, 10f, 10f);
+
+                GameObject right = Instantiate(SwoonEffectPrefabR, rightAttach);
+                right.transform.localPosition = Vector3.zero;
+                right.transform.localScale = new Vector3(10f, 10f, 10f);
+
+                Destroy(gameObject, 0.35f);
             }
         }
     }

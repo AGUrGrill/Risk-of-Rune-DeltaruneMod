@@ -25,7 +25,7 @@ namespace DeltaruneMod.Items.Tier2
 
         public override string ItemFullDescription => "On <style=cIsUtility>Primary or Seconary skill</style> activation, fire a Rude Buster and activate UtilmateHeal." +
             "\nRude Buster: Shoot a projectile that deals <style=cIsDamage>600%</style> base damage <style=cStack>(+200% per stack)</style>." +
-            "\nRude Buster reloads every <style=cIsUtility>5</style> seconds <style=cStack>(+1 charge per stack)</style>." +
+            "\nRude Buster reloads every <style=cIsUtility>5</style> seconds, up to <style=cIsUtility>2</style> charges." +
             "\nUltimateHeal: Heal <style=cIsHealing>5% hp</style> on use.";
 
         public override string ItemLore => "\"Where did you find this?\" ... \"This is the axe that ended the roaring!\"" +
@@ -48,14 +48,12 @@ namespace DeltaruneMod.Items.Tier2
 
         public static GameObject SusieAxeEffectPrefab;
 
-        public static NetworkSoundEventDef SusieAxeSound;
-
         public override void Init()
         {
             CreateItem();
             CreateLang();
             CreateBuff();
-            CreateEffect();
+            CreateSoundEffect();
             CreateProjectile();
             Hooks();
         }
@@ -95,29 +93,22 @@ namespace DeltaruneMod.Items.Tier2
             ContentAddition.AddBuffDef(SusieAxeBuff);
         }
 
-        public void CreateEffect()
+        public void CreateSoundEffect()
         {
-            SusieAxeEffectPrefab = PrefabAPI.InstantiateClone(LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/ShurikenProjectile"), "SusieAxeEffect", true);
+            SusieAxeEffectPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/ShurikenProjectile").InstantiateClone("SusieAxeSoundEffect", true);
 
-            SusieAxeSound = ScriptableObject.CreateInstance<NetworkSoundEventDef>();
-            SusieAxeSound.eventName = "Play_rude_buster";
-            SusieAxeSound.name = "rude_buster_sfx";
-            R2API.ContentAddition.AddNetworkSoundEventDef(SusieAxeSound);
+            Util.Helpers.CreateSoundPrefab("rude_buster_sfx", "Play_rude_buster");
 
             var effectComponent = SusieAxeEffectPrefab.GetComponent<EffectComponent>() ?? SusieAxeEffectPrefab.AddComponent<EffectComponent>();
             effectComponent.soundName = "Play_rude_buster";
 
-            if (!SusieAxeEffectPrefab.GetComponent<NetworkIdentity>())
-                SusieAxeEffectPrefab.AddComponent<NetworkIdentity>();
 
-            if (SusieAxeEffectPrefab) { PrefabAPI.RegisterNetworkPrefab(SusieAxeEffectPrefab); }
-            ContentAddition.AddEffect(SusieAxeEffectPrefab);
+            Util.Helpers.CreateNetworkedEffectPrefab(SusieAxeEffectPrefab);
         }
-        // Spawns shuriken at map spawn
+        
         public void CreateProjectile()
         {
             projectilePrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/ShurikenProjectile").InstantiateClone("SusieAxeProjectile", true);
-            if (!projectilePrefab.GetComponent<NetworkIdentity>()) projectilePrefab.AddComponent<NetworkIdentity>();
 
             var ghost = MainAssets.LoadAsset<GameObject>("rude_buster.prefab").InstantiateClone("rude_buster", true);
             ghost.AddComponent<ProjectileGhostController>();
@@ -137,8 +128,7 @@ namespace DeltaruneMod.Items.Tier2
             UnityEngine.Object.Destroy(projectilePrefab.GetComponent<ProjectileSteerTowardTarget>());
             UnityEngine.Object.Destroy(projectilePrefab.GetComponent<ProjectileTargetComponent>());
 
-            PrefabAPI.RegisterNetworkPrefab(projectilePrefab);
-            ContentAddition.AddProjectile(projectilePrefab);
+            Util.Helpers.CreateNetworkedProjectilePrefab(projectilePrefab);
         }
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()
@@ -373,8 +363,7 @@ namespace DeltaruneMod.Items.Tier2
         [RequireComponent(typeof(TeamFilter))]
         public class PrimarySkillSusieAxeBehavior : CharacterBody.ItemBehavior
         {
-            public const int numShurikensPerStack = 1;
-            public const int numShurikensBase = 1;
+            public const int numShurikensBase = 2;
             public float damageCoefficientBase =  6f;
             public float damageCoefficientPerStack = 2f;
             public const float force = 4f;
@@ -447,7 +436,7 @@ namespace DeltaruneMod.Items.Tier2
             {
                 if (!NetworkServer.active) return;
 
-                int numOfShurikens = numShurikensBase + stack;
+                int numOfShurikens = numShurikensBase;
                 if (body.GetBuffCount(SusieAxeBuff) < numOfShurikens)
                 {
                     float reloadNum = reloadTime;

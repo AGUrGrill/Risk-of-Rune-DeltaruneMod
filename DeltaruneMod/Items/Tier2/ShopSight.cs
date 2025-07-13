@@ -56,7 +56,7 @@ namespace DeltaruneMod.Items.Tier2
                 existing.shrine = self;
                 existing.stack = itemCount;
             }
-            
+
             orig(self, activator);
         }
 

@@ -53,6 +53,7 @@ namespace DeltaruneMod.Items.Tier1
                 //Debug.Log($"Adjusted Tennabuckle Amount | " + amount);
                 
             }
+
             orig(self, amount);
         }
 

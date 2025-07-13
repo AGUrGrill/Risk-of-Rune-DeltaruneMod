@@ -16,7 +16,7 @@ namespace DeltaruneMod.Interactables.Grave
     {
         public override string InteractableName => "Dess's Grave";
 
-        public override string InteractableContext => "Pay respects.";
+        public override string InteractableContext => "Forsake your SOUL..?";
 
         public override string InteractableLangToken => "DESS_GRAVE";
 
@@ -37,7 +37,7 @@ namespace DeltaruneMod.Interactables.Grave
         {
             InteractableBodyModelPrefab = InteractableModel.InstantiateClone("gravestone");
             InteractableBodyModelPrefab.AddComponent<NetworkIdentity>();
-            InteractableBodyModelPrefab.transform.localScale = new Vector3(125f, 125f, 125f);
+            InteractableBodyModelPrefab.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
 
             PurchaseInteraction purchaseInteraction = InteractableBodyModelPrefab.AddComponent<PurchaseInteraction>();
             purchaseInteraction.displayNameToken = $"INTERACTABLE_{InteractableLangToken}_NAME";
@@ -84,7 +84,7 @@ namespace DeltaruneMod.Interactables.Grave
 
             DirectorCard directorCard = new DirectorCard
             {
-                selectionWeight = 1, // 230 = Normal Chest
+                selectionWeight = 0, // 230 = Normal Chest
                 spawnCard = InteractableSpawnCard,
             };
 
