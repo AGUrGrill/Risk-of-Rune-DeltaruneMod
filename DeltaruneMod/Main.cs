@@ -1,4 +1,5 @@
 using BepInEx;
+using DeltaruneMod.Elites;
 using DeltaruneMod.Interactables;
 using DeltaruneMod.Items;
 using DeltaruneMod.Util;
@@ -93,6 +94,8 @@ namespace DeltaruneMod
             #endregion
 
             Events.Init();
+
+            Neo neoElite = new Neo();
 
             StartCoroutine(LoadSoundBankWhenReady());
 

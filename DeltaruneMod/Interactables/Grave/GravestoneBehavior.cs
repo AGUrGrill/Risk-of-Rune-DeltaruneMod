@@ -1,5 +1,5 @@
 ﻿using DeltaruneMod.Items.Lunar;
-using DeltaruneMod.Items.Tier2;
+using DeltaruneMod.Items.Spamton;
 using RoR2;
 using System;
 using System.Collections.Generic;

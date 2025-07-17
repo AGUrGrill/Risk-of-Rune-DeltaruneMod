@@ -40,7 +40,7 @@ namespace DeltaruneMod.Items.Tier3
         public static GameObject SwoonModelPrefab;
         public static GameObject SwoonEffectPrefabL;
         public static GameObject SwoonEffectPrefabR;
-        public static GameObject SwoonSoundPrefab;
+        public static NetworkSoundEventDef SwoonSFX;
 
         private int MaxSwoonStacks = 3;
 
@@ -274,7 +274,7 @@ namespace DeltaruneMod.Items.Tier3
             CreateItem();
             CreateLang();
             CreateBuff();
-            CreateSoundEffect();
+            CreateSFX();
             CreateSwoonEffect();
             Hooks();
 
@@ -336,7 +336,7 @@ namespace DeltaruneMod.Items.Tier3
                     }
                 }
 
-                // Buff Stack 1: set prev health
+                // Buff Stack 1: set prev health on first time
                 if (existing && victimBody.GetBuffCount(SwoonBuff) <= 1)
                 {
                     existing.prevHealth = victimBody.healthComponent.health;
@@ -368,21 +368,15 @@ namespace DeltaruneMod.Items.Tier3
             var effectController = SwoonModelPrefab.GetComponent<SwoonEffectController>();
             if (!effectController) effectController = SwoonModelPrefab.AddComponent<SwoonEffectController>();
 
+            SwoonEffectPrefabL.AddComponent<NetworkIdentity>();
+            SwoonEffectPrefabR.AddComponent<NetworkIdentity>();
+
             Util.Helpers.CreateNetworkedEffectPrefab(SwoonModelPrefab);
-            Util.Helpers.CreateNetworkedEffectPrefab(SwoonEffectPrefabL);
-            Util.Helpers.CreateNetworkedEffectPrefab(SwoonEffectPrefabR);
         }
 
-        public void CreateSoundEffect()
+        public void CreateSFX()
         {
-            SwoonSoundPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/ShurikenProjectile").InstantiateClone("SwoonSoundEffect", true);
-
-            Util.Helpers.CreateSoundPrefab("swoon_sfx", "Play_snd_knight_cut");
-
-            var effectComponent = SwoonSoundPrefab.GetComponent<EffectComponent>() ?? SwoonSoundPrefab.AddComponent<EffectComponent>();
-            effectComponent.soundName = "Play_snd_knight_cut";
-
-            Util.Helpers.CreateNetworkedEffectPrefab(SwoonSoundPrefab);
+            SwoonSFX = Util.Helpers.CreateNetworkSoundEventDef("Play_snd_knight_cut");
         }
 
         public class SwoonDamageTracker : CharacterBody.ItemBehavior
@@ -397,11 +391,6 @@ namespace DeltaruneMod.Items.Tier3
             private void Start()
             {
                 canSwoon = true;
-            }
-            private void OnDisable()
-            {
-                currHealth = 0;
-                prevHealth = 0;
             }
             private void FixedUpdate()
             {
@@ -422,13 +411,25 @@ namespace DeltaruneMod.Items.Tier3
                 totalDamageTaken = (prevHealth - currHealth) * (stack + 1);
                 body.healthComponent.health -= totalDamageTaken;
 
+                // Hopefully fix potential of multiple peoples swoon causing the roaring (the health bar to go crazy)
+                if (body.healthComponent.health - totalDamageTaken > body.maxHealth)
+                {
+                    ResetSwoonStats();
+                    return;
+                }
+
                 EffectManager.SpawnEffect(SwoonModelPrefab, new EffectData { origin = body.transform.position, scale = 1f }, true);
-                EffectManager.SpawnEffect(SwoonSoundPrefab, new EffectData { origin = transform.position, scale = 1f }, true);
+                EffectManager.SimpleSoundEffect(SwoonSFX.index, body.corePosition, true);
 
                 Debug.Log("Swooned " + body.name + " for " + totalDamageTaken + "!");
                 Debug.Log("Prev HP " + prevHealth + " | Old Curr HP " + currHealth);
 
                 canSwoon = false;
+            }
+            public void ResetSwoonStats()
+            {
+                prevHealth = 0;
+                currHealth = 0;
             }
         }
 

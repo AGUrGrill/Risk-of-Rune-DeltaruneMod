@@ -15,7 +15,7 @@ namespace DeltaruneMod.Util
     public class Helpers
     {
         #region Item Defs
-        // 99: ALL, 0: Tier 1, 1: Tier 2, 2: Tier 3
+        // 99: ALL, 0: Tier 1, 1: Tier 2, 2: Tier, 3: Tier Boss
         public static List<ItemDef> GetItems(int tierIndex)
         {
             List<ItemDef> items = new List<ItemDef>();
@@ -54,7 +54,7 @@ namespace DeltaruneMod.Util
         #endregion
 
         #region Buff Defs
-        // 0: ALL, 1: Debuffs, 2: Affixs
+        // 99: ALL, 0: Buffs?, 1: Debuffs, 2: Affixs
         public static List<BuffDef> GetBuffs(int type) 
         {
             List<BuffDef> buffs = new List<BuffDef>();
@@ -63,9 +63,10 @@ namespace DeltaruneMod.Util
             {
                 if (field.GetValue(null) is BuffDef buff)
                 {
-                    if (type == 0) buffs.Add(buff);
+                    if (type == 0 && !buff.isElite && !buff.isDebuff) buffs.Add(buff);
                     else if (type == 1 && buff.isDebuff) buffs.Add(buff);
                     else if (type == 2 && buff.isElite) buffs.Add(buff);
+                    else if (type == 99) buffs.Add(buff);
                 }
             }
             fields = typeof(DLC1Content.Buffs).GetFields(BindingFlags.Public | BindingFlags.Static);
@@ -73,9 +74,10 @@ namespace DeltaruneMod.Util
             {
                 if (field.GetValue(null) is BuffDef buff)
                 {
-                    if (type == 0) buffs.Add(buff);
+                    if (type == 0 && !buff.isElite && !buff.isDebuff) buffs.Add(buff);
                     else if (type == 1 && buff.isDebuff) buffs.Add(buff);
                     else if (type == 2 && buff.isElite) buffs.Add(buff);
+                    else if (type == 99) buffs.Add(buff);
                 }
             }
             fields = typeof(DLC2Content.Buffs).GetFields(BindingFlags.Public | BindingFlags.Static);
@@ -83,9 +85,10 @@ namespace DeltaruneMod.Util
             {
                 if (field.GetValue(null) is BuffDef buff)
                 {
-                    if (type == 0) buffs.Add(buff);
+                    if (type == 0 && !buff.isElite && !buff.isDebuff) buffs.Add(buff);
                     else if (type == 1 && buff.isDebuff) buffs.Add(buff);
                     else if (type == 2 && buff.isElite) buffs.Add(buff);
+                    else if (type == 99) buffs.Add(buff);
                 }
             }
             return buffs;
@@ -97,6 +100,7 @@ namespace DeltaruneMod.Util
         {
             if (!obj.GetComponent<NetworkIdentity>()) obj.AddComponent<NetworkIdentity>();
             if (!obj.GetComponent<EffectComponent>()) obj.AddComponent<EffectComponent>();
+            if (!obj.GetComponent<VFXAttributes>()) obj.AddComponent<VFXAttributes>();
             PrefabAPI.RegisterNetworkPrefab(obj);
             ContentAddition.AddEffect(obj);
         }
@@ -108,13 +112,25 @@ namespace DeltaruneMod.Util
             PrefabAPI.RegisterNetworkPrefab(obj);
             ContentAddition.AddProjectile(obj);
         }
-        public static void CreateSoundPrefab(string name, string event_name)
+        // Using Nuxlar's Sound Solution, cause im too dum for this
+        public static NetworkSoundEventDef CreateNetworkSoundEventDef(string eventName)
         {
-            var sound = ScriptableObject.CreateInstance<NetworkSoundEventDef>();
-            sound.eventName = event_name;
-            sound.name = name;
-            R2API.ContentAddition.AddNetworkSoundEventDef(sound);
+            NetworkSoundEventDef networkSoundEventDef = ScriptableObject.CreateInstance<NetworkSoundEventDef>();
+            networkSoundEventDef.akId = AkSoundEngine.GetIDFromString(eventName);
+            networkSoundEventDef.eventName = eventName;
+
+            ContentAddition.AddNetworkSoundEventDef(networkSoundEventDef);
+
+            return networkSoundEventDef;
         }
         #endregion
+
+        public static void GetAllComponentNames(GameObject obj)
+        {
+            foreach (var componenet in obj.GetComponents<Component>())
+            {
+                Debug.Log(componenet);
+            }
+        }
     }
 }

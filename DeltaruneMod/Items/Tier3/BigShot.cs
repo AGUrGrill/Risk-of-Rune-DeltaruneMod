@@ -18,7 +18,7 @@ namespace DeltaruneMod.Items.Tier3
         public override string ItemName => "Dealmaker";
         public override string ItemLangTokenName => "BIGSHOT";
         public override string ItemPickupDesc => "Gain stacks of <style=cDeath>[Big Shot]</style> on gold gain.";
-        public override string ItemFullDescription => "<style=cShrine>+30%</style> gold gain.\nOn gold gain <style=cStack>($50 per stage)</style>, gain <style=cStack>1</style> stack of <style=cDeath>[Big Shot]</style>.\n" +
+        public override string ItemFullDescription => "<style=cShrine>+30%</style> gold gain.\nOn gold gain, gain <style=cStack>1</style> stack of <style=cDeath>[Big Shot]</style>.\n" +
             "On <style=cIsUtility>10</style> stacks, shoot a projectile on primary skill dealing <style=cIsDamage>777%</style> dmg <style=cStack>(+222% per stack)</style>.";
         public override string ItemLore => "As the days became more dull, and bussiness started to dry, a call came in." +
             "\nIt's your chance... a once in a lifetime chance... to become a <style=cDeath>[Big Shot]</style>.";
@@ -37,14 +37,14 @@ namespace DeltaruneMod.Items.Tier3
 
         public static GameObject projectilePrefab;
 
-        public static GameObject BigShotEffectPrefab;
+        public static NetworkSoundEventDef BigShotSFX;
 
         public override void Init()
         {
             CreateLang();
             CreateItem();
             CreateBuff();
-            CreateEffect();
+            CreateSFX();
             CreateProjectile();
             Hooks();
         }
@@ -106,13 +106,7 @@ namespace DeltaruneMod.Items.Tier3
             }
             else if (existing && itemCount <= 0) existing.enabled = false;
             else if (existing && itemCount > 0 && !existing.enabled) existing.enabled = true;
-            if (existing)
-            {
-                existing.stack = itemCount;
-                existing.GoldThreshold = 50 + TotalStages * GoldIncreasePerStage;
-                //Debug.Log("New Bigshot Threshold: " + existing.GoldThreshold);
-            }
-            
+            if (existing) existing.stack = itemCount;
         }
 
         public void CreateBuff()
@@ -126,16 +120,9 @@ namespace DeltaruneMod.Items.Tier3
             ContentAddition.AddBuffDef(BigShotBuff);
         }
 
-        public void CreateEffect()
+        public void CreateSFX()
         {
-            BigShotEffectPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/ShurikenProjectile").InstantiateClone("BigShotSoundEffect", true);
-
-            Util.Helpers.CreateSoundPrefab("bigshot_sfx", "Play_BIGSHOT");
-
-            var effectComponent = BigShotEffectPrefab.GetComponent<EffectComponent>() ?? BigShotEffectPrefab.AddComponent<EffectComponent>();
-            effectComponent.soundName = "Play_BIGSHOT";
-
-            Util.Helpers.CreateNetworkedEffectPrefab(BigShotEffectPrefab);
+            BigShotSFX = Util.Helpers.CreateNetworkSoundEventDef("Play_BIGSHOT");
         }
 
         public void CreateProjectile()
@@ -416,8 +403,8 @@ namespace DeltaruneMod.Items.Tier3
             public uint MaxBigShotStacks = 30;
             public float TotalDamageCalc;
 
-            public uint TotalGoldGained = 0;
-            public uint GoldThreshold = 50;
+            public float TotalGoldGained = 0;
+            public uint BaseGoldThreshold = 50;
 
             private bool TimeForABigShot;
 
@@ -462,14 +449,18 @@ namespace DeltaruneMod.Items.Tier3
             {
                 if (!NetworkServer.active) return;
 
+                DifficultyDef difficultyDef = DifficultyCatalog.GetDifficultyDef(DifficultyIndex.Normal);
                 #region Gold/Buff/Dmg Calcs
                 TotalDamageCalc = body.damage * (DmgMult + StackDmgMult * (stack - 1));
+                var goldPerStack = BaseGoldThreshold * difficultyDef.scalingValue;
+                var maxGold = goldPerStack * MaxBigShotStacks;
+
                 if (body.GetBuffCount(BigShotBuff) >= MaxBigShotStacks+1) body.RemoveBuff(BigShotBuff); // Remove buff on higher than alloted stack
-                if (TotalGoldGained >= GoldThreshold * MaxBigShotStacks) TotalGoldGained = GoldThreshold * MaxBigShotStacks; // Set max internal gold if higher than possible stacks
-                if (TotalGoldGained >= GoldThreshold)
+                if (TotalGoldGained >= maxGold) TotalGoldGained = maxGold;
+                if (TotalGoldGained >= goldPerStack)
                 {
                     body.AddBuff(BigShotBuff);
-                    TotalGoldGained -= GoldThreshold;
+                    TotalGoldGained -= goldPerStack;
                 } // Add buff and remove gold
                 if (body.GetBuffCount(BigShotBuff) >= BigShotThreshold && !TimeForABigShot) TimeForABigShot = true; // If buff count is equal to threshold, allow big shot
                 #endregion
@@ -482,8 +473,7 @@ namespace DeltaruneMod.Items.Tier3
                 if ((skillLocator != null ? skillLocator.primary : null) == skill && TimeForABigShot)
                 {
                     ShootBigShot();
-                    //RoR2.Util.PlaySound("Play_BIGSHOT", gameObject);
-                    EffectManager.SpawnEffect(BigShotEffectPrefab, new EffectData { origin = transform.position, scale = 1f }, true);
+                    EffectManager.SimpleSoundEffect(BigShotSFX.index, body.corePosition, true);
                     for (int i = 0; i < BigShotThreshold; i++)
                     {
                         body.RemoveBuff(BigShotBuff);
@@ -509,31 +499,6 @@ namespace DeltaruneMod.Items.Tier3
                     });
                 }
             }
-            /*
-            private GameObject FindTarget(float searchRadius)
-            {
-                if (!body || !body.teamComponent) return null;
-
-                TeamIndex teamIndex = body.teamComponent.teamIndex;
-
-                BullseyeSearch search = new BullseyeSearch
-                {
-                    teamMaskFilter = TeamMask.allButNeutral,
-                    filterByLoS = true,
-                    maxDistanceFilter = searchRadius,
-                    searchOrigin = body.corePosition,
-                    sortMode = BullseyeSearch.SortMode.Distance,
-                    viewer = body
-                };
-
-                search.teamMaskFilter.RemoveTeam(teamIndex);
-                search.RefreshCandidates();
-
-                HurtBox targetHurtBox = search.GetResults().FirstOrDefault();
-                GameObject targetGameObject = targetHurtBox ? targetHurtBox.gameObject : null;
-                return targetGameObject;
-            }
-            */
             private Ray GetAimRay()
             {
                 return new Ray(body.inputBank.aimOrigin, body.inputBank.aimDirection);

@@ -1,4 +1,4 @@
-﻿using DeltaruneMod.Items.Tier2;
+﻿using DeltaruneMod.Items.Spamton;
 using R2API;
 using RoR2;
 using System;

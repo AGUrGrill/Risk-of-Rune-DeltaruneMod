@@ -41,7 +41,7 @@ namespace DeltaruneMod.Items.Lunar
         // SEEKER ISSUE - When sojourn causes seeker to disappear, maybe make timer per person?
         public void DevilsKnifeEffect()
         {
-            if (buffs.Count <= 0) buffs = Util.Helpers.GetBuffs(0);
+            if (buffs.Count <= 0) buffs = Util.Helpers.GetBuffs(99);
             CharacterBody[] allCharacterBodies = UnityEngine.Object.FindObjectsOfType<CharacterBody>();
             foreach (CharacterBody sender in allCharacterBodies)
             {

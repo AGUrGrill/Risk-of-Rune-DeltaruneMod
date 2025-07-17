@@ -3,6 +3,7 @@ using DeltaruneMod.Items;
 using DeltaruneMod.Items.Tier2;
 using R2API;
 using RoR2;
+using RoR2.UI;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
@@ -23,6 +24,9 @@ namespace DeltaruneMod.Interactables.SusExchange
         public List<ItemDef> allTier3 = new List<ItemDef>();
         public List<ItemDef> allTakeableItems = new List<ItemDef>();
         public ItemDef kromer, pearl, shinyPearl, pipis, mrPipis, commRing;
+
+        private readonly int maxUses = 10;
+        private int timesUsed = 0;
 
         public void Start()
         {
@@ -58,6 +62,12 @@ namespace DeltaruneMod.Interactables.SusExchange
         {
             if (!NetworkServer.active) return;
 
+            if (timesUsed > maxUses)
+            {
+                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: SHOP IS [Closed for the season] TRY AGAIN [Next time]." });
+                return;
+            }
+            
             EffectManager.SpawnEffect(shrineUseEffect, new EffectData()
             {
                 origin = gameObject.transform.position,
@@ -67,6 +77,7 @@ namespace DeltaruneMod.Interactables.SusExchange
             }, true);
 
             ApplySpamtonShop(interactor);
+            timesUsed ++;
         }
 
         public void ApplySpamtonShop(Interactor interactor)
@@ -95,7 +106,13 @@ namespace DeltaruneMod.Interactables.SusExchange
                 if (allInventoryItems.Contains(allTakeableItems[i]))
                     allTakeableInvItems.Add(allTakeableItems[i]);
             }
-            if (allTakeableInvItems.Count <= 0) return;
+            if (allTakeableInvItems.Count <= 0)
+            {
+                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: ITEMS NO" });
+                timesUsed--;
+                return;
+            }
+            
             #endregion
 
             Debug.Log("Picking item");
@@ -147,7 +164,7 @@ namespace DeltaruneMod.Interactables.SusExchange
                 {
                     if (itemFromInventory.tier == ItemTier.Tier1) itemGiven = randomTier2;
                     else if (itemFromInventory.tier == ItemTier.Tier2) itemGiven = randomTier3;
-                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: THAT'S A REAL BIGSHOT MOVE KID!!! YOU'RE LIKE ME..." });
+                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: THAT'S A REAL <style=cDeath>[[Big Shot]]</style> MOVE KID!!! YOU'RE JUST LIKE [Me]..." });
 
                 }
                 else

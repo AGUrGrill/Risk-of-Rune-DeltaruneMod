@@ -1,6 +1,7 @@
 ﻿using BepInEx.Configuration;
 using R2API;
 using RoR2;
+using RoR2.Hologram;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace DeltaruneMod.Interactables.SusExchange
     {
         public override string InteractableName => "Suspicious Exchange";
 
-        public override string InteractableContext => "Pss... Wanna become a [Big Shot]?";
+        public override string InteractableContext => "WANNA CHANCE TO BECOME A <style=cDeath>[[Big Shot]]</style>? ";//"Pss... Wanna become a <style=cDeath>[Big Shot]</style>?";
 
         public override string InteractableLangToken => "SPAMTON_TRASH";
 
@@ -57,6 +58,27 @@ namespace DeltaruneMod.Interactables.SusExchange
             highlightController.targetRenderer = InteractableBodyModelPrefab.GetComponentsInChildren<MeshRenderer>().Where(x => x.gameObject.name.Contains("polySurface51")).Single();
             highlightController.strength = 1;
             highlightController.highlightColor = Highlight.HighlightColor.interactive;
+
+            Transform pivot = new GameObject("HologramPivot").transform;
+            pivot.SetParent(InteractableBodyModelPrefab.transform);
+            pivot.localPosition = new Vector3(0f, 0.9f, 1.1f);
+
+            var projector = InteractableBodyModelPrefab.AddComponent<HologramProjector>();
+            projector.hologramPivot = pivot;
+            projector.displayDistance = 10f;
+            projector.disableHologramRotation = false;
+
+            GameObject textObject = new GameObject("HologramText");
+            textObject.transform.SetParent(pivot);
+            textObject.transform.localPosition = Vector3.zero;
+
+            var textMesh = textObject.AddComponent<TMPro.TextMeshPro>();
+            textMesh.text = "1 ITEM";
+            textMesh.fontSize = 5f;
+            textMesh.color = Color.red;
+            textMesh.alignment = TMPro.TextAlignmentOptions.Center;
+
+            textObject.AddComponent<Billboard>();
 
             InteractableBodyModelPrefab.GetComponent<Highlight>().targetRenderer = InteractableBodyModelPrefab.GetComponentInChildren<SkinnedMeshRenderer>();
             GameObject something = new GameObject();

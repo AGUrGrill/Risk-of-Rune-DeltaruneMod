@@ -285,7 +285,6 @@ namespace DeltaruneMod.Items.Yellow
     {
         public int prevNumOfPipis = 0;
         public int currNumOfPipis = 0;
-        public CharacterBody body;
         private float pipisMult = 1.05F;
 
         private void FixedUpdate()

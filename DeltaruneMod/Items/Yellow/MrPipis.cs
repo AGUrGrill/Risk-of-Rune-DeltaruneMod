@@ -9,7 +9,7 @@ using static DeltaruneMod.DeltarunePlugin;
 
 namespace DeltaruneMod.Items.Yellow
 {
-    public class MrPipis : ItemBase<Pipis>
+    public class MrPipis : ItemBase<MrPipis>
     {
         public override string ItemName => "Mr. Pipis";
 

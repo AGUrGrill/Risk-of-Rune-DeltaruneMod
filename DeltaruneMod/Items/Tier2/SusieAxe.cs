@@ -42,11 +42,11 @@ namespace DeltaruneMod.Items.Tier2
 
         public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Damage };
 
-        public static GameObject projectilePrefab;
+        public static GameObject ProjectilePrefab;
 
-        public BuffDef SusieAxeBuff;
+        public static BuffDef SusieAxeBuff;
 
-        public static GameObject SusieAxeEffectPrefab;
+        public static NetworkSoundEventDef RudeBusterSFX;
 
         public override void Init()
         {
@@ -66,7 +66,7 @@ namespace DeltaruneMod.Items.Tier2
         
         public void SusieAxeEffect(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
         {
-            if (!NetworkServer.active || !sender) return;
+            if (!NetworkServer.active) return;
 
             var itemCount = GetCount(sender);
             var existing = sender.GetComponent<PrimarySkillSusieAxeBehavior>();
@@ -95,40 +95,31 @@ namespace DeltaruneMod.Items.Tier2
 
         public void CreateSoundEffect()
         {
-            SusieAxeEffectPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/ShurikenProjectile").InstantiateClone("SusieAxeSoundEffect", true);
-
-            Util.Helpers.CreateSoundPrefab("rude_buster_sfx", "Play_rude_buster");
-
-            var effectComponent = SusieAxeEffectPrefab.GetComponent<EffectComponent>() ?? SusieAxeEffectPrefab.AddComponent<EffectComponent>();
-            effectComponent.soundName = "Play_rude_buster";
-
-
-            Util.Helpers.CreateNetworkedEffectPrefab(SusieAxeEffectPrefab);
+            RudeBusterSFX = Util.Helpers.CreateNetworkSoundEventDef("Play_rude_buster");
         }
         
         public void CreateProjectile()
         {
-            projectilePrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/ShurikenProjectile").InstantiateClone("SusieAxeProjectile", true);
+            ProjectilePrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/ShurikenProjectile").InstantiateClone("SusieAxeProjectile", true);
 
             var ghost = MainAssets.LoadAsset<GameObject>("rude_buster.prefab").InstantiateClone("rude_buster", true);
             ghost.AddComponent<ProjectileGhostController>();
             ghost.AddComponent<NetworkIdentity>();
             ghost.transform.localScale = new Vector3(150f, 150f, 150f);
 
-            var projCont = projectilePrefab.GetComponent<ProjectileController>();
+            var projCont = ProjectilePrefab.GetComponent<ProjectileController>();
             if (projCont.ghostPrefab != null) UnityEngine.Object.Destroy(projCont.ghostPrefab);
-            projCont.startSound = "";
             projCont.shouldPlaySounds = false;
             projCont.ghostPrefab = ghost;
 
-            var projSimp = projectilePrefab.GetComponent<ProjectileSimple>();
+            var projSimp = ProjectilePrefab.GetComponent<ProjectileSimple>();
             projSimp.desiredForwardSpeed *= 0.5f;
             projSimp.GetComponent<Rigidbody>().useGravity = false;
 
-            UnityEngine.Object.Destroy(projectilePrefab.GetComponent<ProjectileSteerTowardTarget>());
-            UnityEngine.Object.Destroy(projectilePrefab.GetComponent<ProjectileTargetComponent>());
+            UnityEngine.Object.Destroy(ProjectilePrefab.GetComponent<ProjectileSteerTowardTarget>());
+            UnityEngine.Object.Destroy(ProjectilePrefab.GetComponent<ProjectileTargetComponent>());
 
-            Util.Helpers.CreateNetworkedProjectilePrefab(projectilePrefab);
+            Util.Helpers.CreateNetworkedProjectilePrefab(ProjectilePrefab);
         }
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()
@@ -364,7 +355,7 @@ namespace DeltaruneMod.Items.Tier2
         public class PrimarySkillSusieAxeBehavior : CharacterBody.ItemBehavior
         {
             public const int numShurikensBase = 2;
-            public float damageCoefficientBase =  6f;
+            public float damageCoefficientBase = 6f;
             public float damageCoefficientPerStack = 2f;
             public const float force = 4f;
             public float reloadTime = 5f;
@@ -383,7 +374,7 @@ namespace DeltaruneMod.Items.Tier2
             }
             private void Start()
             {
-                projectilePrefab = SusieAxe.projectilePrefab;
+                projectilePrefab = ProjectilePrefab;
             }
 
             private void OnEnable()
@@ -418,12 +409,13 @@ namespace DeltaruneMod.Items.Tier2
                 if (!NetworkServer.active) return;
 
                 SkillLocator skillLocator = this.skillLocator;
-                if (((skillLocator != null ? skillLocator.primary : null) == skill  || (skillLocator != null ? skillLocator.secondary : null) == skill)  && body.GetBuffCount(SusieAxeBuff) > 0)
+                if (((skillLocator != null ? skillLocator.primary : null) == skill || (skillLocator != null ? skillLocator.secondary : null) == skill) && body.GetBuffCount(SusieAxeBuff) > 0)
                 {
                     FireSusieAxe();
                     //RoR2.Util.PlaySound("Play_rude_buster", gameObject);
                     //RpcPlaySusieSound();
-                    EffectManager.SpawnEffect(SusieAxeEffectPrefab, new EffectData { origin = transform.position, scale = 1f }, true);
+                    //EffectManager.SpawnEffect(SusieAxeEffectPrefab, new EffectData { origin = transform.position, scale = 1f }, true);
+                    EffectManager.SimpleSoundEffect(RudeBusterSFX.index, body.corePosition, true);
                     body.RemoveBuff(SusieAxeBuff);
 
                     float healCalc = body.maxHealth * healPercent;
@@ -463,7 +455,7 @@ namespace DeltaruneMod.Items.Tier2
                     crit = RoR2.Util.CheckRoll(body.crit, body.master),
                     damageColorIndex = DamageColorIndex.Item,
                     comboNumber = 3,
-                }); 
+                });
             }
             private Ray GetAimRay()
             {
@@ -471,5 +463,4 @@ namespace DeltaruneMod.Items.Tier2
             }
         }
     }
-
 }

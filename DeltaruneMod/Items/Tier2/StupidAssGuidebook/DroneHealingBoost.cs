@@ -25,7 +25,7 @@ namespace DeltaruneMod.Items
 
         public override string ItemLore => "";
 
-        public override ItemTier Tier => ItemTier.NoTier;
+        public override ItemTier Tier => ItemTier.AssignedAtRuntime;
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("guide_book.prefab");
         public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("guide_book_icon.png");
@@ -65,13 +65,8 @@ namespace DeltaruneMod.Items
         {
             HealEffectPrefab = MainAssets.LoadAsset<GameObject>("guide_book_heal.prefab").InstantiateClone("guidebook_heal", true);
             HealEffectPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-
-            HealEffectPrefab.AddComponent<NetworkIdentity>();
-            HealEffectPrefab.AddComponent<EffectComponent>();
-            //HealEffectHolder.AddComponent<DroneHealingEffectController>();
-
-            PrefabAPI.RegisterNetworkPrefab(HealEffectPrefab);
-            ContentAddition.AddEffect(HealEffectPrefab);
+ 
+            Util.Helpers.CreateNetworkedEffectPrefab(HealEffectPrefab);
         }
 
         public override void Init()
