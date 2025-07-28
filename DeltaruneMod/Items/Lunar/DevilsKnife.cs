@@ -30,32 +30,50 @@ namespace DeltaruneMod.Items.Lunar
         public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("devils_knife_icon.png");
         public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility };
 
-        private List<BuffDef> buffs = new List<BuffDef>();
+        public override bool isChapter1 => true;
+
+        public override bool isChapter2 => false;
+
+        public override bool isChapter3 => false;
+
+        public override bool isChapter4 => false;
+
+        public static List<BuffDef> buffs = new List<BuffDef>();
 
         public override void Init()
         {
             CreateItem();
             CreateLang();
-        }
-
-        // SEEKER ISSUE - When sojourn causes seeker to disappear, maybe make timer per person?
-        public void DevilsKnifeEffect()
-        {
-            if (buffs.Count <= 0) buffs = Util.Helpers.GetBuffs(99);
-            CharacterBody[] allCharacterBodies = UnityEngine.Object.FindObjectsOfType<CharacterBody>();
-            foreach (CharacterBody sender in allCharacterBodies)
-            {
-                if (!NetworkServer.active || !sender.isPlayerControlled || GetCount(sender) <= 0) return;
-
-                BuffDef randomBuff = buffs[UnityEngine.Random.Range(0, buffs.Count)];
-                sender.AddTimedBuff(randomBuff, 8 + (GetCount(sender) - 0) * 5);
-                Debug.Log($"Added random buff: {randomBuff.name} to {sender.name}");
-            }
+            Hooks();
         }
 
         public override void Hooks()
         {
-            return;
+            RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
+        }
+
+        private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
+        {
+            if (buffs.Count <= 0) buffs = Util.Helpers.GetBuffs(99);
+            if (!NetworkServer.active) return;
+
+            if (sender.inventory)
+            {
+                var chaosInflicted = sender.GetComponent<WorldRevolvingEffect>();
+                if (GetCount(sender) > 0)
+                {
+                    if (!chaosInflicted)
+                    {
+                        chaosInflicted = sender.gameObject.AddComponent<WorldRevolvingEffect>();
+                        chaosInflicted.stack = GetCount(sender);
+                        chaosInflicted.body = sender;
+
+                    } 
+                    else if (chaosInflicted && GetCount(sender) > chaosInflicted.stack) chaosInflicted.stack = GetCount(sender);
+                }
+                else if (chaosInflicted && GetCount(sender) <= 0) chaosInflicted.enabled = false;
+            }
+            
         }
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()
@@ -282,6 +300,39 @@ namespace DeltaruneMod.Items.Lunar
                 }
             });
             return rules;
+        }
+    
+        public class WorldRevolvingEffect : CharacterBody.ItemBehavior
+        {
+            private float timer = 0f;
+            private float maxTime = 10f;
+
+            private void FixedUpdate()
+            {
+                timer -= Time.fixedDeltaTime;
+                if (timer <= 0f)
+                {
+                    ChaosChaos();
+                    timer = maxTime;
+                }
+            }
+            // SEEKER ISSUE - When sojourn causes seeker to disappear, maybe make timer per person?
+            public void ChaosChaos()
+            {
+                BuffDef randomBuff;
+                while (true)
+                {
+                    randomBuff = buffs[UnityEngine.Random.Range(0, buffs.Count)];
+                    if (!body.HasBuff(randomBuff)) break;
+                    Debug.Log(body.name + " already has buff " + randomBuff.name + "! Cycling to next buff...");
+                }
+                body.AddTimedBuff(randomBuff, 5 + (stack * 5));
+                Debug.Log("Added random buff:" + randomBuff.name + " to " + body.name);
+            }
+            private void OnDisable()
+            {
+                Destroy(this);
+            }
         }
     }
 }

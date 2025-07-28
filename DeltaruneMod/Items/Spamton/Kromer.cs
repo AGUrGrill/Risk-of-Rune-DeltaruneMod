@@ -27,12 +27,24 @@ namespace DeltaruneMod.Items.Spamton
 
         public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("kromer.png");
 
+        public override bool isChapter1 => false;
+
+        public override bool isChapter2 => true;
+
+        public override bool isChapter3 => false;
+
+        public override bool isChapter4 => false;
+
         public override void Init()
         {
-            ItemModel.transform.localScale = new Vector3(2f, 2f, 2f);
             CreateLang();
             CreateItem();
             Hooks();
+
+            GameObject pickupModel = MainAssets.LoadAsset<GameObject>("kromer.prefab").InstantiateClone("KromerPickup", true);
+            pickupModel.transform.localScale = new Vector3(2f, 2f, 2f); 
+
+            ItemDef.pickupModelPrefab = pickupModel;
         }
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()

@@ -26,6 +26,14 @@ namespace DeltaruneMod.Items.Tier1
 
         public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility };
 
+        public override bool isChapter1 => false;
+
+        public override bool isChapter2 => false;
+
+        public override bool isChapter3 => true;
+
+        public override bool isChapter4 => false;
+
         public override void Init()
         {
             CreateItem();

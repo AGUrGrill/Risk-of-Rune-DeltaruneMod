@@ -42,6 +42,14 @@ namespace DeltaruneMod.Items.Tier2
 
         public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Damage };
 
+        public override bool isChapter1 => true;
+
+        public override bool isChapter2 => false;
+
+        public override bool isChapter3 => false;
+
+        public override bool isChapter4 => false;
+
         public static GameObject ProjectilePrefab;
 
         public static BuffDef SusieAxeBuff;

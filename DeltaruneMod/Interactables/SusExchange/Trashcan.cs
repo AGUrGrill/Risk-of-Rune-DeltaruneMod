@@ -1,11 +1,13 @@
 ﻿using BepInEx.Configuration;
 using R2API;
+using Rewired.UI;
 using RoR2;
 using RoR2.Hologram;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
@@ -23,9 +25,18 @@ namespace DeltaruneMod.Interactables.SusExchange
 
         public override GameObject InteractableModel => MainAssets.LoadAsset<GameObject>("spamton_trash.prefab");
 
+        public override bool isChapter1 => false;
+
+        public override bool isChapter2 => true;
+
+        public override bool isChapter3 => false;
+
+        public override bool isChapter4 => false;
+
         public static GameObject InteractableBodyModelPrefab;
 
         public static InteractableSpawnCard InteractableSpawnCard;
+
 
         public override void Init()
         {
@@ -61,24 +72,15 @@ namespace DeltaruneMod.Interactables.SusExchange
 
             Transform pivot = new GameObject("HologramPivot").transform;
             pivot.SetParent(InteractableBodyModelPrefab.transform);
-            pivot.localPosition = new Vector3(0f, 0.9f, 1.1f);
+            pivot.localPosition = new Vector3(0f, 0.9f, 1);
 
             var projector = InteractableBodyModelPrefab.AddComponent<HologramProjector>();
             projector.hologramPivot = pivot;
             projector.displayDistance = 10f;
             projector.disableHologramRotation = false;
 
-            GameObject textObject = new GameObject("HologramText");
-            textObject.transform.SetParent(pivot);
-            textObject.transform.localPosition = Vector3.zero;
-
-            var textMesh = textObject.AddComponent<TMPro.TextMeshPro>();
-            textMesh.text = "1 ITEM";
-            textMesh.fontSize = 5f;
-            textMesh.color = Color.red;
-            textMesh.alignment = TMPro.TextAlignmentOptions.Center;
-
-            textObject.AddComponent<Billboard>();
+            var textController = InteractableBodyModelPrefab.AddComponent<TextController>();
+            textController.center = pivot;
 
             InteractableBodyModelPrefab.GetComponent<Highlight>().targetRenderer = InteractableBodyModelPrefab.GetComponentInChildren<SkinnedMeshRenderer>();
             GameObject something = new GameObject();
@@ -117,6 +119,46 @@ namespace DeltaruneMod.Interactables.SusExchange
             };
 
             DirectorAPI.Helpers.AddNewInteractable(directorCardHolder);
+        } 
+    }
+    public class TextController : NetworkBehaviour
+    {
+        [SyncVar] public string text;
+        private string oldText;
+        private TextMeshPro textMesh;
+        public Transform center;
+        private void Start()
+        {
+            GameObject textObject = new GameObject("HologramText");
+            textObject.transform.SetParent(center);
+            textObject.transform.localPosition = Vector3.zero; 
+
+            oldText = text;
+            textMesh = textObject.AddComponent<TMPro.TextMeshPro>();
+            textMesh.text = Util.UniversalVariables.maxSusExUses + " USES";
+            textMesh.fontSize = 5f;
+            textMesh.color = Color.red;
+            textMesh.alignment = TMPro.TextAlignmentOptions.Center;
+            textObject.AddComponent<Billboard>();
+
+            NetworkServer.Spawn(textObject);
+        }
+
+        [ClientRpc]
+        private void UpdateText()
+        {
+            textMesh.text = text;
+            Debug.Log("TEXT CHANGED ON MESH!\n" + oldText + " -> " + text);
+            Debug.Log("IF U DONT SEE IT I KMS :)");
+        }
+
+        [Command]
+        public void SetText(string newText)
+        {
+            oldText = text;
+            text = newText;
+            Debug.Log("TEXT CHANGED!\n" + oldText + " -> " + text);
+            UpdateText();
         }
     }
 }

@@ -33,6 +33,14 @@ namespace DeltaruneMod.Items.Tier3
 
         public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Damage };
 
+        public override bool isChapter1 => false;
+
+        public override bool isChapter2 => false;
+
+        public override bool isChapter3 => true;
+
+        public override bool isChapter4 => false;
+
         public static BuffDef SwoonBuff;
 
         public static Sprite SwoonEffectIcon = MainAssets.LoadAsset<Sprite>("swoon_effect_icon.png");
@@ -278,6 +286,10 @@ namespace DeltaruneMod.Items.Tier3
             CreateSwoonEffect();
             Hooks();
 
+            GameObject pickupModel = MainAssets.LoadAsset<GameObject>("roaring_blade.prefab").InstantiateClone("RoaringBladePickup", true);
+            pickupModel.transform.localScale = new Vector3(2f, 2f, 2f);
+
+            ItemDef.pickupModelPrefab = pickupModel;
         }
 
         public void CreateBuff()
@@ -359,19 +371,19 @@ namespace DeltaruneMod.Items.Tier3
 
         private static void CreateSwoonEffect()
         {
-            SwoonEffectPrefabL = PrefabAPI.InstantiateClone(MainAssets.LoadAsset<GameObject>("swoon_left.prefab"), "swoon_left", true);
-            SwoonEffectPrefabR = PrefabAPI.InstantiateClone(MainAssets.LoadAsset<GameObject>("swoon_right.prefab"), "swoon_right", true);
-            
             SwoonModelPrefab = PrefabAPI.InstantiateClone(MainAssets.LoadAsset<GameObject>("swoon.prefab"), "swoon_main", true);
-            SwoonModelPrefab.transform.localScale = new Vector3(120f, 120f, 120f);
+            SwoonModelPrefab.transform.localScale = new Vector3(130f, 130f, 130f);
 
             var effectController = SwoonModelPrefab.GetComponent<SwoonEffectController>();
             if (!effectController) effectController = SwoonModelPrefab.AddComponent<SwoonEffectController>();
 
-            SwoonEffectPrefabL.AddComponent<NetworkIdentity>();
-            SwoonEffectPrefabR.AddComponent<NetworkIdentity>();
+            Util.Helpers.CreateNetworkedEffectPrefab(SwoonModelPrefab, false);
 
-            Util.Helpers.CreateNetworkedEffectPrefab(SwoonModelPrefab);
+            SwoonEffectPrefabL = PrefabAPI.InstantiateClone(MainAssets.LoadAsset<GameObject>("swoon_left.prefab"), "swoon_left", true);
+            SwoonEffectPrefabR = PrefabAPI.InstantiateClone(MainAssets.LoadAsset<GameObject>("swoon_right.prefab"), "swoon_right", true);
+
+            Util.Helpers.AddEffectPrefabToContentAddition(SwoonEffectPrefabL);
+            Util.Helpers.AddEffectPrefabToContentAddition(SwoonEffectPrefabR);
         }
 
         public void CreateSFX()
@@ -433,7 +445,7 @@ namespace DeltaruneMod.Items.Tier3
             }
         }
 
-        public class SwoonEffectController : MonoBehaviour
+        public class SwoonEffectController : NetworkBehaviour
         {
 
             void Start()

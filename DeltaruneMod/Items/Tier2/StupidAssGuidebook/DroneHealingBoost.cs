@@ -30,8 +30,15 @@ namespace DeltaruneMod.Items
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("guide_book.prefab");
         public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("guide_book_icon.png");
 
+        public override bool isChapter1 => true;
+
+        public override bool isChapter2 => false;
+
+        public override bool isChapter3 => false;
+
+        public override bool isChapter4 => false;
+
         public static GameObject HealEffectPrefab;
-        public static GameObject HealEffectHolder;
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {
@@ -57,16 +64,14 @@ namespace DeltaruneMod.Items
                     healingBehavior.body = sender;
                     Debug.Log("Gave " + sender + " " + ItemName + ".");
                 }
-                
             }
         }
 
         private static void CreateEffect()
         {
             HealEffectPrefab = MainAssets.LoadAsset<GameObject>("guide_book_heal.prefab").InstantiateClone("guidebook_heal", true);
-            HealEffectPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
- 
-            Util.Helpers.CreateNetworkedEffectPrefab(HealEffectPrefab);
+            //HealEffectPrefab.transform.localRotation = Quaternion.LookRotation(Vector3.up);
+            Util.Helpers.CreateNetworkedEffectPrefab(HealEffectPrefab, true);
         }
 
         public override void Init()
@@ -123,13 +128,22 @@ namespace DeltaruneMod.Items
                     CharacterBody targetBody = target.healthComponent?.body;
                     if (targetBody && targetBody != drone)
                     {
-                        EffectManager.SpawnEffect(HealEffectPrefab, new EffectData
+                        //targetBody.gameObject.AddComponent<DroneHealingEffectController>();
+
+                        try
                         {
-                            rootObject = targetBody.gameObject,
-                            origin = targetBody.footPosition,
-                            rotation = Quaternion.LookRotation(Vector3.up),
-                            scale = 1f
-                        }, true);
+                            EffectData effectData = new EffectData
+                            {
+                                origin = targetBody.transform.position,
+                                scale = 1f,
+                            };
+                            EffectManager.SpawnEffect(HealEffectPrefab, effectData, true);
+                        }
+                        catch
+                        {
+                            Debug.Log("NRE, don't spawn effect.");
+                        }
+                        
 
                         float healAmount = targetBody.healthComponent.fullCombinedHealth * healFraction;
                         targetBody.healthComponent.Heal(healAmount, default, true);
@@ -139,16 +153,36 @@ namespace DeltaruneMod.Items
             }
         }
     
-        public class DroneHealingEffectController : MonoBehaviour
+        public class DroneHealingEffectController : NetworkBehaviour
         {
-            public CharacterBody targetBody;
+            float effectLength = 1.5f;
             void Start()
             {
-                GameObject healEffect = Instantiate(HealEffectPrefab, transform.Find("Base"));
-                healEffect.transform.localPosition = Vector3.zero;
-                healEffect.transform.localRotation = Quaternion.LookRotation(Vector3.up);
+                try
+                {
+                    CharacterBody body = GetComponentInParent<CharacterBody>();
+                    HurtBox hurtBox = body ? body.mainHurtBox : null;
 
-                Destroy(gameObject, 1f);
+                    if (hurtBox)
+                    {
+                        // Spawn effect and tie to ally
+                        EffectData effectData = new EffectData
+                        {
+                            origin = transform.position,
+                            scale = 1f,
+                            //rotation = Quaternion.LookRotation(Vector3.up),
+                        };
+                        effectData.SetHurtBoxReference(hurtBox);
+                        HealEffectPrefab.AddComponent<DestroyOnTimer>().duration = effectLength;
+                        EffectManager.SpawnEffect(HealEffectPrefab, effectData, true);
+                    }
+
+                    Destroy(this, effectLength);
+                }
+                catch
+                {
+                    Debug.Log("Error applying drone heal effect.");
+                }
             }
         }
     }

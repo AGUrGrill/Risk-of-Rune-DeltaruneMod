@@ -27,10 +27,8 @@ namespace DeltaruneMod.Items
         public abstract string ItemPickupDesc { get; }
         public abstract string ItemFullDescription { get; }
         public abstract string ItemLore { get; }
-
         public abstract ItemTier Tier { get; }
         public virtual ItemTag[] ItemTags { get; set; } = new ItemTag[] { };
-
         public abstract GameObject ItemModel { get; }
         public abstract Sprite ItemIcon { get; }
 
@@ -47,6 +45,11 @@ namespace DeltaruneMod.Items
         public virtual bool PrinterBlacklisted { get; set; } = false;
 
         public virtual bool RequireUnlock { get; set; } = true;
+
+        public abstract bool isChapter1 { get; }
+        public abstract bool isChapter2 { get; } 
+        public abstract bool isChapter3 { get; }
+        public abstract bool isChapter4 { get; }
 
         public abstract void Init();
 
@@ -128,6 +131,13 @@ namespace DeltaruneMod.Items
                         list.RemoveAll(x => DeltarunePlugin.BlacklistedFromPrinter.Contains(ItemCatalog.GetItemDef(PickupCatalog.GetPickupDef(x).itemIndex)));
                     }
                 });
+            }
+        }
+        public string ConfigCategory
+        {
+            get
+            {
+                return "Item: " + ItemLangTokenName;
             }
         }
     }

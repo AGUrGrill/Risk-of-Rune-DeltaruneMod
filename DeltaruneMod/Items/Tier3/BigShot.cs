@@ -27,6 +27,14 @@ namespace DeltaruneMod.Items.Tier3
         public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("big_shot_icon.png");
         public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Damage };
 
+        public override bool isChapter1 => false;
+
+        public override bool isChapter2 => true;
+
+        public override bool isChapter3 => false;
+
+        public override bool isChapter4 => false;
+
         public Sprite BuffIcon = MainAssets.LoadAsset<Sprite>("big_shot_effect_icon.png");
 
         public BuffDef BigShotBuff;

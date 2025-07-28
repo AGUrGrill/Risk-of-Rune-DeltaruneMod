@@ -24,6 +24,14 @@ namespace DeltaruneMod.Items.Tier1
         public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("lancer_card_icon.png");
         public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility, ItemTag.OnStageBeginEffect };
 
+        public override bool isChapter1 => true;
+
+        public override bool isChapter2 => false;
+
+        public override bool isChapter3 => false;
+
+        public override bool isChapter4 => false;
+
         private bool canUseEffect = false;
 
         public override void Init()

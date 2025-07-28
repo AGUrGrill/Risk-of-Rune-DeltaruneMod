@@ -22,6 +22,14 @@ namespace DeltaruneMod.Interactables.Grave
 
         public override GameObject InteractableModel => MainAssets.LoadAsset<GameObject>("gravestone.prefab");
 
+        public override bool isChapter1 => false;
+
+        public override bool isChapter2 => true;
+
+        public override bool isChapter3 => false;
+
+        public override bool isChapter4 => false;
+
         public static GameObject InteractableBodyModelPrefab;
 
         public static InteractableSpawnCard InteractableSpawnCard;

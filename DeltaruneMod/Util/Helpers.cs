@@ -63,6 +63,7 @@ namespace DeltaruneMod.Util
             {
                 if (field.GetValue(null) is BuffDef buff)
                 {
+                    if (buff.isHidden) continue;
                     if (type == 0 && !buff.isElite && !buff.isDebuff) buffs.Add(buff);
                     else if (type == 1 && buff.isDebuff) buffs.Add(buff);
                     else if (type == 2 && buff.isElite) buffs.Add(buff);
@@ -74,6 +75,7 @@ namespace DeltaruneMod.Util
             {
                 if (field.GetValue(null) is BuffDef buff)
                 {
+                    if (buff.isHidden) continue;
                     if (type == 0 && !buff.isElite && !buff.isDebuff) buffs.Add(buff);
                     else if (type == 1 && buff.isDebuff) buffs.Add(buff);
                     else if (type == 2 && buff.isElite) buffs.Add(buff);
@@ -85,6 +87,7 @@ namespace DeltaruneMod.Util
             {
                 if (field.GetValue(null) is BuffDef buff)
                 {
+                    if (buff.isHidden) continue;
                     if (type == 0 && !buff.isElite && !buff.isDebuff) buffs.Add(buff);
                     else if (type == 1 && buff.isDebuff) buffs.Add(buff);
                     else if (type == 2 && buff.isElite) buffs.Add(buff);
@@ -96,13 +99,30 @@ namespace DeltaruneMod.Util
         #endregion
 
         #region Make Prefabs
-        public static void CreateNetworkedEffectPrefab(GameObject obj)
+        public static void CreateNetworkedEffectPrefab(GameObject obj, bool isFollower)
+        {
+            if (!obj.GetComponent<NetworkIdentity>()) obj.AddComponent<NetworkIdentity>();
+            var effect = obj.GetComponent<EffectComponent>();
+            if (!effect) effect = obj.AddComponent<EffectComponent>();
+            effect.applyScale = isFollower;
+            effect.effectIndex = EffectIndex.Invalid;
+            effect.parentToReferencedTransform = isFollower;
+            effect.positionAtReferencedTransform = isFollower;
+
+            PrefabAPI.RegisterNetworkPrefab(obj);
+            ContentAddition.AddEffect(obj);
+        }
+        public static void AddEffectPrefabToContentAddition(GameObject obj)
         {
             if (!obj.GetComponent<NetworkIdentity>()) obj.AddComponent<NetworkIdentity>();
             if (!obj.GetComponent<EffectComponent>()) obj.AddComponent<EffectComponent>();
-            if (!obj.GetComponent<VFXAttributes>()) obj.AddComponent<VFXAttributes>();
-            PrefabAPI.RegisterNetworkPrefab(obj);
             ContentAddition.AddEffect(obj);
+        }
+        public static void CreateNetworkedObjectPrefab(GameObject obj)
+        {
+            if (!obj.GetComponent<NetworkIdentity>()) obj.AddComponent<NetworkIdentity>();
+            PrefabAPI.RegisterNetworkPrefab(obj);
+            ContentAddition.AddNetworkedObject(obj);
         }
         public static void CreateNetworkedProjectilePrefab(GameObject obj)
         {
@@ -111,6 +131,25 @@ namespace DeltaruneMod.Util
             if (!obj.GetComponent<NetworkIdentity>()) obj.AddComponent<NetworkIdentity>();
             PrefabAPI.RegisterNetworkPrefab(obj);
             ContentAddition.AddProjectile(obj);
+        }
+        public static GameObject CreateTemplateEffectPrefab(string name)
+        {
+            var template = new GameObject(name);
+            template.AddComponent<NetworkIdentity>();
+
+            var visual = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            visual.name = "fake_visuals";
+            visual.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            visual.transform.SetParent(template.transform, false);
+            GameObject.DestroyImmediate(visual.GetComponent<Collider>());
+
+            var effect = template.AddComponent<EffectComponent>();
+            effect.applyScale = true;
+            effect.effectIndex = EffectIndex.Invalid;
+            effect.parentToReferencedTransform = false;
+            effect.positionAtReferencedTransform = true;
+
+            return template;
         }
         // Using Nuxlar's Sound Solution, cause im too dum for this
         public static NetworkSoundEventDef CreateNetworkSoundEventDef(string eventName)

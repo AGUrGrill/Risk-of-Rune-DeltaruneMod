@@ -34,6 +34,15 @@ namespace DeltaruneMod.Items.Yellow
             get => base.PrinterBlacklisted;
             set => base.PrinterBlacklisted = true;
         }
+
+        public override bool isChapter1 => false;
+
+        public override bool isChapter2 => true;
+
+        public override bool isChapter3 => true;
+
+        public override bool isChapter4 => false;
+
         public override void Init()
         {
             CreateLang();

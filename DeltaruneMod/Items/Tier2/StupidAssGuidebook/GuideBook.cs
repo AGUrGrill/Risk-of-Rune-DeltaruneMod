@@ -15,9 +15,9 @@ namespace DeltaruneMod.Items.Tier3
 
         public override string ItemLangTokenName => "GUIDE_BOOK";
 
-        public override string ItemPickupDesc => "Teaches all drones to heal.";
+        public override string ItemPickupDesc => "Teaches all drones a healing prayer.";
 
-        public override string ItemFullDescription => "All drones can now additionally cast Heal," +
+        public override string ItemFullDescription => "All drones can now additionally cast a heal prayer," +
 			"\nhealing for <style=cIsHealing>2.5%</style> hp every <style=cIsUtility>10</style> seconds <style=cStack>(+1% hp per stack)</style>.";
 
         public override string ItemLore => "You tried to read the handcrafted manual, but it was so dense it made your head spin..." +
@@ -25,9 +25,17 @@ namespace DeltaruneMod.Items.Tier3
 
         public override ItemTier Tier => ItemTier.Tier2;
 
-        public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("guie_book.prefab");
+        public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("guide_book.prefab");
 
 		public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("guide_book_icon.png");
+
+        public override bool isChapter1 => true;
+
+        public override bool isChapter2 => false;
+
+        public override bool isChapter3 => false;
+
+        public override bool isChapter4 => false;
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {
@@ -38,10 +46,10 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "Chest",
-                    localPos = new Vector3(0.03424F, 0.24531F, -0.28029F),
-                    localAngles = new Vector3(29.02806F, 9.87036F, 0.15779F),
-                    localScale = new Vector3(43.11241F, 48.88401F, 48.88401F)
+                    childName = "ThighR",
+                    localPos = new Vector3(-0.06842F, -0.06525F, 0.00302F),
+                    localAngles = new Vector3(344.6374F, 10.5189F, 172.5793F),
+                    localScale = new Vector3(11.24511F, 12.75054F, 12.75054F)
                 }
             });
             rules.Add("mdlHuntress", new ItemDisplayRule[]
@@ -50,10 +58,10 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "Chest",
-                    localPos = new Vector3(0.15683F, 0.03304F, -0.05687F),
-                    localAngles = new Vector3(8.67311F, 301.7072F, 343.5933F),
-                    localScale = new Vector3(32.31651F, 20.56886F, 31.46058F)
+                    childName = "BowHinge2L",
+                    localPos = new Vector3(-0.01511F, -0.12038F, -0.04515F),
+                    localAngles = new Vector3(40.99971F, 359.4588F, 0.25029F),
+                    localScale = new Vector3(20.1074F, 12.97089F, 15.01608F)
 
                 }
             });
@@ -63,10 +71,10 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "Chest",
-                    localPos = new Vector3(0.03685F, 0.04701F, -0.19537F),
-                    localAngles = new Vector3(351.7767F, 8.65373F, 346.0138F),
-                    localScale = new Vector3(46.44885F, 26.87783F, 2.25375F)
+                    childName = "MuzzlePistol",
+                    localPos = new Vector3(0.00462F, 0.07294F, -0.24116F),
+                    localAngles = new Vector3(23.59849F, 87.6305F, 336.2294F),
+                    localScale = new Vector3(2.71367F, 4.69018F, 2.90618F)
 
                 }
             });
@@ -77,10 +85,9 @@ namespace DeltaruneMod.Items.Tier3
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
                     childName = "Chest",
-                    localPos = new Vector3(0.35631F, 0.30782F, -1.88334F),
-                    localAngles = new Vector3(4.96775F, 356.1217F, 343.4172F),
-                    localScale = new Vector3(342.7814F, 342.7814F, 342.7814F)
-
+                    localPos = new Vector3(0.07447F, 0.64331F, -1.79574F),
+                    localAngles = new Vector3(75.89338F, 94.53836F, 185.0458F),
+                    localScale = new Vector3(145.8154F, 161.3661F, 145.8154F)
                 }
             });
             rules.Add("mdlEngi", new ItemDisplayRule[]
@@ -89,11 +96,10 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "HandR",
-                    localPos = new Vector3(0.61056F, 0.2345F, 0.19811F),
-                    localAngles = new Vector3(351.2091F, 161.5561F, 217.4899F),
-                    localScale = new Vector3(50.83732F, 50.83732F, 50.83732F)
-
+                    childName = "MuzzleLeft",
+                    localPos = new Vector3(0.21551F, 0.07161F, -0.24095F),
+                    localAngles = new Vector3(344.467F, 179.7876F, 178.1696F),
+                    localScale = new Vector3(10.38355F, 10.38355F, 10.38355F)
                 }
             });
             rules.Add("mdlMage", new ItemDisplayRule[]
@@ -102,11 +108,10 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "ClavicleR",
-                    localPos = new Vector3(0.19937F, -0.11671F, -0.00412F),
-                    localAngles = new Vector3(351.81F, 103.9537F, 14.96851F),
-                    localScale = new Vector3(26.79127F, 25.62798F, 28.75669F)
-
+                    childName = "LowerArmL",
+                    localPos = new Vector3(0.00965F, 0.19812F, -0.0943F),
+                    localAngles = new Vector3(341.6551F, 268.496F, 179.2602F),
+                    localScale = new Vector3(8.24085F, 7.88303F, 8.8454F)
                 }
             });
             rules.Add("mdlMerc", new ItemDisplayRule[]
@@ -115,11 +120,10 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "HandR",
-                    localPos = new Vector3(0.64632F, 0.31625F, 0.05835F),
-                    localAngles = new Vector3(350.5506F, 180.2126F, 212.7281F),
-                    localScale = new Vector3(63.08693F, 63.08693F, 63.08693F)
-
+                    childName = "ThighR",
+                    localPos = new Vector3(-0.08936F, 0.00467F, 0.06222F),
+                    localAngles = new Vector3(345.8772F, 20.92191F, 177.8589F),
+                    localScale = new Vector3(10.62848F, 10.62848F, 10.62848F)
                 }
             });
             rules.Add("mdlTreebot", new ItemDisplayRule[]
@@ -129,9 +133,9 @@ namespace DeltaruneMod.Items.Tier3
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
                     childName = "FlowerBase",
-                    localPos = new Vector3(-1.09289F, -0.17844F, 0.06287F),
-                    localAngles = new Vector3(6.32783F, 163.8389F, 43.61153F),
-                    localScale = new Vector3(64.85601F, 64.85601F, 64.85601F)
+                    localPos = new Vector3(0.41321F, -0.38063F, 0.19475F),
+                    localAngles = new Vector3(13.43373F, 343.3212F, 21.37775F),
+                    localScale = new Vector3(14.47604F, 15.15385F, 15.43011F)
 
                 }
             });
@@ -141,11 +145,10 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "HandL",
-                    localPos = new Vector3(0.05452F, 0.96759F, 0.03388F),
-                    localAngles = new Vector3(342.5309F, 38.24583F, 185.2787F),
-                    localScale = new Vector3(43.79625F, 43.79625F, 43.79625F)
-
+                    childName = "MechBase",
+                    localPos = new Vector3(0.20024F, 0.40954F, 0.35092F),
+                    localAngles = new Vector3(14.93578F, 90.2113F, 14.04156F),
+                    localScale = new Vector3(5.11029F, 4.13625F, 4.33906F)
                 }
             });
             rules.Add("mdlCroco", new ItemDisplayRule[]
@@ -154,11 +157,10 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "Chest",
-                    localPos = new Vector3(-0.40245F, -0.11621F, -0.95978F),
-                    localAngles = new Vector3(349.0351F, 87.08124F, 49.89027F),
-                    localScale = new Vector3(545.4311F, 545.4311F, 545.4311F)
-
+                    childName = "MouthMuzzle",
+                    localPos = new Vector3(-1.32711F, 2.22417F, 2.74239F),
+                    localAngles = new Vector3(359.0917F, 42.2724F, 63.16629F),
+                    localScale = new Vector3(75.89112F, 75.89112F, 75.89112F)
                 }
             });
             rules.Add("mdlCaptain", new ItemDisplayRule[]
@@ -167,11 +169,10 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "Stomach",
-                    localPos = new Vector3(0.13571F, 0.20722F, -0.26261F),
-                    localAngles = new Vector3(6.9968F, 350.0926F, 341.5277F),
-                    localScale = new Vector3(44.86234F, 37.9991F, 37.9991F)
-
+                    childName = "HandR",
+                    localPos = new Vector3(0.00749F, 0.16526F, 0.03505F),
+                    localAngles = new Vector3(71.62508F, 193.732F, 183.1327F),
+                    localScale = new Vector3(14.82975F, 11.77351F, 12.56107F)
                 }
             });
             rules.Add("mdlRailGunner", new ItemDisplayRule[]
@@ -180,11 +181,10 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "ToeR",
-                    localPos = new Vector3(-0.05914F, 0.23115F, -0.02773F),
-                    localAngles = new Vector3(359.2351F, 160.0996F, 254.6561F),
-                    localScale = new Vector3(15.71294F, 15.71294F, 15.71294F)
-
+                    childName = "FootL",
+                    localPos = new Vector3(0.01065F, 0.03102F, 0.10055F),
+                    localAngles = new Vector3(350.7331F, 80.90894F, 225.1298F),
+                    localScale = new Vector3(3.5252F, 3.48996F, 3.53609F)
                 }
             });
             rules.Add("mdlVoidSurvivor", new ItemDisplayRule[]
@@ -193,23 +193,10 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "Chest",
-                    localPos = new Vector3(-0.00696F, -0.22984F, -0.10106F),
-                    localAngles = new Vector3(19.71435F, 168.1724F, 315.2494F),
-                    localScale = new Vector3(35.84454F, 41.6678F, 29.87045F)
-
-                }
-            });
-            rules.Add("mdlChef", new ItemDisplayRule[]
-            {
-                new ItemDisplayRule
-                {
-                    ruleType = ItemDisplayRuleType.ParentedPrefab,
-                    followerPrefab = ItemModel,
-                    childName = "Chest",
-                    localPos = new Vector3(-0.21611F, -0.41288F, 0.0538F),
-                    localAngles = new Vector3(296.2543F, 222.2426F, 355.6819F),
-                    localScale = new Vector3(18.60245F, 27.97708F, 27.97708F)
+                    childName = "Head",
+                    localPos = new Vector3(-0.13241F, 0.03476F, -0.08426F),
+                    localAngles = new Vector3(48.72685F, 157.9988F, 295.8664F),
+                    localScale = new Vector3(14.89942F, 17.31997F, 12.4162F)
 
                 }
             });
@@ -220,10 +207,9 @@ namespace DeltaruneMod.Items.Tier3
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
                     childName = "Pack",
-                    localPos = new Vector3(0.31906F, -0.45957F, -0.1822F),
-                    localAngles = new Vector3(336.2322F, 23.51318F, 346.6137F),
-                    localScale = new Vector3(47.03091F, 41.80524F, 41.80524F)
-
+                    localPos = new Vector3(-0.07427F, -0.05237F, -0.39707F),
+                    localAngles = new Vector3(332.633F, 92.34814F, 354.5216F),
+                    localScale = new Vector3(7.42348F, 5.85202F, 6.0095F)
                 }
             });
             rules.Add("mdlFalseSon", new ItemDisplayRule[]
@@ -232,13 +218,25 @@ namespace DeltaruneMod.Items.Tier3
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "Head",
-                    localPos = new Vector3(-0.01625F, 0.17917F, 0.0463F),
-                    localAngles = new Vector3(354.49F, 266.0255F, 41.55928F),
-                    localScale = new Vector3(55.72091F, 55.72091F, 55.72091F)
-
+                    childName = "ClavL",
+                    localPos = new Vector3(-0.10036F, 0.79036F, -0.31671F),
+                    localAngles = new Vector3(63.96176F, 129.177F, 16.81915F),
+                    localScale = new Vector3(10.35707F, 10.35707F, 10.35707F)
                 }
             });
+            rules.Add("mdlChef", new ItemDisplayRule[]
+            {
+                new ItemDisplayRule
+                {
+                    ruleType = ItemDisplayRuleType.ParentedPrefab,
+                    followerPrefab = ItemModel,
+                    childName = "Chest",
+                    localPos = new Vector3(-0.30605F, -0.02151F, -0.1316F),
+                    localAngles = new Vector3(293.5251F, 187.9981F, 294.4022F),
+                    localScale = new Vector3(4.5489F, 5.00249F, 5.00249F)
+                }
+            });
+            /*
             rules.Add("mdlRalsei", new ItemDisplayRule[]
             {
                 new ItemDisplayRule
@@ -251,6 +249,7 @@ namespace DeltaruneMod.Items.Tier3
                     localScale = new Vector3(0.91639F, 0.91639F, 0.91639F)
                 }
             });
+            */
             return rules;
         }
 
@@ -286,6 +285,11 @@ namespace DeltaruneMod.Items.Tier3
 			CreateItem();
 			CreateLang();
 			Hooks();
+
+            GameObject pickupModel = MainAssets.LoadAsset<GameObject>("guide_book.prefab").InstantiateClone("SageManualPickup", true);
+            pickupModel.transform.localScale = new Vector3(2f, 2f, 2f);
+
+            ItemDef.pickupModelPrefab = pickupModel;
         }
 
     }
@@ -364,6 +368,8 @@ namespace DeltaruneMod.Items.Tier3
 		{
 			if ((inventory && newStack > 0 && (bodyFlags & CharacterBody.BodyFlags.Mechanical) > CharacterBody.BodyFlags.None) || (bodyFlags & CharacterBody.BodyFlags.Devotion) > CharacterBody.BodyFlags.None)
 			{
+                if ((bodyFlags & CharacterBody.BodyFlags.Void) > CharacterBody.BodyFlags.None) return;
+
 				int itemCount = inventory.GetItemCount(DroneHealingBoost.instance.ItemDef);
 				if (itemCount < stack)
 				{

@@ -25,8 +25,9 @@ namespace DeltaruneMod.Interactables.SusExchange
         public List<ItemDef> allTakeableItems = new List<ItemDef>();
         public ItemDef kromer, pearl, shinyPearl, pipis, mrPipis, commRing;
 
-        private readonly int maxUses = 10;
         private int timesUsed = 0;
+
+        private TextController textController;
 
         public void Start()
         {
@@ -34,6 +35,13 @@ namespace DeltaruneMod.Interactables.SusExchange
             {
                 purchaseInteraction.SetAvailable(true);
             }
+
+            Util.Helpers.GetAllComponentNames(gameObject);
+
+            timesUsed = Util.UniversalVariables.maxSusExUses;
+
+            textController = gameObject.GetComponent<TextController>();
+            textController.SetText(timesUsed + " USED");
 
             AkSoundEngine.PostEvent(3865094552, gameObject);
 
@@ -62,9 +70,10 @@ namespace DeltaruneMod.Interactables.SusExchange
         {
             if (!NetworkServer.active) return;
 
-            if (timesUsed > maxUses)
+            if (timesUsed <= 0)
             {
                 Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: SHOP IS [Closed for the season] TRY AGAIN [Next time]." });
+                textController.SetText("CLOSED");
                 return;
             }
             
@@ -77,7 +86,9 @@ namespace DeltaruneMod.Interactables.SusExchange
             }, true);
 
             ApplySpamtonShop(interactor);
-            timesUsed ++;
+            timesUsed --;
+            textController = gameObject.GetComponent<TextController>();
+            textController.SetText(timesUsed + " USED");
         }
 
         public void ApplySpamtonShop(Interactor interactor)
@@ -108,8 +119,8 @@ namespace DeltaruneMod.Interactables.SusExchange
             }
             if (allTakeableInvItems.Count <= 0)
             {
-                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: ITEMS NO" });
-                timesUsed--;
+                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: NO [[Usable]] ITEMS." });
+                timesUsed++;
                 return;
             }
             
@@ -180,12 +191,12 @@ namespace DeltaruneMod.Interactables.SusExchange
             //try
             //{
             PickupIndex take = new PickupIndex(itemTaken.itemIndex);
-                PickupIndex give = new PickupIndex(itemGiven.itemIndex);
-                PickupDef pickupDef = take.pickupDef;
+            PickupIndex give = new PickupIndex(itemGiven.itemIndex);
+            PickupDef pickupDef = take.pickupDef;
 
-                AkSoundEngine.PostEvent(2011881192, gameObject);
-                ScrapperController.CreateItemTakenOrb(body.corePosition, gameObject, pickupDef.itemIndex);
-                PickupDropletController.CreatePickupDroplet(give, dropletOrigin.position, dropletOrigin.forward * 20f);
+            AkSoundEngine.PostEvent(2011881192, gameObject);
+            ScrapperController.CreateItemTakenOrb(body.corePosition, gameObject, pickupDef.itemIndex);
+            PickupDropletController.CreatePickupDroplet(give, dropletOrigin.position, dropletOrigin.forward * 20f);
             //}
             //catch
             //{

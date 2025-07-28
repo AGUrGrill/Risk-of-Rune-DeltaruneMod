@@ -36,6 +36,14 @@ namespace DeltaruneMod.Items.Spamton
 
         public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility };
 
+        public override bool isChapter1 => false;
+
+        public override bool isChapter2 => true;
+
+        public override bool isChapter3 => false;
+
+        public override bool isChapter4 => false;
+
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {
             ItemDisplayRuleDict rules = new ItemDisplayRuleDict();

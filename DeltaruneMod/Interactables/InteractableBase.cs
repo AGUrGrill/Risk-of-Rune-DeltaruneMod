@@ -29,12 +29,25 @@ namespace DeltaruneMod.Interactables
 
         public abstract GameObject InteractableModel { get; }
 
+        public abstract bool isChapter1 { get; }
+        public abstract bool isChapter2 { get; }
+        public abstract bool isChapter3 { get; }
+        public abstract bool isChapter4 { get; }
+
         public abstract void Init();
 
         protected void CreateLang()
         {
             LanguageAPI.Add("INTERACTABLE_" + InteractableLangToken + "_NAME", InteractableName);
             LanguageAPI.Add("INTERACTABLE_" + InteractableLangToken + "_CONTEXT", InteractableContext);
+        }
+
+        public string ConfigCategory
+        {
+            get
+            {
+                return "Interactable: " + InteractableLangToken;
+            }
         }
     }
 }
