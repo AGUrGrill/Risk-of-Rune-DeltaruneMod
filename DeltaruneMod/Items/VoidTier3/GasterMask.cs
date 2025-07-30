@@ -392,6 +392,7 @@ namespace DeltaruneMod.Items.VoidTier3
             CorruptedEffectHolder.AddComponent<FollowTarget>();
             GameObject.DontDestroyOnLoad(CorruptedEffectHolder);
             Util.Helpers.CreateNetworkedObjectPrefab(CorruptedEffectHolder);
+            //CorruptedEffectHolder.RegisterNetworkPrefab();
         }
 
         public void CreateBuff()

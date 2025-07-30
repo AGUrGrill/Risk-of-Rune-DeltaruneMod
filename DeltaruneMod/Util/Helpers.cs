@@ -55,7 +55,7 @@ namespace DeltaruneMod.Util
 
         #region Buff Defs
         // 99: ALL, 0: Buffs?, 1: Debuffs, 2: Affixs
-        public static List<BuffDef> GetBuffs(int type) 
+        public static List<BuffDef> GetBuffs(int type)
         {
             List<BuffDef> buffs = new List<BuffDef>();
             FieldInfo[] fields = typeof(RoR2Content.Buffs).GetFields(BindingFlags.Public | BindingFlags.Static);
@@ -132,25 +132,21 @@ namespace DeltaruneMod.Util
             PrefabAPI.RegisterNetworkPrefab(obj);
             ContentAddition.AddProjectile(obj);
         }
-        public static GameObject CreateTemplateEffectPrefab(string name)
+        /// <summary>
+        /// Loads a prefab from RoR2 addressable assets, clones it without awakening it, applies a modifier function to the clone, then performs a second InstantiateClone operation to freeze the modified version into a new named prefab.
+        /// </summary>
+        public static GameObject ModifyVanillaPrefab(string addressablePath, string newName, bool shouldNetwork, System.Func<GameObject, GameObject> modifierCallback)
         {
-            var template = new GameObject(name);
-            template.AddComponent<NetworkIdentity>();
-
-            var visual = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            visual.name = "fake_visuals";
-            visual.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-            visual.transform.SetParent(template.transform, false);
-            GameObject.DestroyImmediate(visual.GetComponent<Collider>());
-
-            var effect = template.AddComponent<EffectComponent>();
-            effect.applyScale = true;
-            effect.effectIndex = EffectIndex.Invalid;
-            effect.parentToReferencedTransform = false;
-            effect.positionAtReferencedTransform = true;
-
-            return template;
+            var origObj = Addressables.LoadAssetAsync<GameObject>(addressablePath)
+                .WaitForCompletion()
+                .InstantiateClone("Temporary Setup Prefab", false);
+            var newObj = modifierCallback(origObj);
+            var newObjPrefabified = newObj.InstantiateClone(newName, shouldNetwork);
+            GameObject.Destroy(origObj);
+            GameObject.Destroy(newObj);
+            return newObjPrefabified;
         }
+
         // Using Nuxlar's Sound Solution, cause im too dum for this
         public static NetworkSoundEventDef CreateNetworkSoundEventDef(string eventName)
         {

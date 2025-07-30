@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using static DeltaruneMod.DeltarunePlugin;
+using static DeltaruneMod.Util.Components;
 using static DeltaruneMod.Util.Helpers;
 
 namespace DeltaruneMod.Interactables.SusExchange
@@ -25,23 +26,17 @@ namespace DeltaruneMod.Interactables.SusExchange
         public List<ItemDef> allTakeableItems = new List<ItemDef>();
         public ItemDef kromer, pearl, shinyPearl, pipis, mrPipis, commRing;
 
-        private int timesUsed = 0;
-
-        private TextController textController;
+        private int timesUsed = 10;
 
         public void Start()
         {
             if (NetworkServer.active && Run.instance)
             {
                 purchaseInteraction.SetAvailable(true);
+                GetComponent<Util.Components.TextController>()?.SetText(timesUsed + " USED");
             }
-
-            Util.Helpers.GetAllComponentNames(gameObject);
-
-            timesUsed = Util.UniversalVariables.maxSusExUses;
-
-            textController = gameObject.GetComponent<TextController>();
-            textController.SetText(timesUsed + " USED");
+            
+            //Util.Helpers.GetAllComponentNames(gameObject);
 
             AkSoundEngine.PostEvent(3865094552, gameObject);
 
@@ -64,6 +59,12 @@ namespace DeltaruneMod.Interactables.SusExchange
             }
             purchaseInteraction.onPurchase.AddListener(OnPurchase);
         }
+        public void FixedUpdate()
+        {
+            if (!NetworkServer.active) return;
+
+            GetComponent<Util.Components.TextController>()?.SetText(timesUsed + " USED");
+        }
 
         [Server]
         public void OnPurchase(Interactor interactor)
@@ -73,7 +74,7 @@ namespace DeltaruneMod.Interactables.SusExchange
             if (timesUsed <= 0)
             {
                 Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: SHOP IS [Closed for the season] TRY AGAIN [Next time]." });
-                textController.SetText("CLOSED");
+                //textController.SetText("CLOSED");
                 return;
             }
             
@@ -87,8 +88,6 @@ namespace DeltaruneMod.Interactables.SusExchange
 
             ApplySpamtonShop(interactor);
             timesUsed --;
-            textController = gameObject.GetComponent<TextController>();
-            textController.SetText(timesUsed + " USED");
         }
 
         public void ApplySpamtonShop(Interactor interactor)

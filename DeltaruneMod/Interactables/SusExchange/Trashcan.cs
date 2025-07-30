@@ -72,15 +72,25 @@ namespace DeltaruneMod.Interactables.SusExchange
 
             Transform pivot = new GameObject("HologramPivot").transform;
             pivot.SetParent(InteractableBodyModelPrefab.transform);
-            pivot.localPosition = new Vector3(0f, 0.9f, 1);
+            pivot.localPosition = new Vector3(0f, 3f, 1.2f);
 
             var projector = InteractableBodyModelPrefab.AddComponent<HologramProjector>();
             projector.hologramPivot = pivot;
             projector.displayDistance = 10f;
             projector.disableHologramRotation = false;
+            
+            var hologramText = new GameObject("HologramText");
+            hologramText.transform.SetParent(pivot);
 
-            var textController = InteractableBodyModelPrefab.AddComponent<TextController>();
-            textController.center = pivot;
+            var textMesh = hologramText.AddComponent<TMPro.TextMeshPro>();
+            textMesh.text = "shiz brokey";
+            textMesh.fontSize = 6f;
+            textMesh.color = Color.red;
+            textMesh.alignment = TMPro.TextAlignmentOptions.Center;
+            hologramText.AddComponent<Billboard>();
+
+            var textController = InteractableBodyModelPrefab.AddComponent<Util.Components.TextController>();
+            textController.textMesh = textMesh;
 
             InteractableBodyModelPrefab.GetComponent<Highlight>().targetRenderer = InteractableBodyModelPrefab.GetComponentInChildren<SkinnedMeshRenderer>();
             GameObject something = new GameObject();
@@ -120,45 +130,5 @@ namespace DeltaruneMod.Interactables.SusExchange
 
             DirectorAPI.Helpers.AddNewInteractable(directorCardHolder);
         } 
-    }
-    public class TextController : NetworkBehaviour
-    {
-        [SyncVar] public string text;
-        private string oldText;
-        private TextMeshPro textMesh;
-        public Transform center;
-        private void Start()
-        {
-            GameObject textObject = new GameObject("HologramText");
-            textObject.transform.SetParent(center);
-            textObject.transform.localPosition = Vector3.zero; 
-
-            oldText = text;
-            textMesh = textObject.AddComponent<TMPro.TextMeshPro>();
-            textMesh.text = Util.UniversalVariables.maxSusExUses + " USES";
-            textMesh.fontSize = 5f;
-            textMesh.color = Color.red;
-            textMesh.alignment = TMPro.TextAlignmentOptions.Center;
-            textObject.AddComponent<Billboard>();
-
-            NetworkServer.Spawn(textObject);
-        }
-
-        [ClientRpc]
-        private void UpdateText()
-        {
-            textMesh.text = text;
-            Debug.Log("TEXT CHANGED ON MESH!\n" + oldText + " -> " + text);
-            Debug.Log("IF U DONT SEE IT I KMS :)");
-        }
-
-        [Command]
-        public void SetText(string newText)
-        {
-            oldText = text;
-            text = newText;
-            Debug.Log("TEXT CHANGED!\n" + oldText + " -> " + text);
-            UpdateText();
-        }
     }
 }

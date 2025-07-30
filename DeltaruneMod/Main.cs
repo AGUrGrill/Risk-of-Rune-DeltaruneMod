@@ -15,6 +15,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.Networking;
+using static DeltaruneMod.Util.Components;
 
 namespace DeltaruneMod
 {
@@ -56,6 +57,8 @@ namespace DeltaruneMod
         public static bool useChapter2 = true;
         public static bool useChapter3 = true;
         public static bool useChapter4 = true;
+
+        public const short TextSyncMsgId = 4242;
 
         public void Awake()
         {
