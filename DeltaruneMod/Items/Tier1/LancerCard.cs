@@ -43,41 +43,45 @@ namespace DeltaruneMod.Items.Tier1
         
         public override void Hooks()
         {
-            CharacterBody.onBodyStartGlobal += LancerCardEffect;
+            On.RoR2.CharacterBody.Start += CharacterBody_Start;
             On.RoR2.CharacterMaster.OnServerStageBegin += CharacterMaster_OnServerStageBegin;
+        }
+
+        private void CharacterBody_Start(On.RoR2.CharacterBody.orig_Start orig, CharacterBody self)
+        {
+            orig(self);
+
+            #region Apply Lancer Unlocks
+            var itemCount = GetCount(self);
+            var body = self;
+            while (!body)
+            {
+                body = self.GetBody();
+                Debug.Log("Searching for body...");
+            }
+            if (canUseEffect)
+            {
+                for (int i = 0; i < itemCount; i++)
+                {
+                    if (i == 0 || i % 2 == 0)
+                        body.AddBuff(DLC2Content.Buffs.FreeUnlocks.buffIndex);
+                    Debug.Log("Added lancer unlock effect to " + body.name);
+                }
+                AkSoundEngine.PostEvent(2353227689, body.gameObject);
+            }
+            #endregion
         }
 
         private void CharacterMaster_OnServerStageBegin(On.RoR2.CharacterMaster.orig_OnServerStageBegin orig, CharacterMaster self, Stage stage)
         {
             orig(self, stage);
-            try
-            {
-                if (stage.sceneDef.cachedName != "bazaar")
-                {
-                    canUseEffect = true;
-                }
-                else canUseEffect = false;
-                //Debug.Log("Can use lancer effect: " + canUseEffect);
-            }
-            catch { Debug.Log("Issue checking stage for " + PluginName); }
             
-        }
-
-        public void LancerCardEffect(CharacterBody sender)
-        {
-            if (!NetworkServer.active && !sender.isPlayerControlled || !canUseEffect) return;
-
-            var itemCount = GetCount(sender);
-            if (sender.inventory && itemCount > 0)
+            // Check is stage is bazaar, if it is skip cause free unlock breaks everything
+            if (stage.sceneDef.cachedName != "bazaar")
             {
-                for (int i = 0; i < itemCount; i++)
-                {
-                    if (i == 0 || i % 2 == 0)
-                        sender.AddBuff(DLC2Content.Buffs.FreeUnlocks.buffIndex);
-                    Debug.Log($"Added lancer unlock effect to {sender.name}");
-                }
-                AkSoundEngine.PostEvent(2353227689, sender.gameObject);
+                canUseEffect = true;
             }
+            else canUseEffect = false; 
         }
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()
@@ -317,30 +321,5 @@ namespace DeltaruneMod.Items.Tier1
             });
             return rules;
         }
-
-        /* Lunar Item Conept
-        public static void LancerCardDebuffEffect()
-        {
-            foreach (CharacterBody body in CharacterBody.readOnlyInstancesList)
-            {
-                if (body.isPlayerControlled)
-                {
-                    characterBody = body;
-                    Debug.Log("Found player: " + body.name);
-                }
-            }
-
-            if (characterBody == null || !NetworkServer.active || characterBody.inventory == null) return;
-
-            var itemCount = characterBody.inventory.GetItemCount(lancerCardItemDef);
-            if (characterBody.inventory && itemCount > 0)
-            {
-                characterMaster = characterBody.master;
-                var moners = characterMaster.money;
-                Debug.Log("$: " + moners);
-                if (moners > 0) characterMaster.GiveMoney((uint)(-moners));
-            }
-        }
-        */
     }
 }

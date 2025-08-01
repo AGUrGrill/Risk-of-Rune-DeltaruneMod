@@ -51,6 +51,7 @@ namespace DeltaruneMod.Interactables.SusExchange
             InteractableBodyModelPrefab.AddComponent<NetworkIdentity>();
             InteractableBodyModelPrefab.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
 
+            #region PurchaseInteraction
             PurchaseInteraction purchaseInteraction = InteractableBodyModelPrefab.AddComponent<PurchaseInteraction>();
             purchaseInteraction.displayNameToken = $"INTERACTABLE_{InteractableLangToken}_NAME";
             purchaseInteraction.contextToken = $"INTERACTABLE_{InteractableLangToken}_CONTEXT";
@@ -58,7 +59,9 @@ namespace DeltaruneMod.Interactables.SusExchange
             purchaseInteraction.setUnavailableOnTeleporterActivated = false;
             purchaseInteraction.isShrine = true;
             purchaseInteraction.isGoldShrine = false;
+            #endregion
 
+            # region Manager and Text Controls
             TrashcanBehavior mgr = InteractableBodyModelPrefab.AddComponent<TrashcanBehavior>();
             mgr.purchaseInteraction = purchaseInteraction;
 
@@ -72,7 +75,7 @@ namespace DeltaruneMod.Interactables.SusExchange
 
             Transform pivot = new GameObject("HologramPivot").transform;
             pivot.SetParent(InteractableBodyModelPrefab.transform);
-            pivot.localPosition = new Vector3(0f, 3f, 1.2f);
+            pivot.localPosition = new Vector3(0f, 0.9f, 1f);
 
             var projector = InteractableBodyModelPrefab.AddComponent<HologramProjector>();
             projector.hologramPivot = pivot;
@@ -81,6 +84,7 @@ namespace DeltaruneMod.Interactables.SusExchange
             
             var hologramText = new GameObject("HologramText");
             hologramText.transform.SetParent(pivot);
+            hologramText.transform.localPosition = Vector3.zero;
 
             var textMesh = hologramText.AddComponent<TMPro.TextMeshPro>();
             textMesh.text = "shiz brokey";
@@ -91,13 +95,16 @@ namespace DeltaruneMod.Interactables.SusExchange
 
             var textController = InteractableBodyModelPrefab.AddComponent<Util.Components.TextController>();
             textController.textMesh = textMesh;
+            #endregion
 
+            #region Instantiation
             InteractableBodyModelPrefab.GetComponent<Highlight>().targetRenderer = InteractableBodyModelPrefab.GetComponentInChildren<SkinnedMeshRenderer>();
             GameObject something = new GameObject();
             GameObject trigger = UnityEngine.Object.Instantiate(something, InteractableBodyModelPrefab.transform);
             trigger.AddComponent<BoxCollider>().isTrigger = true;
             trigger.AddComponent<EntityLocator>().entity = InteractableBodyModelPrefab;
             InteractableBodyModelPrefab.RegisterNetworkPrefab();
+            #endregion
         }
 
         public void CreateInteractableSpawnCard()

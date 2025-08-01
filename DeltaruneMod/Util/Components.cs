@@ -10,6 +10,7 @@ namespace DeltaruneMod.Util
 {
     public class Components
     {
+        // Set target and gameobject will follow
         public class FollowTarget : MonoBehaviour
         {
             public Transform target;
@@ -29,6 +30,7 @@ namespace DeltaruneMod.Util
             }
         }
 
+        // Set mesh reference, change text when neeeded
         public class TextController : NetworkBehaviour
         {
             public TextMeshPro textMesh;
@@ -38,6 +40,31 @@ namespace DeltaruneMod.Util
                 textMesh.text = newText;
             }
 
+        }
+    
+        // This is an evil proof of conept that is horrid
+        public class Timer : MonoBehaviour
+        {
+            float timer = 0;
+            bool timerActive = false;
+
+            public bool CallTimer(float interval)
+            {
+                timer = interval;
+                timerActive = true;
+                while (timer > 0)
+                {
+                    Debug.Log("Timer: " + timer); 
+                }
+                return true;
+            }
+            private void Update()
+            {
+                if (timerActive)
+                {
+                    timer -= Time.deltaTime;
+                }
+            }
         }
     }
 }

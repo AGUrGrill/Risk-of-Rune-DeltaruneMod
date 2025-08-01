@@ -17,6 +17,7 @@ namespace DeltaruneMod.Interactables.SusExchange
 {
     public class TrashcanBehavior : NetworkBehaviour
     {
+        #region Making vars
         public PurchaseInteraction purchaseInteraction;
         private GameObject shrineUseEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/ShrineUseEffect.prefab").WaitForCompletion();
         public List<ItemDef> allItems = new List<ItemDef>();
@@ -27,19 +28,22 @@ namespace DeltaruneMod.Interactables.SusExchange
         public ItemDef kromer, pearl, shinyPearl, pipis, mrPipis, commRing;
 
         private int timesUsed = 10;
+        #endregion
 
         public void Start()
         {
+            // Set starting text for client 2 since I cant get server to work
             if (NetworkServer.active && Run.instance)
             {
                 purchaseInteraction.SetAvailable(true);
-                GetComponent<Util.Components.TextController>()?.SetText(timesUsed + " USED");
+                GetComponent<Util.Components.TextController>()?.SetText("1 ITEM");
             }
             
             //Util.Helpers.GetAllComponentNames(gameObject);
 
             AkSoundEngine.PostEvent(3865094552, gameObject);
 
+            #region Set All Item Stuff
             allItems = Util.Helpers.GetItems(99);
             allTier1 = Util.Helpers.GetItems(0);
             allTier2 = Util.Helpers.GetItems(1);
@@ -57,13 +61,19 @@ namespace DeltaruneMod.Interactables.SusExchange
                     else if (itemDef.name == "ITEM_COMM_RING") commRing = itemDef;
                 }
             }
+            #endregion
+
             purchaseInteraction.onPurchase.AddListener(OnPurchase);
         }
+
+        // Change text based on times used
         public void FixedUpdate()
         {
-            if (!NetworkServer.active) return;
-
-            GetComponent<Util.Components.TextController>()?.SetText(timesUsed + " USED");
+            if (NetworkServer.active && Run.instance)
+            {
+                if (timesUsed > 0) GetComponent<Util.Components.TextController>()?.SetText(timesUsed + " USED");
+                else if (timesUsed <= 0) GetComponent<Util.Components.TextController>()?.SetText("CLOSED");
+            }
         }
 
         [Server]
@@ -71,13 +81,14 @@ namespace DeltaruneMod.Interactables.SusExchange
         {
             if (!NetworkServer.active) return;
 
+            // If out of tries, broadcast message
             if (timesUsed <= 0)
             {
                 Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: SHOP IS [Closed for the season] TRY AGAIN [Next time]." });
-                //textController.SetText("CLOSED");
                 return;
             }
             
+            // Spawn shrine effect
             EffectManager.SpawnEffect(shrineUseEffect, new EffectData()
             {
                 origin = gameObject.transform.position,
@@ -87,12 +98,14 @@ namespace DeltaruneMod.Interactables.SusExchange
             }, true);
 
             ApplySpamtonShop(interactor);
-            timesUsed --;
+            timesUsed--;
         }
 
         public void ApplySpamtonShop(Interactor interactor)
         {
             Debug.Log("Starting shop purchase");
+
+            #region Making vars
             CharacterBody body = interactor.GetComponent<CharacterBody>();
             Transform dropletOrigin = body.transform;
             List<ItemDef> allInventoryItems = Util.Helpers.GetAllItemsFromInventory(body.inventory);
@@ -101,6 +114,7 @@ namespace DeltaruneMod.Interactables.SusExchange
             ItemDef randomTier3 = allTier3[Random.Range(0, allTier3.Count)];
             ItemDef itemTaken = null; 
             ItemDef itemGiven = null;
+            #endregion
 
             if (!body.inventory) return;
 
@@ -145,13 +159,13 @@ namespace DeltaruneMod.Interactables.SusExchange
             {
                 body.inventory.RemoveItem(itemFromInventory);
                 itemGiven = pipis;
-                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOUR FIRST STEP TO BECOMING A [[Big shot]]." });
+                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOUR FIRST STEP TO BECOMING A [[Big shot]]. ["+timesUsed+"] tries left." });
             }
             else if (itemFromInventory == shinyPearl)
             {
                 body.inventory.RemoveItem(itemFromInventory);
                 itemGiven = mrPipis;
-                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOU WON WON WON MY [[Hyperlink blocked]]." });
+                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOU WON WON WON MY [[Hyperlink blocked]]. ["+timesUsed+"] tries left." });
             }
             else if (itemFromInventory == kromer)
             {
@@ -160,7 +174,7 @@ namespace DeltaruneMod.Interactables.SusExchange
                     body.inventory.RemoveItem(kromer);
                 }
                 itemGiven = commRing;
-                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOU ARE THE FIRST TO OWN MY <style=cIsUtility>[Commemorative Ring]</style>!!!" });
+                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOU ARE THE FIRST TO OWN MY <style=cIsUtility>[Commemorative Ring]</style>!!! ["+timesUsed+"] tries left." });
             }
             else
             {
@@ -174,21 +188,19 @@ namespace DeltaruneMod.Interactables.SusExchange
                 {
                     if (itemFromInventory.tier == ItemTier.Tier1) itemGiven = randomTier2;
                     else if (itemFromInventory.tier == ItemTier.Tier2) itemGiven = randomTier3;
-                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: THAT'S A REAL <style=cDeath>[[Big Shot]]</style> MOVE KID!!! YOU'RE JUST LIKE [Me]..." });
+                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: THAT'S A REAL <style=cDeath>[[Big Shot]]</style> MOVE KID!!! YOU'RE JUST LIKE [Me]... ["+timesUsed+"] tries left." });
 
                 }
                 else
                 {
                     itemGiven = kromer;
-                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: DELICIOUS KROMER" });
+                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: DELICIOUS KROMER. ["+timesUsed+"] tries left." });
                 }
             }
             #endregion
 
             Debug.Log("Taking " + itemTaken + ", Giving " + itemGiven);
             #region Complete interaction
-            //try
-            //{
             PickupIndex take = new PickupIndex(itemTaken.itemIndex);
             PickupIndex give = new PickupIndex(itemGiven.itemIndex);
             PickupDef pickupDef = take.pickupDef;
@@ -196,11 +208,6 @@ namespace DeltaruneMod.Interactables.SusExchange
             AkSoundEngine.PostEvent(2011881192, gameObject);
             ScrapperController.CreateItemTakenOrb(body.corePosition, gameObject, pickupDef.itemIndex);
             PickupDropletController.CreatePickupDroplet(give, dropletOrigin.position, dropletOrigin.forward * 20f);
-            //}
-            //catch
-            //{
-                //Debug.Log("Error taking and giving item.");
-            //}
             #endregion
         }
     }

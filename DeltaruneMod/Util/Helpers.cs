@@ -160,6 +160,7 @@ namespace DeltaruneMod.Util
         }
         #endregion
 
+        #region Extras
         public static void GetAllComponentNames(GameObject obj)
         {
             foreach (var componenet in obj.GetComponents<Component>())
@@ -167,5 +168,6 @@ namespace DeltaruneMod.Util
                 Debug.Log(componenet);
             }
         }
+        #endregion
     }
 }

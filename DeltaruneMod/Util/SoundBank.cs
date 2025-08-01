@@ -17,6 +17,8 @@ namespace DeltaruneMod.Util
         public const string soundBankFileName = "DeltaruneSoundBank.bnk";
         public const string soundBankName = "DeltaruneSoundBank";
         public static string SoundBankDirectory => Path.Combine(Path.GetDirectoryName(DeltarunePlugin.Instance.Info.Location));
+
+        // Setup soundbank
         public static void Init()
         {
             UnityEngine.Debug.Log(SoundBankDirectory);

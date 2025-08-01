@@ -264,28 +264,40 @@ namespace DeltaruneMod.Items.Yellow
 
         public override void Hooks()
         {
-            RecalculateStatsAPI.GetStatCoefficients += MrPipisEffect;
+            RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients; ;
         }
 
-        private void MrPipisEffect(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
+        private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
         {
-            if (!NetworkServer.active || !sender) return;
+            if (!NetworkServer.active || !sender.inventory) return;
 
             var existing = sender.GetComponent<MrPipisTracker>();
-            if (sender.inventory && GetCount(sender) > 0 && !existing)
+            if (GetCount(sender) > 0)
             {
-                existing = sender.gameObject.AddComponent<MrPipisTracker>();
-                existing.body = sender;
-                existing.enabled = true;
+                if (!existing)
+                {
+                    existing = sender.gameObject.AddComponent<MrPipisTracker>();
+                    existing.body = sender;
+                    existing.enabled = true;
+                }
+                if (!existing.enabled) existing.enabled = true;
             }
-            else if (sender.inventory && GetCount(sender) <= 0 && existing) existing.enabled = false;
-            else if (sender.inventory && GetCount(sender) > 0 && !existing.enabled) existing.enabled = true;
+            else if (GetCount(sender) <= 0 && existing) existing.enabled = false;
         }
 
-        public class MrPipisTracker : CharacterBody.ItemBehavior
+        public class MrPipisTracker : MonoBehaviour
         {
             List<BuffDef> allAffixes = Util.Helpers.GetBuffs(2);
+            public CharacterBody body;
 
+            private void Awake()
+            {
+                base.enabled = false;
+            }
+            private void OnEnable()
+            {
+
+            }
             private void FixedUpdate()
             {
                 foreach (var affix in allAffixes)

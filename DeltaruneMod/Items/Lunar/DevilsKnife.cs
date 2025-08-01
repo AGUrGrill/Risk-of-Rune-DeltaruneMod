@@ -54,26 +54,26 @@ namespace DeltaruneMod.Items.Lunar
 
         private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
         {
+            // If no buffs in list, populate
             if (buffs.Count <= 0) buffs = Util.Helpers.GetBuffs(99);
-            if (!NetworkServer.active) return;
+            if (!NetworkServer.active || !sender.inventory) return;
 
-            if (sender.inventory)
+            #region Chaos Effect Controller
+            var chaosInflicted = sender.GetComponent<WorldRevolvingEffect>();
+            if (GetCount(sender) > 0)
             {
-                var chaosInflicted = sender.GetComponent<WorldRevolvingEffect>();
-                if (GetCount(sender) > 0)
+                if (!chaosInflicted)
                 {
-                    if (!chaosInflicted)
-                    {
-                        chaosInflicted = sender.gameObject.AddComponent<WorldRevolvingEffect>();
-                        chaosInflicted.stack = GetCount(sender);
-                        chaosInflicted.body = sender;
+                    chaosInflicted = sender.gameObject.AddComponent<WorldRevolvingEffect>();
+                    chaosInflicted.itemStacks = GetCount(sender);
+                    chaosInflicted.body = sender;
 
-                    } 
-                    else if (chaosInflicted && GetCount(sender) > chaosInflicted.stack) chaosInflicted.stack = GetCount(sender);
-                }
-                else if (chaosInflicted && GetCount(sender) <= 0) chaosInflicted.enabled = false;
+                } 
+                else if (chaosInflicted) chaosInflicted.itemStacks = GetCount(sender);
+                else if (!chaosInflicted.enabled) chaosInflicted.enabled = true;
             }
-            
+            else if (chaosInflicted && GetCount(sender) <= 0) chaosInflicted.enabled = false;
+            #endregion
         }
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()
@@ -302,11 +302,23 @@ namespace DeltaruneMod.Items.Lunar
             return rules;
         }
     
-        public class WorldRevolvingEffect : CharacterBody.ItemBehavior
+        // Handles buff applications
+        public class WorldRevolvingEffect : MonoBehaviour
         {
             private float timer = 0f;
             private float maxTime = 10f;
+            public CharacterBody body;
+            public int itemStacks = 0;
 
+            private void Awake()
+            {
+                base.enabled = false;
+            }
+            private void OnEnabled()
+            {
+
+            }
+            // Timer for chaos (buff application)
             private void FixedUpdate()
             {
                 timer -= Time.fixedDeltaTime;
@@ -316,6 +328,8 @@ namespace DeltaruneMod.Items.Lunar
                     timer = maxTime;
                 }
             }
+            // Find random buff user doesnt have and give it
+            //
             // SEEKER ISSUE - When sojourn causes seeker to disappear, maybe make timer per person?
             public void ChaosChaos()
             {
@@ -326,7 +340,7 @@ namespace DeltaruneMod.Items.Lunar
                     if (!body.HasBuff(randomBuff)) break;
                     Debug.Log(body.name + " already has buff " + randomBuff.name + "! Cycling to next buff...");
                 }
-                body.AddTimedBuff(randomBuff, 5 + (stack * 5));
+                body.AddTimedBuff(randomBuff, 5 + (itemStacks * 5));
                 Debug.Log("Added random buff:" + randomBuff.name + " to " + body.name);
             }
             private void OnDisable()

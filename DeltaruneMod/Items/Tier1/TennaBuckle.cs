@@ -39,6 +39,11 @@ namespace DeltaruneMod.Items.Tier1
             CreateItem();
             CreateLang();
             Hooks();
+
+            GameObject pickupModel = MainAssets.LoadAsset<GameObject>("tenna_buckle.prefab").InstantiateClone("TennaBucklePickup", true);
+            pickupModel.transform.localScale = new Vector3(2f, 2f, 2f);
+
+            ItemDef.pickupModelPrefab = pickupModel;
         }
 
         public override void Hooks()
@@ -305,7 +310,6 @@ namespace DeltaruneMod.Items.Tier1
             });
             return rules;
         }
-
-        
+   
     }
 }

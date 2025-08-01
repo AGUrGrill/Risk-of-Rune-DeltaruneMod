@@ -293,6 +293,7 @@ namespace DeltaruneMod.Items.Lunar
         {
             if (!NetworkServer.active) return;
 
+            // Convert comm ring to thorn ring if applicable
             int itemCount = GetCount(sender);
             if (sender.inventory && itemCount > 0)
             {
@@ -321,6 +322,7 @@ namespace DeltaruneMod.Items.Lunar
 
         public void ThornRingEffect(On.RoR2.GlobalEventManager.orig_OnHitEnemy orig, GlobalEventManager self, DamageInfo damageInfo, GameObject victim)
         {
+            // Need to reduce player hp
             orig(self, damageInfo, victim);
 
             if (!NetworkServer.active) return;
@@ -333,6 +335,7 @@ namespace DeltaruneMod.Items.Lunar
 
             int itemCount = GetCount(sender);
 
+            // Change frost debuff to look cool and custom
             frostbite = DLC2Content.Buffs.Frost;
             frostbite.name = "FrostbiteDebuff";
             frostbite.iconSprite = FrostbiteEffectIcon;
@@ -341,6 +344,7 @@ namespace DeltaruneMod.Items.Lunar
             //float thornDmg = sender.baseMaxHealth * (0.05f + (0.03f * (itemCount-1)));
             //int stacksFrostbite = victimBody.GetBuffCount(frostbite);
 
+            // Add debuff to enemy and slightly hurt player
             if (sender.inventory && itemCount > 0)
             {
                 for (int i = 0; i < itemCount; i++)

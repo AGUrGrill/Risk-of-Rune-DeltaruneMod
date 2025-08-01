@@ -266,48 +266,27 @@ namespace DeltaruneMod.Items.Yellow
 
         public override void Hooks()
         {
-            RecalculateStatsAPI.GetStatCoefficients += PipisEffect;
+            RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
         }
 
-        private void PipisEffect(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
+        private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
         {
-            if (!NetworkServer.active || !sender) return;
+            if (!NetworkServer.active || !sender.inventory) return;
 
-            var existing = sender.GetComponent<PipisTracker>();
-            if (sender.inventory && GetCount(sender) > 0)
+            #region Add Pipis Stat Buffs
+            if (GetCount(sender) > 0)
             {
-                if (!existing)
-                {
-                    existing = sender.gameObject.AddComponent<PipisTracker>();
-                    existing.body = sender;
-                    existing.currNumOfPipis = GetCount(sender);
-                }
-                else if (existing && GetCount(sender) <= 0) existing.enabled = false;
-                else if (existing && GetCount(sender) > 0 && !existing.enabled) existing.enabled = true;
-                if (existing) existing.currNumOfPipis = GetCount(sender);
+                var multi = 0.05f * GetCount(sender);
+                args.armorAdd += multi;
+                args.healthMultAdd += multi;
+                args.moveSpeedMultAdd += multi;
+                args.regenMultAdd += multi;
+                args.attackSpeedMultAdd += multi;
+                args.damageMultAdd += multi;
+                args.critDamageMultAdd += multi;
+                args.critAdd += multi;
             }
-        }
-    }
-
-    public class PipisTracker : CharacterBody.ItemBehavior
-    {
-        public int prevNumOfPipis = 0;
-        public int currNumOfPipis = 0;
-        private float pipisMult = 1.05F;
-
-        private void FixedUpdate()
-        {
-            if (currNumOfPipis > prevNumOfPipis)
-            {
-                body.baseArmor *= pipisMult;
-                body.baseMaxHealth *= pipisMult;
-                body.baseMoveSpeed *= pipisMult;
-                body.baseRegen *= pipisMult;
-                body.baseAttackSpeed *= pipisMult;
-                body.baseDamage *= pipisMult;
-                body.baseCrit *= pipisMult;
-                prevNumOfPipis = currNumOfPipis;
-            }
+            #endregion  
         }
     }
 }

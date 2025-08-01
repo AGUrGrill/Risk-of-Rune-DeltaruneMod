@@ -64,6 +64,11 @@ namespace DeltaruneMod.Items.Tier2
             CreateSoundEffect();
             CreateProjectile();
             Hooks();
+
+            GameObject pickupModel = MainAssets.LoadAsset<GameObject>("susie_axe.prefab").InstantiateClone("SusieAxePickup", true);
+            pickupModel.transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
+
+            ItemDef.pickupModelPrefab = pickupModel;
         }
 
         public override void Hooks()

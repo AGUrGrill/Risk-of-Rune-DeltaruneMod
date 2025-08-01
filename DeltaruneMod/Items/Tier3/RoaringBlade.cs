@@ -391,6 +391,7 @@ namespace DeltaruneMod.Items.Tier3
             SwoonSFX = Util.Helpers.CreateNetworkSoundEventDef("Play_snd_knight_cut");
         }
 
+        // Does the damage and effect spawn
         public class SwoonDamageTracker : CharacterBody.ItemBehavior
         {
             public float currHealth;
@@ -406,6 +407,7 @@ namespace DeltaruneMod.Items.Tier3
             }
             private void FixedUpdate()
             {
+                // If cant swoon start timer to swoon again
                 if (!canSwoon)
                 {
                     swoonTimer -= Time.fixedDeltaTime;
@@ -420,6 +422,7 @@ namespace DeltaruneMod.Items.Tier3
             {
                 if (!NetworkServer.active) return;
 
+                // Deal dmg to target
                 totalDamageTaken = (prevHealth - currHealth) * (stack + 1);
                 body.healthComponent.health -= totalDamageTaken;
 
@@ -430,6 +433,7 @@ namespace DeltaruneMod.Items.Tier3
                     return;
                 }
 
+                // Spawn effect anddound
                 EffectManager.SpawnEffect(SwoonModelPrefab, new EffectData { origin = body.transform.position, scale = 1f }, true);
                 EffectManager.SimpleSoundEffect(SwoonSFX.index, body.corePosition, true);
 
@@ -445,9 +449,9 @@ namespace DeltaruneMod.Items.Tier3
             }
         }
 
+        // All the anim stuff
         public class SwoonEffectController : NetworkBehaviour
         {
-
             void Start()
             {
                 Animator anim = GetComponent<Animator>();
