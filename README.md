@@ -9,8 +9,10 @@ Some planned items include: Thorn Ring, Ralsei Plush, ???, a new Elite type and 
 | Jack of Spades | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/lancer_card_icon.png?raw=true)   | Free unlock on stage start.   |
 | Showrunner's Buckle | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/tenna_buckle_icon.png?raw=true)   | 10% more gold gain.   |
 | Monster's Axe | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/susie_axe_icon%201.png?raw=true)   | Shoot a Rude Buster on Primary or Secondary skill and activate UltimateHeal.   |
+| Sage's Manual | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/guide_book_icon%201.png?raw=true)   | Teaches all drones a healing prayer.   |
 | Dealmaker | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/big_shot_icon.png?raw=true)   | Gain stacks of [[Big Shot]]on gold gain. +30% gold gain.   |
 | Roaring Blade | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/roaring_blade_icon.png?raw=true)   | Stack swoon on hit, total damage dealt prior reapplies after 3 stacks.   |
+| Mystery Man's Mask | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/gaster_mask_icon.png?raw=true)   | Enemies that fall below 10% hp become corrupted allies. Void of Happiest Mask.   |
 | Devilsknife | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/devils_knife_icon.png?raw=true)   | Gain a random effect every 10 seconds for 10 seconds.   |
 | ??? | ???   | Spamton has quite the item for sale... not a scam. (actually)   |
 | ??? | ???   | Find this secret and be GREATLY rewarded!   |
