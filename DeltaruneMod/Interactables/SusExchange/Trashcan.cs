@@ -87,7 +87,7 @@ namespace DeltaruneMod.Interactables.SusExchange
             hologramText.transform.localPosition = Vector3.zero;
 
             var textMesh = hologramText.AddComponent<TMPro.TextMeshPro>();
-            textMesh.text = "shiz brokey";
+            textMesh.text = "";
             textMesh.fontSize = 6f;
             textMesh.color = Color.red;
             textMesh.alignment = TMPro.TextAlignmentOptions.Center;

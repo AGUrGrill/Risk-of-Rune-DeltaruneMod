@@ -101,7 +101,7 @@ namespace DeltaruneMod.Util
         #region Make Prefabs
         public static void CreateNetworkedEffectPrefab(GameObject obj, bool isFollower)
         {
-            if (!obj.GetComponent<NetworkIdentity>()) obj.AddComponent<NetworkIdentity>();
+            //if (!obj.GetComponent<NetworkIdentity>()) obj.AddComponent<NetworkIdentity>();
             var effect = obj.GetComponent<EffectComponent>();
             if (!effect) effect = obj.AddComponent<EffectComponent>();
             effect.applyScale = isFollower;
@@ -109,7 +109,7 @@ namespace DeltaruneMod.Util
             effect.parentToReferencedTransform = isFollower;
             effect.positionAtReferencedTransform = isFollower;
 
-            PrefabAPI.RegisterNetworkPrefab(obj);
+            //PrefabAPI.RegisterNetworkPrefab(obj);
             ContentAddition.AddEffect(obj);
         }
         public static void AddEffectPrefabToContentAddition(GameObject obj)

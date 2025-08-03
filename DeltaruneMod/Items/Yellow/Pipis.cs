@@ -271,8 +271,6 @@ namespace DeltaruneMod.Items.Yellow
 
         private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
         {
-            if (!NetworkServer.active || !sender.inventory) return;
-
             #region Add Pipis Stat Buffs
             if (GetCount(sender) > 0)
             {

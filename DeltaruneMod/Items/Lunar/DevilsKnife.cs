@@ -56,7 +56,6 @@ namespace DeltaruneMod.Items.Lunar
         {
             // If no buffs in list, populate
             if (buffs.Count <= 0) buffs = Util.Helpers.GetBuffs(99);
-            if (!NetworkServer.active || !sender.inventory) return;
 
             #region Chaos Effect Controller
             var chaosInflicted = sender.GetComponent<WorldRevolvingEffect>();
@@ -67,7 +66,7 @@ namespace DeltaruneMod.Items.Lunar
                     chaosInflicted = sender.gameObject.AddComponent<WorldRevolvingEffect>();
                     chaosInflicted.itemStacks = GetCount(sender);
                     chaosInflicted.body = sender;
-
+                    chaosInflicted.enabled = true;
                 } 
                 else if (chaosInflicted) chaosInflicted.itemStacks = GetCount(sender);
                 else if (!chaosInflicted.enabled) chaosInflicted.enabled = true;
@@ -314,7 +313,7 @@ namespace DeltaruneMod.Items.Lunar
             {
                 base.enabled = false;
             }
-            private void OnEnabled()
+            private void OnEnable()
             {
 
             }
@@ -345,7 +344,7 @@ namespace DeltaruneMod.Items.Lunar
             }
             private void OnDisable()
             {
-                Destroy(this);
+                
             }
         }
     }

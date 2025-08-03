@@ -39,10 +39,10 @@ namespace DeltaruneMod.Items.Tier1
         public static BuffDef JackBuff;
 
         // Numbers for stuff
-        private readonly float multi = 0.01f;
+        private readonly float multi = 0.05f;
 
         private readonly float baseMulti = 0.05f;
-
+        
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {
             return null;
@@ -83,19 +83,10 @@ namespace DeltaruneMod.Items.Tier1
                 timer.enabled = false;
             }
             #endregion
-
-            #region Determine Stack Count
-            if (timer && GetCount(self) > 0)
-            {
-                timer.itemStacks = GetCount(self);
-            }
-            #endregion
         }
 
         private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
         {
-            if (!NetworkServer.active || !sender.inventory) return;
-
             #region Add Speed
             if (GetCount(sender) > 0 && sender.HasBuff(JackBuff))
             {
@@ -109,19 +100,18 @@ namespace DeltaruneMod.Items.Tier1
 
         public override void Init()
         {
-            CreateItem();
-            CreateLang();
-            CreateBuff();
-            Hooks();
+            //CreateItem();
+            //CreateLang();
+            //CreateBuff();
+            //Hooks();
         }
 
         private class JackNOffTimer : MonoBehaviour
         {
-            readonly float timerInterval = 30f;
+            readonly float timerInterval = 5f;
             float timer = 0f;
             
             public CharacterBody player;
-            public int itemStacks = 0;
 
             private void Awake()
             {

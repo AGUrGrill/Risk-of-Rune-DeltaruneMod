@@ -159,13 +159,13 @@ namespace DeltaruneMod.Interactables.SusExchange
             {
                 body.inventory.RemoveItem(itemFromInventory);
                 itemGiven = pipis;
-                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOUR FIRST STEP TO BECOMING A [[Big shot]]. ["+timesUsed+"] tries left." });
+                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOUR FIRST STEP TO BECOMING A [[Big shot]]. ["+(timesUsed-1)+"] tries left." });
             }
             else if (itemFromInventory == shinyPearl)
             {
                 body.inventory.RemoveItem(itemFromInventory);
                 itemGiven = mrPipis;
-                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOU WON WON WON MY [[Hyperlink blocked]]. ["+timesUsed+"] tries left." });
+                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOU WON WON WON MY [[Hyperlink blocked]]. ["+ (timesUsed - 1) + "] tries left." });
             }
             else if (itemFromInventory == kromer)
             {
@@ -174,7 +174,7 @@ namespace DeltaruneMod.Interactables.SusExchange
                     body.inventory.RemoveItem(kromer);
                 }
                 itemGiven = commRing;
-                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOU ARE THE FIRST TO OWN MY <style=cIsUtility>[Commemorative Ring]</style>!!! ["+timesUsed+"] tries left." });
+                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOU ARE THE FIRST TO OWN MY <style=cIsUtility>[Commemorative Ring]</style>!!! ["+ (timesUsed - 1) + "] tries left." });
             }
             else
             {
@@ -188,13 +188,13 @@ namespace DeltaruneMod.Interactables.SusExchange
                 {
                     if (itemFromInventory.tier == ItemTier.Tier1) itemGiven = randomTier2;
                     else if (itemFromInventory.tier == ItemTier.Tier2) itemGiven = randomTier3;
-                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: THAT'S A REAL <style=cDeath>[[Big Shot]]</style> MOVE KID!!! YOU'RE JUST LIKE [Me]... ["+timesUsed+"] tries left." });
+                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: THAT'S A REAL <style=cDeath>[[Big Shot]]</style> MOVE KID!!! YOU'RE JUST LIKE [Me]... ["+ (timesUsed - 1) + "] tries left." });
 
                 }
                 else
                 {
                     itemGiven = kromer;
-                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: DELICIOUS KROMER. ["+timesUsed+"] tries left." });
+                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: DELICIOUS KROMER. ["+ (timesUsed - 1)+ "] tries left." });
                 }
             }
             #endregion

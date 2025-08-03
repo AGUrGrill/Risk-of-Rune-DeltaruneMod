@@ -113,15 +113,15 @@ namespace DeltaruneMod.Items.Tier2
         
         public void CreateProjectile()
         {
-            ProjectilePrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/ShurikenProjectile").InstantiateClone("SusieAxeProjectile", true);
+            ProjectilePrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/ShurikenProjectile").InstantiateClone("SusieAxeProjectile", false);
 
-            var ghost = MainAssets.LoadAsset<GameObject>("rude_buster.prefab").InstantiateClone("rude_buster", true);
+            var ghost = MainAssets.LoadAsset<GameObject>("rude_buster.prefab").InstantiateClone("SusieAxeGhost", false);
             ghost.AddComponent<ProjectileGhostController>();
             ghost.AddComponent<NetworkIdentity>();
             ghost.transform.localScale = new Vector3(150f, 150f, 150f);
 
             var projCont = ProjectilePrefab.GetComponent<ProjectileController>();
-            if (projCont.ghostPrefab != null) UnityEngine.Object.Destroy(projCont.ghostPrefab);
+            if (projCont.ghostPrefab) UnityEngine.Object.Destroy(projCont.ghostPrefab);
             projCont.shouldPlaySounds = false;
             projCont.ghostPrefab = ghost;
 

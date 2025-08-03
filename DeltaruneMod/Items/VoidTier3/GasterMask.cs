@@ -282,8 +282,6 @@ namespace DeltaruneMod.Items.VoidTier3
 
         private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
         {
-            if (!NetworkServer.active) return;
-
             try
             {
                 // Convert item if happiest mask is present (item index 77)
@@ -372,23 +370,30 @@ namespace DeltaruneMod.Items.VoidTier3
             modelLocator = voidAlly.modelLocator;
             if (modelLocator) modelLocator.dontReleaseModelOnDeath = true;
 
-            // Add controller and set follow target
-            var wingDingy = voidAlly.gameObject.AddComponent<WingDingyAnimController>();
-            wingDingy.followTarget = voidAlly.gameObject;
-            wingDingy.CorruptedEffect = CorruptedEffect;
-            wingDingy.CorruptedEffectHolder = CorruptedEffectHolder;
-            wingDingy.CorruptedConversionTime = CorruptConversionTime;
-            wingDingy.CmdFIRE();
+            // Spawn effect on enemy
+            try
+            {
+                if (voidAlly.gameObject)
+                {
+                    EffectData effectData = new EffectData
+                    {
+                        scale = 1f
+                    };
+                    effectData.SetNetworkedObjectReference(voidAlly.gameObject);
+
+                    EffectManager.SpawnEffect(CorruptedEffect, effectData, true);
+                }
+            }
+            catch { Debug.Log("Could not apply wing ding effect."); }
 
             // Destroy old target copy
             if (targetCopy) targetCopy.healthComponent.Suicide();
-            //UnityEngine.Object.Destroy(targetCopy);
             
         }
 
         public void CreateEffect()
         {
-            CorruptedEffect = MainAssets.LoadAsset<GameObject>("wingshit.prefab").InstantiateClone("gaster_corrupt_effect", true);
+            CorruptedEffect = MainAssets.LoadAsset<GameObject>("wingshit.prefab").InstantiateClone("gaster_corrupt_effect", false);
             CorruptedEffect.transform.localScale = new Vector3(1f, 1f, 1f);
             Util.Helpers.CreateNetworkedEffectPrefab(CorruptedEffect, true);
 
@@ -434,47 +439,6 @@ namespace DeltaruneMod.Items.VoidTier3
             { 
                 Debug.Log("bleh :P");
             }
-        }
-    }
-
-    // All the anim stuff
-    public class WingDingyAnimController : NetworkBehaviour
-    {
-        public GameObject followTarget;
-        public GameObject CorruptedEffectHolder;
-        public GameObject CorruptedEffect;
-        public int CorruptedConversionTime;
-
-        // Do all the visual stuff that wont work on server cause f me ig
-        [Command]
-        public void CmdFIRE()
-        {
-            if (!NetworkServer.active) return;
-
-            if (!followTarget || !CorruptedEffectHolder || !CorruptedEffect || CorruptedConversionTime <= 0) return;
-
-            var holder = Instantiate(CorruptedEffectHolder);
-
-            // Oh why does this not spawn for client 2 ????
-            NetworkServer.Spawn(holder);
-
-            // Get the follow for the effect
-            var follow = holder.GetComponent<FollowTarget>();
-            follow.target = followTarget.transform;
-            follow.enabled = true;
-
-            // Setup and spawn effect
-            EffectData effectData = new EffectData
-            {
-                scale = 1f
-            };
-            effectData.SetNetworkedObjectReference(holder);
-
-            EffectManager.SpawnEffect(CorruptedEffect, effectData, true);
-
-            // Destroy the remains, BURN IT DOWN!
-            Destroy(holder, CorruptedConversionTime);
-            Destroy(this, CorruptedConversionTime);
         }
     }
 }

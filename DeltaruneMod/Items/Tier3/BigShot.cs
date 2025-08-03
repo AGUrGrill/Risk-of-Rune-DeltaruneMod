@@ -420,7 +420,7 @@ namespace DeltaruneMod.Items.Tier3
             #endregion
             private void Awake()
             {
-                enabled = false;
+                base.enabled = false;
             }
             private void Start()
             {
