@@ -236,20 +236,19 @@ namespace DeltaruneMod.Items.Tier3
                     localScale = new Vector3(4.5489F, 5.00249F, 5.00249F)
                 }
             });
-            /*
             rules.Add("mdlRalsei", new ItemDisplayRule[]
             {
                 new ItemDisplayRule
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "HandR",
-                    localPos = new Vector3(0.00839F, 0.00898F, 0.00293F),
-                    localAngles = new Vector3(334.2737F, 179.8516F, 182.9772F),
-                    localScale = new Vector3(0.91639F, 0.91639F, 0.91639F)
+                    childName = "Hips",
+                    localPos = new Vector3(0.00527F, 0.00014F, 0.00049F),
+                    localAngles = new Vector3(17.59271F, 355.3093F, 344.7248F),
+                    localScale = new Vector3(0.34789F, 0.34789F, 0.34789F)
+
                 }
             });
-            */
             return rules;
         }
 

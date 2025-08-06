@@ -59,7 +59,7 @@ namespace DeltaruneMod.Items.Tier1
                 body = self.GetBody();
                 Debug.Log("Searching for body...");
             }
-            if (canUseEffect)
+            if (GetCount(self) > 0 && canUseEffect)
             {
                 for (int i = 0; i < itemCount; i++)
                 {

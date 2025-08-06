@@ -257,20 +257,19 @@ namespace DeltaruneMod.Items.VoidTier3
                     localScale = new Vector3(35.0727F, 35.0727F, 35.0727F)
                 }
             });
-            /*
             rules.Add("mdlRalsei", new ItemDisplayRule[]
             {
                 new ItemDisplayRule
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "HandR",
-                    localPos = new Vector3(0.00839F, 0.00898F, 0.00293F),
-                    localAngles = new Vector3(334.2737F, 179.8516F, 182.9772F),
-                    localScale = new Vector3(0.91639F, 0.91639F, 0.91639F)
+                    childName = "Head",
+                    localPos = new Vector3(0.00038F, 0.00367F, 0.00505F),
+                    localAngles = new Vector3(40.00007F, 8.95804F, 18.94578F),
+                    localScale = new Vector3(0.92104F, 0.58765F, 0.86567F)
+
                 }
             });
-            */
             return rules;
         }
         
@@ -396,15 +395,6 @@ namespace DeltaruneMod.Items.VoidTier3
             CorruptedEffect = MainAssets.LoadAsset<GameObject>("wingshit.prefab").InstantiateClone("gaster_corrupt_effect", false);
             CorruptedEffect.transform.localScale = new Vector3(1f, 1f, 1f);
             Util.Helpers.CreateNetworkedEffectPrefab(CorruptedEffect, true);
-
-            var corrHolder = new GameObject("temp_holder");
-            corrHolder.transform.localPosition = Vector3.zero;
-            corrHolder.transform.localScale = new Vector3(1f, 1f, 1f);
-            corrHolder.AddComponent<FollowTarget>();
-            //GameObject.DontDestroyOnLoad(CorruptedEffectHolder);
-            CorruptedEffectHolder = corrHolder.InstantiateClone("CorruptedEffectHolder", false);
-            Util.Helpers.CreateNetworkedObjectPrefab(CorruptedEffectHolder);
-            //CorruptedEffectHolder.RegisterNetworkPrefab();
         }
 
         public void CreateBuff()
@@ -426,7 +416,7 @@ namespace DeltaruneMod.Items.VoidTier3
             CreateBuff();
             Hooks();
 
-            GameObject pickupModel = MainAssets.LoadAsset<GameObject>("jim_carry.prefab").InstantiateClone("GasterMaskPickup", true);
+            GameObject pickupModel = MainAssets.LoadAsset<GameObject>("jim_carry.prefab").InstantiateClone("GasterMaskPickup", false);
             pickupModel.transform.localScale = new Vector3(650f, 650f, 650f); 
 
             ItemDef.pickupModelPrefab = pickupModel;

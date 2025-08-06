@@ -55,10 +55,9 @@ namespace DeltaruneMod.Items.Tier1
         {
             if (!NetworkServer.active || !self.GetBody()) return;
 
-            var body = self.GetBody();
-            var itemCount = GetCount(body);
+            var itemCount = GetCount(self);
 
-            if (body.inventory && itemCount > 0)
+            if (self.inventory && itemCount > 0)
             {
                 //Debug.Log($"Amount | " + amount);
                 uint bonus = (uint)Mathf.CeilToInt(amount * (0.1f + 0.05f * (itemCount-1)));

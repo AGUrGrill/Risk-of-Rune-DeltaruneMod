@@ -36,7 +36,7 @@ namespace DeltaruneMod.Items.Tier2
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("susie_axe.prefab");
 
-        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("susie_axe_icon 1.png");
+        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("monster_axe_icon.png");
 
         public Sprite BuffIcon = MainAssets.LoadAsset<Sprite>("rude_buster_effect_icon.png");
 
@@ -65,7 +65,7 @@ namespace DeltaruneMod.Items.Tier2
             CreateProjectile();
             Hooks();
 
-            GameObject pickupModel = MainAssets.LoadAsset<GameObject>("susie_axe.prefab").InstantiateClone("SusieAxePickup", true);
+            GameObject pickupModel = MainAssets.LoadAsset<GameObject>("susie_axe.prefab").InstantiateClone("SusieAxePickup", false);
             pickupModel.transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
 
             ItemDef.pickupModelPrefab = pickupModel;

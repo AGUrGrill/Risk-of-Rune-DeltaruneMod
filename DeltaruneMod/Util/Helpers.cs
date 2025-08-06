@@ -129,7 +129,7 @@ namespace DeltaruneMod.Util
             if (!obj.GetComponent<ProjectileController>()) obj.AddComponent<ProjectileController>();
             if (!obj.GetComponent<ProjectileSimple>()) obj.AddComponent<ProjectileSimple>();
             if (!obj.GetComponent<NetworkIdentity>()) obj.AddComponent<NetworkIdentity>();
-            PrefabAPI.RegisterNetworkPrefab(obj);
+            if (obj) PrefabAPI.RegisterNetworkPrefab(obj);
             ContentAddition.AddProjectile(obj);
         }
         /// <summary>

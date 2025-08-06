@@ -1,11 +1,6 @@
 ﻿using R2API;
 using RoR2;
 using RoR2.Projectile;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Numerics;
-using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using static DeltaruneMod.DeltarunePlugin;
@@ -38,8 +33,6 @@ namespace DeltaruneMod.Items.VoidTier3
 
         public override bool isChapter4 => true;
 
-        public GameObject ProjectileModel = MainAssets.LoadAsset<GameObject>("hammer_justice.prefab");
-
         public static GameObject ProjectilePrefab;
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()
@@ -47,26 +40,89 @@ namespace DeltaruneMod.Items.VoidTier3
             return null;
         }
 
-        public override void Hooks()
+        public void CreateProjectile()
         {
-            RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
-            On.RoR2.GlobalEventManager.OnHitEnemy += GlobalEventManager_OnHitEnemy;
+            #region Setup Projectile Stats
+            var procCoefficent = 1f;
+
+            var lookRange = 75;
+            var lookCone = 20;
+
+            var rotationSpd = 180;
+            #endregion
+
+            #region Projectile Setup/Modification
+            ProjectilePrefab = PrefabAPI.InstantiateClone(LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/FMJ"), "ShellProjectile", true);
+
+            var model = MainAssets.LoadAsset<GameObject>("hammer_justice.prefab");
+            model.AddComponent<NetworkIdentity>();
+            model.AddComponent<ProjectileGhostController>();
+            model.transform.localScale = new Vector3(100f, 100f, 100f);
+
+            var controller = ProjectilePrefab.GetComponent<ProjectileController>();
+            controller.procCoefficient = procCoefficent;
+            controller.ghostPrefab = model;
+
+            ProjectilePrefab.GetComponent<TeamFilter>().teamIndex = TeamIndex.Player;
+
+            var damage = ProjectilePrefab.GetComponent<ProjectileDamage>();
+            damage.damageType = DamageType.CrippleOnHit;
+            damage.damage = 0;
+
+            var intervalController = ProjectilePrefab.GetComponent<ProjectileIntervalOverlapAttack>();
+            UnityEngine.Object.Destroy(intervalController);
+
+            //var impactEffect = LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/ImpactEffects/VagrantCannonExplosion");
+
+            //var overlapAttack = ProjectilePrefab.GetComponent<ProjectileOverlapAttack>();
+            //overlapAttack.impactEffect = impactEffect;
+
+            //var applyTorqueOnStart = ProjectilePrefab.AddComponent<ApplyTorqueOnStart>();
+            //applyTorqueOnStart.localTorque = new Vector3(0, 1500, 0);
+
+            var projectileTarget = ProjectilePrefab.AddComponent<ProjectileTargetComponent>();
+
+            var projectileDirectionalTargetFinder = ProjectilePrefab.AddComponent<ProjectileDirectionalTargetFinder>();
+            projectileDirectionalTargetFinder.lookRange = lookRange;
+            projectileDirectionalTargetFinder.lookCone = lookCone;
+            projectileDirectionalTargetFinder.targetSearchInterval = 0.1f;
+            projectileDirectionalTargetFinder.onlySearchIfNoTarget = true;
+            projectileDirectionalTargetFinder.allowTargetLoss = false;
+            projectileDirectionalTargetFinder.testLoS = false;
+            projectileDirectionalTargetFinder.ignoreAir = false;
+            projectileDirectionalTargetFinder.flierAltitudeTolerance = float.PositiveInfinity;
+            projectileDirectionalTargetFinder.targetComponent = projectileTarget;
+
+            var projectileHoming = ProjectilePrefab.AddComponent<ProjectileSteerTowardTarget>();
+            projectileHoming.targetComponent = projectileTarget;
+            projectileHoming.rotationSpeed = rotationSpd;
+            projectileHoming.yAxisOnly = false;
+
+            var projectileSimple = ProjectilePrefab.GetComponent<ProjectileSimple>();
+            projectileSimple.enableVelocityOverLifetime = true;
+            projectileSimple.updateAfterFiring = true;
+            projectileSimple.velocityOverLifetime = new AnimationCurve(new Keyframe[] { new Keyframe(0, 0), new Keyframe(2, 70) });
+
+            Util.Helpers.CreateNetworkedProjectilePrefab(ProjectilePrefab);
+            #endregion
         }
 
-        private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
+        public override void Hooks()
         {
-            if (!NetworkServer.active) return;
+            //On.RoR2.GlobalEventManager.OnHitEnemy += GlobalEventManager_OnHitEnemy;
+            On.RoR2.CharacterBody.OnSkillActivated += CharacterBody_OnSkillActivated;
+        }
 
-            var itemCount = GetCount(sender);
-            var behaviorExists = sender.GetComponent<HammerOfJusticeBehavior>();
+        private void CharacterBody_OnSkillActivated(On.RoR2.CharacterBody.orig_OnSkillActivated orig, CharacterBody self, GenericSkill skill)
+        {
+            orig(self, skill);
 
-            if (sender.inventory && itemCount > 0 && !behaviorExists)
+            if (!NetworkServer.active || !self.skillLocator) return;
+
+            var skillLocator = self.skillLocator;
+            if (skillLocator.primary == skill && GetCount(self) > 0) 
             {
-                behaviorExists = sender.gameObject.AddComponent<HammerOfJusticeBehavior>();
-            }
-            else if (sender.inventory && itemCount <= 0 && behaviorExists)
-            {
-                behaviorExists.enabled = false;
+                FireShellProjectile(self);
             }
         }
 
@@ -74,44 +130,44 @@ namespace DeltaruneMod.Items.VoidTier3
         {
             orig(self, damageInfo, victim);
 
-            if (!NetworkServer.active) return;
-
             var player = damageInfo.attacker.GetComponent<CharacterBody>();
             var enemy = victim.GetComponent<CharacterBody>();
             var itemCount = GetCount(player);
-            var behavior = player.GetComponent<HammerOfJusticeBehavior>();
+        }
 
-            if (player.inventory && itemCount > 0 && behavior)
+        public void FireShellProjectile(CharacterBody player)
+        {
+            //Check every part for no obj reference
+            #region Projectile Stats
+            var baseDmg = 4f;
+            var dmgMult = 1.5f;
+            var dmgCalc = player.damage * (baseDmg * (dmgMult * GetCount(player)));
+
+            var force = 2f;
+            var maxDistance = 300f;
+            var speedOverride = 50f;
+            byte maxCombo = 3;
+            #endregion
+
+            #region Projectile
+            var inputBank = player.inputBank;
+            Ray aimRay = new Ray(inputBank.aimOrigin, inputBank.aimDirection);
+
+            ProjectileManager.instance.FireProjectile(new FireProjectileInfo
             {
-                behavior.FireProjectile();
-                Debug.Log("Preparing to fire");
-            }
-        }
-
-        
-
-        public override void Init()
-        {
-            //CreateItem();
-            //CreateLang();
-            //CreateProjectile();
-            //Hooks();
-        }
-
-        public void CreateProjectile()
-        {
-            var seekDistance = 80;
-            byte combo = 3;
-            ProjectilePrefab = Resources.Load<GameObject>("Prefabs/Projectiles/FMJ").InstantiateClone("shell_projectile", true);
-
-            var projMissileController = ProjectilePrefab.AddComponent<MissileController>();
-            projMissileController.maxSeekDistance = seekDistance;
-
-            var projController = ProjectilePrefab.GetComponent<ProjectileController>();
-            projController.ghostPrefab = ProjectileModel;
-            projController.combo = combo;
-
-            Util.Helpers.CreateNetworkedProjectilePrefab(ProjectilePrefab);
+                projectilePrefab = ProjectilePrefab,
+                position = aimRay.origin,
+                rotation = RoR2.Util.QuaternionSafeLookRotation(aimRay.direction),
+                owner = player.gameObject,
+                damage = dmgCalc,
+                force = force,
+                crit = RoR2.Util.CheckRoll(player.crit, player.master),
+                damageColorIndex = DamageColorIndex.Default,
+                speedOverride = speedOverride,
+                maxDistance = maxDistance,
+                comboNumber = maxCombo,
+            });
+            #endregion
         }
 
         public void CreateSFX()
@@ -119,52 +175,34 @@ namespace DeltaruneMod.Items.VoidTier3
 
         }
 
-        public class HammerOfJusticeBehavior : CharacterBody.ItemBehavior
+        public override void Init()
         {
-            private int maxTargets = 3;
-            private int currBounces = 0;
-            SkillLocator skillLocator;
-            InputBankTest inputBank;
+            CreateItem();
+            CreateLang();
+            CreateProjectile();
+            Hooks();
+        }
 
+        public class ShellController : MonoBehaviour
+        {
+            readonly int maxBounces = 3;
+            public int currBounces = 0;
+            private void Awake()
+            {
+                base.enabled = false;
+            }
             private void OnEnable()
             {
-                StartCoroutine(DelayedInit());
-            }
 
-            private IEnumerator DelayedInit()
+            }
+            private void FixedUpdate()
             {
-                yield return new WaitForSeconds(0.1f); 
-                if (body)
-                {
-                    skillLocator = body.skillLocator;
-                    inputBank = body.inputBank; 
-                }
+
             }
             private void OnDisable()
             {
-                Destroy(this);
-            }
-            public void FireProjectile()
-            {
-                Debug.Log("starting");
-                if (!NetworkServer.active || inputBank == null) return;
-                Debug.Log("passsed");
-                var target = ProjectilePrefab.GetComponent<MissileController>();
-                Ray aimRay = new Ray(inputBank.aimOrigin, inputBank.aimDirection); //null
-                ProjectileManager.instance.FireProjectile(new FireProjectileInfo
-                {
-                    projectilePrefab = ProjectilePrefab,
-                    position = aimRay.origin,
-                    rotation = RoR2.Util.QuaternionSafeLookRotation(aimRay.direction),
-                    owner = gameObject,
-                    damage = 10f,
-                    force = 1f,
-                    crit = RoR2.Util.CheckRoll(body.crit, body.master),
-                    damageColorIndex = DamageColorIndex.Default,
-                    target = target.targetComponent.target.gameObject,
-                });
-                Debug.Log(target.targetComponent.target);
+
             }
         }
-    } 
+    }  
 }

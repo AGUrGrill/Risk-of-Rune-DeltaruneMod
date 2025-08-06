@@ -71,7 +71,7 @@ namespace DeltaruneMod.Interactables.SusExchange
         {
             if (NetworkServer.active && Run.instance)
             {
-                if (timesUsed > 0) GetComponent<Util.Components.TextController>()?.SetText(timesUsed + " USED");
+                if (timesUsed > 0) GetComponent<Util.Components.TextController>()?.SetText(timesUsed + " USES");
                 else if (timesUsed <= 0) GetComponent<Util.Components.TextController>()?.SetText("CLOSED");
             }
         }

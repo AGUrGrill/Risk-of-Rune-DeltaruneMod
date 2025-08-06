@@ -286,7 +286,7 @@ namespace DeltaruneMod.Items.Tier3
             CreateSwoonEffect();
             Hooks();
 
-            GameObject pickupModel = MainAssets.LoadAsset<GameObject>("roaring_blade.prefab").InstantiateClone("RoaringBladePickup", true);
+            GameObject pickupModel = MainAssets.LoadAsset<GameObject>("roaring_blade.prefab").InstantiateClone("RoaringBladePickup", false);
             pickupModel.transform.localScale = new Vector3(2f, 2f, 2f);
 
             ItemDef.pickupModelPrefab = pickupModel;
@@ -396,7 +396,6 @@ namespace DeltaruneMod.Items.Tier3
         {
             public float currHealth;
             public float prevHealth;
-            public float totalDamageTaken;
             public bool canSwoon;
             private float swoonTimer = 0f;
             private float swoonTimerInterval = 1f;
@@ -422,9 +421,18 @@ namespace DeltaruneMod.Items.Tier3
             {
                 if (!NetworkServer.active) return;
 
-                // Deal dmg to target
-                totalDamageTaken = (prevHealth - currHealth) * (stack + 1);
-                body.healthComponent.health -= totalDamageTaken;
+                // Deal dmg to target and if its gonna kill, leave at 1 hp (lore kinda + no money/xp otherwise)
+                var totalDamageTaken = (prevHealth - currHealth) * (stack + 1);
+                var projectedHP = body.healthComponent.health - totalDamageTaken;
+                if (projectedHP <= 0)
+                {
+                    body.healthComponent.health = 1;
+                }
+                else
+                {
+                    body.healthComponent.health -= totalDamageTaken;
+                }
+
 
                 // Hopefully fix potential of multiple peoples swoon causing the roaring (the health bar to go crazy)
                 if (body.healthComponent.health - totalDamageTaken > body.maxHealth)
