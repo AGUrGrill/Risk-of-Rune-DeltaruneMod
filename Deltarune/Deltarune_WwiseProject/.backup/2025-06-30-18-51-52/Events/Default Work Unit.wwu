@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{179913E5-BB2C-48FC-A0EB-5710C5CCB252}" SchemaVersion="97">
+	<Events>
+		<WorkUnit Name="Default Work Unit" ID="{179913E5-BB2C-48FC-A0EB-5710C5CCB252}" PersistMode="Standalone">
+			<ChildrenList>
+				<Event Name="Play_Dialtone" ID="{B207DB99-2A3D-421A-AF6C-02E3E1A10439}">
+					<ChildrenList>
+						<Action Name="" ID="{A5E6CA42-CE35-4B6D-BC4D-3B4EC384CDD3}" ShortID="608953391">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Dialtone" ID="{140958A1-A9C0-4B75-B866-04EE319ABCDE}" WorkUnitID="{89AFC121-3D32-46A3-ABB3-A15F3BA5EB6E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_Spamton" ID="{50939F31-8F92-4FBF-BDE6-99E0316BA099}">
+					<ChildrenList>
+						<Action Name="" ID="{F5EDBF8B-C820-4836-AAB9-A1CE69E807BF}" ShortID="479348049">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Spamton" ID="{889F7593-7FD0-4335-845E-470AA0B305E6}" WorkUnitID="{89AFC121-3D32-46A3-ABB3-A15F3BA5EB6E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+			</ChildrenList>
+		</WorkUnit>
+	</Events>
+</WwiseDocument>

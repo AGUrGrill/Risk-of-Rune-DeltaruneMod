@@ -79,8 +79,6 @@ namespace DeltaruneMod.Items.Tier2
         
         public void SusieAxeEffect(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
         {
-            if (!NetworkServer.active) return;
-
             var itemCount = GetCount(sender);
             var existing = sender.GetComponent<PrimarySkillSusieAxeBehavior>();
             if (!existing && sender.inventory && itemCount > 0)

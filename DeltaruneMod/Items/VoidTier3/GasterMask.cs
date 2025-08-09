@@ -21,7 +21,7 @@ namespace DeltaruneMod.Items.VoidTier3
         public override string ItemPickupDesc => "Enemies that fall below 10% hp become corrupted allies.";
 
         public override string ItemFullDescription => "Enemies gain <style=cIsDamage>corruption</style> when hit, when below <style=cIsDamage>10%</style> hp" +
-            "\nenemies become corrupted allies for <style=cIsUtility>7.5</style> seconds <style=cStack>(+5 seconds per stack)</style>.";
+            "\nenemies become corrupted allies for <style=cIsUtility>10</style> seconds <style=cStack>(+5 seconds per stack)</style>.";
 
         public override string ItemLore => "ENTRY NUMBER SEVENTEEN" +
             "\nDARK DARKER YET DARKER" +
@@ -300,37 +300,42 @@ namespace DeltaruneMod.Items.VoidTier3
         {
             orig(self, damageInfo, victim);
 
-            if (!NetworkServer.active) return;
-
-            var attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
-            var victimBody = victim.GetComponent<CharacterBody>();
-            var itemCount = GetCount(attackerBody);
-            var thresholdHP = 0.1f;
-
-            if (!attackerBody.inventory || itemCount <= 0) return;
-
-            // Add visual buff
-            if (!victimBody.HasBuff(CorruptedBuff)) victimBody.AddBuff(CorruptedBuff);
-
-            // Convert is hp is low enough
-            if (victimBody.healthComponent.health <= victimBody.maxHealth * thresholdHP)
+            var attackerBody = damageInfo.attacker ? damageInfo.attacker.GetComponent<CharacterBody>() : null;
+            var victimBody = victim ? victim.GetComponent<CharacterBody>() : null;
+            if (NetworkServer.active && attackerBody && victimBody)
             {
-                float time = Time.time; // Make sure clone dosent spawn twice
-                if (lastTimeCloneSpawned.TryGetValue(attackerBody, out float lastTime))
-                {
-                    if (time - lastTime < 0.05f) return;
-                }
-                lastTimeCloneSpawned[attackerBody] = time;
+                var itemCount = GetCount(attackerBody);
+                var thresholdHP = 0.1f;
 
-                // Get this guy outta here!!
-                if (victimBody.name != "VoidInfestorBody(Clone)" && victimBody.name != "VoidInfestorBody"
-                    && victimBody.master.name != "VoidInfestorMaster(Clone)" && victimBody.master.name != "VoidInfestorMaster")
-                    ConvertEnemy(victimBody, attackerBody);
-            }       
+                if (itemCount <= 0) return;
+
+                // Add visual buff
+                if (!victimBody.HasBuff(CorruptedBuff)) victimBody.AddBuff(CorruptedBuff);
+
+                // Convert is hp is low enough
+                if (victimBody.healthComponent.health <= victimBody.maxHealth * thresholdHP)
+                {
+                    float time = Time.time; // Make sure clone dosent spawn twice
+                    if (lastTimeCloneSpawned.TryGetValue(attackerBody, out float lastTime))
+                    {
+                        if (time - lastTime < 0.05f) return;
+                    }
+                    lastTimeCloneSpawned[attackerBody] = time;
+
+                    // Get this guy outta here!!
+                    if (victimBody.name != "VoidInfestorBody(Clone)" && victimBody.name != "VoidInfestorBody"
+                        && victimBody.master.name != "VoidInfestorMaster(Clone)" && victimBody.master.name != "VoidInfestorMaster")
+                        ConvertEnemy(victimBody, attackerBody);
+                }
+            }  
         }
         
         private void ConvertEnemy(CharacterBody target, CharacterBody owner)
         {
+            var baseConversionTime = 10;
+            var multConversionTime = 5;
+
+
             if (!NetworkServer.active) return;
 
             if (target.isPlayerControlled || target.bodyFlags.HasFlag(CharacterBody.BodyFlags.Mechanical)) return;
@@ -362,7 +367,7 @@ namespace DeltaruneMod.Items.VoidTier3
             }
 
             // Create ally
-            CorruptConversionTime = 2 + GetCount(owner) * 5;
+            CorruptConversionTime = baseConversionTime + ((GetCount(owner)-1) * multConversionTime);
             var voidAlly = RoR2.Util.TryToCreateGhost(targetCopy, owner, CorruptConversionTime);
             
             // Stop corpse from spawning

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SoundBanksInfo Platform="Mac" BasePlatform="Mac" SchemaVersion="16" SoundBankVersion="150">
+	<RootPaths>
+		<ProjectRoot>../..</ProjectRoot>
+		<SourceFilesRoot>../../.cache/Mac</SourceFilesRoot>
+		<SoundBanksRoot>.</SoundBanksRoot>
+		<ExternalSourcesInputFile></ExternalSourcesInputFile>
+		<ExternalSourcesOutputRoot>.</ExternalSourcesOutputRoot>
+	</RootPaths>
+	<DialogueEvents/>
+	<SoundBanks>
+		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{61C96F58-C698-58B7-2DC4-98991E32CD9A}">
+			<ShortName>Init</ShortName>
+			<Path>Init.bnk</Path>
+			<Plugins>
+				<AudioDevices>
+					<Plugin Id="2317455096" Name="No_Output" LibName="No Output" LibId="11862023"/>
+					<Plugin Id="3859886410" Name="System" LibName="System" LibId="11403271"/>
+				</AudioDevices>
+			</Plugins>
+			<Busses>
+				<Bus Id="3803692087" Name="Master Audio Bus"/>
+			</Busses>
+			<GameParameters>
+				<GameParameter Id="3673881719" Name="Volume_SFX"/>
+			</GameParameters>
+		</SoundBank>
+		<SoundBank Id="2255073904" Type="User" Language="SFX" Hash="{D0A237BB-5B01-A658-3C6B-1727A4EA16C2}">
+			<ShortName>DeltaruneSoundBank</ShortName>
+			<Path>DeltaruneSoundBank.bnk</Path>
+			<Media>
+				<File Id="62528516" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>aquire_lancer.wav</ShortName>
+					<CachePath>SFX/aquire_lancer_EDCD4836.wem</CachePath>
+				</File>
+				<File Id="577750466" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>BIGSHOT.WAV</ShortName>
+					<CachePath>SFX/BIGSHOT_EDCD4836.wem</CachePath>
+				</File>
+				<File Id="695872906" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>rude_buster.wav</ShortName>
+					<CachePath>SFX/rude_buster_EDCD4836.wem</CachePath>
+				</File>
+				<File Id="740584786" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Dialtone.WAV</ShortName>
+					<CachePath>SFX/Dialtone_EDCD4836.wem</CachePath>
+				</File>
+				<File Id="914713983" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>rude_buster_hit.wav</ShortName>
+					<CachePath>SFX/rude_buster_hit_EDCD4836.wem</CachePath>
+				</File>
+				<File Id="1072037571" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Spamton.wav</ShortName>
+					<CachePath>SFX/Spamton_D8A0D580.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="2353227689" Name="Play_aquire_lancer" MaxAttenuation="75" DurationType="OneShot" DurationMin="2.2998412" DurationMax="2.2998412">
+					<MediaRefs>
+						<MediaRef Id="62528516"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1506173320" Name="Play_BIGSHOT" MaxAttenuation="25" DurationType="OneShot" DurationMin="1.3931973" DurationMax="1.3931973">
+					<MediaRefs>
+						<MediaRef Id="577750466"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2011881192" Name="Play_Dialtone" MaxAttenuation="75" DurationType="OneShot" DurationMin="1.1609977" DurationMax="1.1609977">
+					<MediaRefs>
+						<MediaRef Id="740584786"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3925164868" Name="Play_rude_buster" MaxAttenuation="75" DurationType="OneShot" DurationMin="0.9533787" DurationMax="0.9533787">
+					<MediaRefs>
+						<MediaRef Id="695872906"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2646491066" Name="Play_rude_buster_hit" MaxAttenuation="75" DurationType="OneShot" DurationMin="0.9533787" DurationMax="0.9533787">
+					<MediaRefs>
+						<MediaRef Id="914713983"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3865094552" Name="Play_Spamton" MaxAttenuation="75" DurationType="Infinite">
+					<MediaRefs>
+						<MediaRef Id="1072037571"/>
+					</MediaRefs>
+				</Event>
+			</Events>
+			<GameParameters>
+				<GameParameter Id="3673881719" Name="Volume_SFX"/>
+			</GameParameters>
+		</SoundBank>
+		<SoundBank Id="3557673768" Type="User" Language="SFX" Hash="{D8625FAA-734A-DAD6-EC02-5658523A74B1}">
+			<ShortName>SpamtonSoundBank</ShortName>
+			<Path>SpamtonSoundBank.bnk</Path>
+			<Media>
+				<File Id="62528516" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>aquire_lancer.wav</ShortName>
+					<CachePath>SFX/aquire_lancer_EDCD4836.wem</CachePath>
+				</File>
+				<File Id="577750466" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>BIGSHOT.WAV</ShortName>
+					<CachePath>SFX/BIGSHOT_EDCD4836.wem</CachePath>
+				</File>
+				<File Id="695872906" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>rude_buster.wav</ShortName>
+					<CachePath>SFX/rude_buster_EDCD4836.wem</CachePath>
+				</File>
+				<File Id="740584786" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Dialtone.WAV</ShortName>
+					<CachePath>SFX/Dialtone_EDCD4836.wem</CachePath>
+				</File>
+				<File Id="914713983" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>rude_buster_hit.wav</ShortName>
+					<CachePath>SFX/rude_buster_hit_EDCD4836.wem</CachePath>
+				</File>
+				<File Id="1072037571" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Spamton.wav</ShortName>
+					<CachePath>SFX/Spamton_D8A0D580.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="2353227689" Name="Play_aquire_lancer" MaxAttenuation="75" DurationType="OneShot" DurationMin="2.2998412" DurationMax="2.2998412">
+					<MediaRefs>
+						<MediaRef Id="62528516"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1506173320" Name="Play_BIGSHOT" MaxAttenuation="25" DurationType="OneShot" DurationMin="1.3931973" DurationMax="1.3931973">
+					<MediaRefs>
+						<MediaRef Id="577750466"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2011881192" Name="Play_Dialtone" MaxAttenuation="75" DurationType="OneShot" DurationMin="1.1609977" DurationMax="1.1609977">
+					<MediaRefs>
+						<MediaRef Id="740584786"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3925164868" Name="Play_rude_buster" MaxAttenuation="75" DurationType="OneShot" DurationMin="0.9533787" DurationMax="0.9533787">
+					<MediaRefs>
+						<MediaRef Id="695872906"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2646491066" Name="Play_rude_buster_hit" MaxAttenuation="75" DurationType="OneShot" DurationMin="0.9533787" DurationMax="0.9533787">
+					<MediaRefs>
+						<MediaRef Id="914713983"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3865094552" Name="Play_Spamton" MaxAttenuation="75" DurationType="Infinite">
+					<MediaRefs>
+						<MediaRef Id="1072037571"/>
+					</MediaRefs>
+				</Event>
+			</Events>
+			<GameParameters>
+				<GameParameter Id="3673881719" Name="Volume_SFX"/>
+			</GameParameters>
+		</SoundBank>
+	</SoundBanks>
+	<FileHash>{B7007BE8-E7D7-1CF3-39BE-1E4769A2CA3F}</FileHash>
+</SoundBanksInfo>

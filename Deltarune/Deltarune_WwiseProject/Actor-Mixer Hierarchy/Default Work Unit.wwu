@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{89AFC121-3D32-46A3-ABB3-A15F3BA5EB6E}" SchemaVersion="119">
+	<AudioObjects>
+		<WorkUnit Name="Default Work Unit" ID="{89AFC121-3D32-46A3-ABB3-A15F3BA5EB6E}" PersistMode="Standalone">
+			<ChildrenList>
+				<ActorMixer Name="SFX_Mixer" ID="{D636D39C-DE9E-4236-A191-F167FF181181}" ShortID="379234523">
+					<PropertyList>
+						<Property Name="3DSpatialization" Type="int16" Value="1"/>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Attenuation">
+							<ObjectRef Name="SpamtonAttenuation" ID="{BE69214B-9487-4776-AEAC-36CAFFD41C63}" WorkUnitID="{6AB6DD04-0430-4184-8ABB-0E509BD6E4C6}"/>
+						</Reference>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{481865C0-BE72-413A-8025-7525F4A8FF64}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{43900400-78A3-49BA-AE6B-A6F12A3796FA}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="Dialtone" ID="{140958A1-A9C0-4B75-B866-04EE319ABCDE}" ShortID="572189920">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>8</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{481865C0-BE72-413A-8025-7525F4A8FF64}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{43900400-78A3-49BA-AE6B-A6F12A3796FA}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Dialtone" ID="{D561873B-E8E5-4755-A801-E44458BD0535}">
+									<Language>SFX</Language>
+									<AudioFile>Dialtone.WAV</AudioFile>
+									<MediaIDList>
+										<MediaID ID="740584786"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Dialtone" ID="{D561873B-E8E5-4755-A801-E44458BD0535}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="Spamton" ID="{889F7593-7FD0-4335-845E-470AA0B305E6}" ShortID="126110382">
+							<PropertyList>
+								<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-8</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{481865C0-BE72-413A-8025-7525F4A8FF64}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{43900400-78A3-49BA-AE6B-A6F12A3796FA}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Spamton" ID="{65F09609-488D-4B5B-824A-7F9E797C5B47}">
+									<Language>SFX</Language>
+									<AudioFile>Spamton.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="1072037571"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Spamton" ID="{65F09609-488D-4B5B-824A-7F9E797C5B47}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="BIGSHOT" ID="{CCB26596-01C6-4911-B990-B4A7BCA8922D}" ShortID="1004601715">
+							<PropertyList>
+								<Property Name="OverridePositioning" Type="bool" Value="True"/>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-2</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="BigShotAttenuation" ID="{88800E3C-0DD6-4598-A57F-AEC9F5108BAF}" WorkUnitID="{6AB6DD04-0430-4184-8ABB-0E509BD6E4C6}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{481865C0-BE72-413A-8025-7525F4A8FF64}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{43900400-78A3-49BA-AE6B-A6F12A3796FA}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="BIGSHOT" ID="{F900D9D6-95B4-4B6F-B100-0620539C473D}">
+									<Language>SFX</Language>
+									<AudioFile>BIGSHOT.WAV</AudioFile>
+									<MediaIDList>
+										<MediaID ID="577750466"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="BIGSHOT" ID="{F900D9D6-95B4-4B6F-B100-0620539C473D}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="aquire_lancer" ID="{EF7C219B-4888-4258-AF26-A74DCDA0B1AE}" ShortID="446470179">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>4</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{481865C0-BE72-413A-8025-7525F4A8FF64}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{43900400-78A3-49BA-AE6B-A6F12A3796FA}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="aquire_lancer" ID="{9C84ABA5-C45E-47FC-A081-D8C69EA1C65B}">
+									<Language>SFX</Language>
+									<AudioFile>aquire_lancer.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="62528516"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="aquire_lancer" ID="{9C84ABA5-C45E-47FC-A081-D8C69EA1C65B}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="rude_buster" ID="{F3AD54CE-6BCE-4E48-8530-2650C62AD7B1}" ShortID="279622633">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>2</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{481865C0-BE72-413A-8025-7525F4A8FF64}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{43900400-78A3-49BA-AE6B-A6F12A3796FA}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="rude_buster" ID="{317176F1-580F-4DF9-9BC0-9C11BDCD3D6E}">
+									<Language>SFX</Language>
+									<AudioFile>rude_buster.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="695872906"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="rude_buster" ID="{317176F1-580F-4DF9-9BC0-9C11BDCD3D6E}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="rude_buster_hit" ID="{73301AB0-BB02-499E-9B42-5E8A444C05E9}" ShortID="548091693">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>2</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{481865C0-BE72-413A-8025-7525F4A8FF64}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{43900400-78A3-49BA-AE6B-A6F12A3796FA}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="rude_buster_hit" ID="{84F3A8B8-3D44-478F-9837-F571EE90794D}">
+									<Language>SFX</Language>
+									<AudioFile>rude_buster_hit.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="914713983"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="rude_buster_hit" ID="{84F3A8B8-3D44-478F-9837-F571EE90794D}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+					<ObjectLists>
+						<ObjectList Name="RTPC">
+							<Reference>
+								<Local>
+									<RTPC Name="" ID="{CA9A25A8-D6F5-4489-8509-95CBFCD40F8F}" ShortID="447071697">
+										<PropertyList>
+											<Property Name="PropertyName" Type="string" Value="Volume"/>
+										</PropertyList>
+										<ReferenceList>
+											<Reference Name="ControlInput">
+												<ObjectRef Name="Volume_SFX" ID="{3F86ED27-B1B1-43CA-ABC3-E5A394B80C2B}" WorkUnitID="{C773BD9B-485F-44A7-A4EB-AA962F9CF34E}"/>
+											</Reference>
+											<Reference Name="Curve">
+												<Custom>
+													<Curve Name="" ID="{3759E1B0-437A-44BE-A740-F99F97B16FDA}">
+														<PropertyList>
+															<Property Name="Flags" Type="int32" Value="3"/>
+														</PropertyList>
+														<PointList>
+															<Point>
+																<XPos>0</XPos>
+																<YPos>-200</YPos>
+																<Flags>5</Flags>
+															</Point>
+															<Point>
+																<XPos>100</XPos>
+																<YPos>0</YPos>
+																<Flags>37</Flags>
+															</Point>
+														</PointList>
+													</Curve>
+												</Custom>
+											</Reference>
+										</ReferenceList>
+									</RTPC>
+								</Local>
+							</Reference>
+						</ObjectList>
+					</ObjectLists>
+				</ActorMixer>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

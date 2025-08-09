@@ -77,32 +77,33 @@ namespace DeltaruneMod.Items.Tier3
 
         public void BigShotMoneyEffect(On.RoR2.CharacterMaster.orig_GiveMoney orig, CharacterMaster self, uint amount)
         {
-            if (!NetworkServer.active || !self.GetBody()) return;
-
-            var sender = self.GetBody();
-            var itemCount = GetCount(sender);
-            var existing = sender.GetComponent<BigShotBehavior>();
-
-            if (sender.inventory && itemCount > 0)
+            #region If everything is epic, add money bonus
+            if (NetworkServer.active && self.GetBody())
             {
-                Debug.Log($"Amount | " + amount);
-                uint bonus = (uint)Mathf.CeilToInt(amount * 0.3f);
-                amount += bonus;
-                Debug.Log($"Adjusted Dealmaker Amount | " + amount);
+                var sender = self.GetBody();
+                var itemCount = GetCount(sender);
+                var existing = sender.GetComponent<BigShotBehavior>();
 
-                if (existing)
+                if (sender.inventory && itemCount > 0)
                 {
-                    existing.TotalGoldGained += amount;
+                    Debug.Log($"Amount | " + amount);
+                    uint bonus = (uint)Mathf.CeilToInt(amount * 0.3f);
+                    amount += bonus;
+                    Debug.Log($"Adjusted Dealmaker Amount | " + amount);
+
+                    if (existing)
+                    {
+                        existing.TotalGoldGained += amount;
+                    }
                 }
             }
+            #endregion
 
             orig(self, amount);
         }
 
         public void BigShotEffect(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
         {
-            if (!NetworkServer.active || !sender) return;
-
             var itemCount = GetCount(sender);
             var existing = sender.GetComponent<BigShotBehavior>();
             if (sender.inventory && itemCount > 0 && !existing)

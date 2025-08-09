@@ -314,59 +314,59 @@ namespace DeltaruneMod.Items.Tier3
 
             if (!NetworkServer.active) return;
 
-            // Try catch for occasional NRE
             try 
             {
-                var attacker = damageInfo.attacker;
-                var sender = attacker.GetComponent<CharacterBody>();
+                var sender = damageInfo.attacker ? damageInfo.attacker.GetComponent<CharacterBody>(): null;
                 var victimBody = victim.GetComponent<CharacterBody>();
-                var existing = victimBody.GetComponent<SwoonDamageTracker>();
 
-                if (!sender.isPlayerControlled || victimBody.isPlayerControlled) return;
-
-                #region Add Damage Tracker
-                int itemCount = GetCount(sender);
-                if (!existing && sender.inventory && itemCount > 0)
+                if (sender && victimBody)
                 {
-                    existing = victimBody.gameObject.AddComponent<SwoonDamageTracker>();
-                    existing.body = victimBody;
-                    existing.stack = itemCount;
-                }
-                else if (existing && itemCount <= 0) existing.enabled = false;
-                else if (existing && itemCount > 0 && !existing.enabled) existing.enabled = true;
-                if (existing) existing.stack = itemCount;
-                #endregion
-
-                #region Buff Application & Effect
-                // Add Buff
-                if (existing && sender.inventory && itemCount > 0
-                    && existing.canSwoon && victimBody.GetBuffCount(SwoonBuff) <= MaxSwoonStacks)
-                {
-                    if (RoR2.Util.CheckRoll(50, sender.master))
+                    var existing = victimBody.GetComponent<SwoonDamageTracker>();
+                    #region Add Damage Tracker
+                    int itemCount = GetCount(sender);
+                    if (!existing && sender.inventory && itemCount > 0)
                     {
-                        victimBody.AddBuff(SwoonBuff);
+                        existing = victimBody.gameObject.AddComponent<SwoonDamageTracker>();
+                        existing.body = victimBody;
+                        existing.stack = itemCount;
                     }
-                }
+                    else if (existing && itemCount <= 0) existing.enabled = false;
+                    else if (existing && itemCount > 0 && !existing.enabled) existing.enabled = true;
+                    if (existing) existing.stack = itemCount;
+                    #endregion
 
-                // Buff Stack 1: set prev health on first time
-                if (existing && victimBody.GetBuffCount(SwoonBuff) <= 1)
-                {
-                    existing.prevHealth = victimBody.healthComponent.health;
-                }
-
-                // Buff Stack 3: set curr health, do swoon
-                if (existing && victimBody.GetBuffCount(SwoonBuff) >= MaxSwoonStacks)
-                {
-                    existing.currHealth = victimBody.healthComponent.health;
-                    existing.DoSwoonDamage();
-                    for (int i = 0; i <= MaxSwoonStacks; i++)
+                    #region Buff Application & Effect
+                    // Add Buff
+                    if (existing && sender.inventory && itemCount > 0
+                        && existing.canSwoon && victimBody.GetBuffCount(SwoonBuff) <= MaxSwoonStacks)
                     {
-                        victimBody.RemoveBuff(SwoonBuff);
+                        if (RoR2.Util.CheckRoll(50, sender.master))
+                        {
+                            victimBody.AddBuff(SwoonBuff);
+                        }
                     }
+
+                    // Buff Stack 1: set prev health on first time
+                    if (existing && victimBody.GetBuffCount(SwoonBuff) <= 1)
+                    {
+                        existing.prevHealth = victimBody.healthComponent.health;
+                    }
+
+                    // Buff Stack 3: set curr health, do swoon
+                    if (existing && victimBody.GetBuffCount(SwoonBuff) >= MaxSwoonStacks)
+                    {
+                        existing.currHealth = victimBody.healthComponent.health;
+                        existing.DoSwoonDamage();
+                        for (int i = 0; i <= MaxSwoonStacks; i++)
+                        {
+                            victimBody.RemoveBuff(SwoonBuff);
+                        }
+                    }
+                    #endregion
                 }
-                #endregion
+
             }
-            catch { return; } 
+            catch { Debug.Log("Please check swoon effect DeltaruneMod"); } 
         }
 
         private static void CreateSwoonEffect()

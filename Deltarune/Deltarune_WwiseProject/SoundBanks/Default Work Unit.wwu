@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{36DF47F5-A23B-48F5-A4DF-82AAA8197CDD}" SchemaVersion="119">
+	<SoundBanks>
+		<WorkUnit Name="Default Work Unit" ID="{36DF47F5-A23B-48F5-A4DF-82AAA8197CDD}" PersistMode="Standalone">
+			<ChildrenList>
+				<SoundBank Name="SpamtonSoundBank" ID="{7BEB342B-897B-4B2D-A007-4F3934951409}">
+					<ObjectInclusionList>
+						<ObjectRef Name="Default Work Unit" ID="{179913E5-BB2C-48FC-A0EB-5710C5CCB252}" WorkUnitID="{179913E5-BB2C-48FC-A0EB-5710C5CCB252}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="DeltaruneSoundBank" ID="{5C7EA01B-3BE5-4B3E-9F4C-63ADA6D57923}">
+					<ObjectInclusionList>
+						<ObjectRef Name="Default Work Unit" ID="{179913E5-BB2C-48FC-A0EB-5710C5CCB252}" WorkUnitID="{179913E5-BB2C-48FC-A0EB-5710C5CCB252}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+			</ChildrenList>
+		</WorkUnit>
+	</SoundBanks>
+</WwiseDocument>

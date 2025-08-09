@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{89AFC121-3D32-46A3-ABB3-A15F3BA5EB6E}" SchemaVersion="97">
+	<AudioObjects>
+		<WorkUnit Name="Default Work Unit" ID="{89AFC121-3D32-46A3-ABB3-A15F3BA5EB6E}" PersistMode="Standalone">
+			<ChildrenList>
+				<ActorMixer Name="SFX_Mixer" ID="{D636D39C-DE9E-4236-A191-F167FF181181}" ShortID="379234523">
+					<PropertyList>
+						<Property Name="3DSpatialization" Type="int16" Value="1"/>
+						<Property Name="Volume" Type="Real64">
+							<RTPCList>
+								<RTPC Name="" ID="{CA9A25A8-D6F5-4489-8509-95CBFCD40F8F}" ShortID="447071697">
+									<ReferenceList>
+										<Reference Name="ControlInput">
+											<ObjectRef Name="Volume_SFX" ID="{3F86ED27-B1B1-43CA-ABC3-E5A394B80C2B}" WorkUnitID="{C773BD9B-485F-44A7-A4EB-AA962F9CF34E}"/>
+										</Reference>
+									</ReferenceList>
+									<Curve Name="" ID="{3759E1B0-437A-44BE-A740-F99F97B16FDA}">
+										<PropertyList>
+											<Property Name="Flags" Type="int32" Value="3"/>
+										</PropertyList>
+										<PointList>
+											<Point>
+												<XPos>0</XPos>
+												<YPos>-200</YPos>
+												<Flags>5</Flags>
+											</Point>
+											<Point>
+												<XPos>100</XPos>
+												<YPos>0</YPos>
+												<Flags>37</Flags>
+											</Point>
+										</PointList>
+									</Curve>
+								</RTPC>
+							</RTPCList>
+						</Property>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Attenuation">
+							<ObjectRef Name="SpamtonAttenuation" ID="{BE69214B-9487-4776-AEAC-36CAFFD41C63}" WorkUnitID="{6AB6DD04-0430-4184-8ABB-0E509BD6E4C6}"/>
+						</Reference>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{481865C0-BE72-413A-8025-7525F4A8FF64}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{43900400-78A3-49BA-AE6B-A6F12A3796FA}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="Dialtone" ID="{140958A1-A9C0-4B75-B866-04EE319ABCDE}" ShortID="572189920">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{481865C0-BE72-413A-8025-7525F4A8FF64}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{43900400-78A3-49BA-AE6B-A6F12A3796FA}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Dialtone" ID="{D561873B-E8E5-4755-A801-E44458BD0535}">
+									<Language>SFX</Language>
+									<AudioFile>Dialtone.WAV</AudioFile>
+									<MediaIDList>
+										<MediaID ID="740584786"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Dialtone" ID="{D561873B-E8E5-4755-A801-E44458BD0535}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="Spamton" ID="{889F7593-7FD0-4335-845E-470AA0B305E6}" ShortID="126110382">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{481865C0-BE72-413A-8025-7525F4A8FF64}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{43900400-78A3-49BA-AE6B-A6F12A3796FA}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Spamton" ID="{65F09609-488D-4B5B-824A-7F9E797C5B47}">
+									<Language>SFX</Language>
+									<AudioFile>Spamton.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="1072037571"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Spamton" ID="{65F09609-488D-4B5B-824A-7F9E797C5B47}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</ActorMixer>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>
