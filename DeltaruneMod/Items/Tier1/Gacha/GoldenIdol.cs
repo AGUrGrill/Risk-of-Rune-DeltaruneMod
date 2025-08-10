@@ -48,7 +48,6 @@ namespace DeltaruneMod.Items.Tier1.Gacha
 
         private void DeathRewards_OnKilledServer(On.RoR2.DeathRewards.orig_OnKilledServer orig, DeathRewards self, DamageReport damageReport)
         {
-            Debug.Log("Giving xp");
             var player = damageReport.attackerBody;
             var xp = self.expReward;
             #region Give player increased xp

@@ -10,7 +10,6 @@ using static DeltaruneMod.DeltarunePlugin;
 
 namespace DeltaruneMod.Items.Lunar
 {
-    //hi
     public class DevilsKnife : ItemBase<DevilsKnife>
     {
         public override string ItemName => "Devilsknife";

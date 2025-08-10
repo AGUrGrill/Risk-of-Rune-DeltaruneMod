@@ -338,7 +338,7 @@ namespace DeltaruneMod.Items.Tier1
             // Jack Key N. Off Timer
             private void FixedUpdate()
             {
-                timer -= Time.deltaTime;
+                timer -= Time.fixedDeltaTime;
                 if (timer <= 0)
                 {
                     YourTakingTooLong();
