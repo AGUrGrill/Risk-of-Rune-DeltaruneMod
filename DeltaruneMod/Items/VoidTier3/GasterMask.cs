@@ -300,36 +300,49 @@ namespace DeltaruneMod.Items.VoidTier3
         {
             orig(self, damageInfo, victim);
 
-            var attackerBody = damageInfo.attacker ? damageInfo.attacker.GetComponent<CharacterBody>() : null;
-            var victimBody = victim ? victim.GetComponent<CharacterBody>() : null;
-            if (NetworkServer.active && attackerBody && victimBody)
+            #region Convert enemy effect
+            try
             {
-                var itemCount = GetCount(attackerBody);
-                var thresholdHP = 0.1f;
+                
+                // Null check vitals
+                var attacker = damageInfo.attacker;
+                if (!attacker) return;
+                var attackerBody = attacker.GetComponent<CharacterBody>();
+                if (!attackerBody) return;
+                var victimBody = victim.GetComponent<CharacterBody>();
+                if (!victimBody) return;
 
-                if (itemCount <= 0) return;
-
-                // Add visual buff
-                if (!victimBody.HasBuff(CorruptedBuff)) victimBody.AddBuff(CorruptedBuff);
-
-                // Convert is hp is low enough
-                if (victimBody.healthComponent.health <= victimBody.maxHealth * thresholdHP)
+                if (NetworkServer.active && attackerBody && victimBody)
                 {
-                    float time = Time.time; // Make sure clone dosent spawn twice
-                    if (lastTimeCloneSpawned.TryGetValue(attackerBody, out float lastTime))
-                    {
-                        if (time - lastTime < 0.05f) return;
-                    }
-                    lastTimeCloneSpawned[attackerBody] = time;
+                    var itemCount = GetCount(attackerBody);
+                    var thresholdHP = 0.1f;
 
-                    // Get this guy outta here!!
-                    if (victimBody.name != "VoidInfestorBody(Clone)" && victimBody.name != "VoidInfestorBody"
-                        && victimBody.master.name != "VoidInfestorMaster(Clone)" && victimBody.master.name != "VoidInfestorMaster")
-                        ConvertEnemy(victimBody, attackerBody);
+                    if (itemCount <= 0) return;
+
+                    // Add visual buff
+                    if (!victimBody.HasBuff(CorruptedBuff)) victimBody.AddBuff(CorruptedBuff);
+
+                    // Convert is hp is low enough
+                    if (victimBody.healthComponent.health <= victimBody.maxHealth * thresholdHP)
+                    {
+                        float time = Time.time; // Make sure clone dosent spawn twice
+                        if (lastTimeCloneSpawned.TryGetValue(attackerBody, out float lastTime))
+                        {
+                            if (time - lastTime < 0.05f) return;
+                        }
+                        lastTimeCloneSpawned[attackerBody] = time;
+
+                        // Get this guy outta here!!
+                        if (victimBody.name != "VoidInfestorBody(Clone)" && victimBody.name != "VoidInfestorBody"
+                            && victimBody.master.name != "VoidInfestorMaster(Clone)" && victimBody.master.name != "VoidInfestorMaster")
+                            ConvertEnemy(victimBody, attackerBody);
+                    }
                 }
-            }  
+            }
+            catch { Debug.Log("Please check gaster effect DeltaruneMod"); }
+            #endregion
         }
-        
+
         private void ConvertEnemy(CharacterBody target, CharacterBody owner)
         {
             var baseConversionTime = 10;

@@ -69,6 +69,28 @@
 						</Action>
 					</ChildrenList>
 				</Event>
+				<Event Name="Play_snd_heal" ID="{21052C5D-4EA7-4275-9ABC-8F221199DB26}">
+					<ChildrenList>
+						<Action Name="" ID="{46C9AF7F-C8A7-4244-9239-98DEAD7D9C5B}" ShortID="883250534">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="snd_heal" ID="{6C4FC11C-2AA9-420D-A473-1AF4F5015AB0}" WorkUnitID="{89AFC121-3D32-46A3-ABB3-A15F3BA5EB6E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_snd_knight_cut" ID="{17B4197A-6AC9-4E55-B0DB-9B9C1FD83ACA}">
+					<ChildrenList>
+						<Action Name="" ID="{E9A227D7-3F17-410F-B9CF-979AB4B16651}" ShortID="913069267">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="snd_knight_cut" ID="{13739FB6-10FE-41CE-90B9-1FBB3539CA5F}" WorkUnitID="{89AFC121-3D32-46A3-ABB3-A15F3BA5EB6E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>

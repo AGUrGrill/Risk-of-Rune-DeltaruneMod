@@ -25,13 +25,21 @@
 				<GameParameter Id="3673881719" Name="Volume_SFX"/>
 			</GameParameters>
 		</SoundBank>
-		<SoundBank Id="2255073904" Type="User" Language="SFX" Hash="{D0A237BB-5B01-A658-3C6B-1727A4EA16C2}">
+		<SoundBank Id="2255073904" Type="User" Language="SFX" Hash="{D7EB8CAE-A24A-E837-A178-F6F9803F2DF6}">
 			<ShortName>DeltaruneSoundBank</ShortName>
 			<Path>DeltaruneSoundBank.bnk</Path>
 			<Media>
+				<File Id="23743213" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>snd_knight_cut.wav</ShortName>
+					<CachePath>SFX/snd_knight_cut_EDCD4836.wem</CachePath>
+				</File>
 				<File Id="62528516" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>aquire_lancer.wav</ShortName>
 					<CachePath>SFX/aquire_lancer_EDCD4836.wem</CachePath>
+				</File>
+				<File Id="268160823" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>snd_heal.wav</ShortName>
+					<CachePath>SFX/snd_heal_EDCD4836.wem</CachePath>
 				</File>
 				<File Id="577750466" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>BIGSHOT.WAV</ShortName>
@@ -78,6 +86,16 @@
 				<Event Id="2646491066" Name="Play_rude_buster_hit" MaxAttenuation="75" DurationType="OneShot" DurationMin="0.9533787" DurationMax="0.9533787">
 					<MediaRefs>
 						<MediaRef Id="914713983"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="767763152" Name="Play_snd_heal" MaxAttenuation="75" DurationType="OneShot" DurationMin="0.435375" DurationMax="0.435375">
+					<MediaRefs>
+						<MediaRef Id="268160823"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="537817528" Name="Play_snd_knight_cut" MaxAttenuation="75" DurationType="OneShot" DurationMin="1.02" DurationMax="1.02">
+					<MediaRefs>
+						<MediaRef Id="23743213"/>
 					</MediaRefs>
 				</Event>
 				<Event Id="3865094552" Name="Play_Spamton" MaxAttenuation="75" DurationType="Infinite">
@@ -90,13 +108,21 @@
 				<GameParameter Id="3673881719" Name="Volume_SFX"/>
 			</GameParameters>
 		</SoundBank>
-		<SoundBank Id="3557673768" Type="User" Language="SFX" Hash="{D8625FAA-734A-DAD6-EC02-5658523A74B1}">
+		<SoundBank Id="3557673768" Type="User" Language="SFX" Hash="{E46438B4-6302-4949-882E-9F49C68E3417}">
 			<ShortName>SpamtonSoundBank</ShortName>
 			<Path>SpamtonSoundBank.bnk</Path>
 			<Media>
+				<File Id="23743213" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>snd_knight_cut.wav</ShortName>
+					<CachePath>SFX/snd_knight_cut_EDCD4836.wem</CachePath>
+				</File>
 				<File Id="62528516" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>aquire_lancer.wav</ShortName>
 					<CachePath>SFX/aquire_lancer_EDCD4836.wem</CachePath>
+				</File>
+				<File Id="268160823" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>snd_heal.wav</ShortName>
+					<CachePath>SFX/snd_heal_EDCD4836.wem</CachePath>
 				</File>
 				<File Id="577750466" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>BIGSHOT.WAV</ShortName>
@@ -143,6 +169,16 @@
 				<Event Id="2646491066" Name="Play_rude_buster_hit" MaxAttenuation="75" DurationType="OneShot" DurationMin="0.9533787" DurationMax="0.9533787">
 					<MediaRefs>
 						<MediaRef Id="914713983"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="767763152" Name="Play_snd_heal" MaxAttenuation="75" DurationType="OneShot" DurationMin="0.435375" DurationMax="0.435375">
+					<MediaRefs>
+						<MediaRef Id="268160823"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="537817528" Name="Play_snd_knight_cut" MaxAttenuation="75" DurationType="OneShot" DurationMin="1.02" DurationMax="1.02">
+					<MediaRefs>
+						<MediaRef Id="23743213"/>
 					</MediaRefs>
 				</Event>
 				<Event Id="3865094552" Name="Play_Spamton" MaxAttenuation="75" DurationType="Infinite">
@@ -156,5 +192,5 @@
 			</GameParameters>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{541852C9-2910-8D30-7F02-522FC591042E}</FileHash>
+	<FileHash>{8E5029E4-0016-FFB5-57C1-5BA1396D5B2A}</FileHash>
 </SoundBanksInfo>

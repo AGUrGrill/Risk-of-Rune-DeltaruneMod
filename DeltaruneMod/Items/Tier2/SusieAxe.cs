@@ -121,6 +121,7 @@ namespace DeltaruneMod.Items.Tier2
             var projCont = ProjectilePrefab.GetComponent<ProjectileController>();
             if (projCont.ghostPrefab) UnityEngine.Object.Destroy(projCont.ghostPrefab);
             projCont.shouldPlaySounds = false;
+            projCont.startSound = "";
             projCont.ghostPrefab = ghost;
 
             var projSimp = ProjectilePrefab.GetComponent<ProjectileSimple>();

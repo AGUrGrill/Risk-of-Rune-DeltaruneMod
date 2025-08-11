@@ -312,14 +312,17 @@ namespace DeltaruneMod.Items.Tier3
         {
             orig(self, damageInfo, victim);
 
-            if (!NetworkServer.active) return;
-
-            try 
+            #region Swoon effect
+            try
             {
-                var sender = damageInfo.attacker ? damageInfo.attacker.GetComponent<CharacterBody>(): null;
+                var attacker = damageInfo.attacker;
+                if (!attacker) return;
+                var sender = attacker.GetComponent<CharacterBody>();
+                if (!sender) return;
                 var victimBody = victim.GetComponent<CharacterBody>();
+                if (!victimBody || victimBody.isPlayerControlled) return;
 
-                if (sender && victimBody)
+                if (NetworkServer.active && sender && victimBody)
                 {
                     var existing = victimBody.GetComponent<SwoonDamageTracker>();
                     #region Add Damage Tracker
@@ -337,7 +340,7 @@ namespace DeltaruneMod.Items.Tier3
 
                     #region Buff Application & Effect
                     // Add Buff
-                    if (existing && sender.inventory && itemCount > 0
+                    if (existing && itemCount > 0
                         && existing.canSwoon && victimBody.GetBuffCount(SwoonBuff) <= MaxSwoonStacks)
                     {
                         if (RoR2.Util.CheckRoll(50, sender.master))
@@ -366,7 +369,8 @@ namespace DeltaruneMod.Items.Tier3
                 }
 
             }
-            catch { Debug.Log("Please check swoon effect DeltaruneMod"); } 
+            catch { Debug.Log("Please check swoon effect DeltaruneMod"); }
+            #endregion
         }
 
         private static void CreateSwoonEffect()
@@ -424,15 +428,16 @@ namespace DeltaruneMod.Items.Tier3
                 // Deal dmg to target and if its gonna kill, leave at 1 hp (lore kinda + no money/xp otherwise)
                 var totalDamageTaken = (prevHealth - currHealth) * (stack + 1);
                 var projectedHP = body.healthComponent.health - totalDamageTaken;
-                if (projectedHP <= 0)
+                // Disabled cause of gaster issue, back to old system
+                /*if (projectedHP <= 0)
                 {
                     body.healthComponent.health = 1;
                 }
                 else
                 {
                     body.healthComponent.health -= totalDamageTaken;
-                }
-
+                }*/ 
+                body.healthComponent.health -= totalDamageTaken;
 
                 // Hopefully fix potential of multiple peoples swoon causing the roaring (the health bar to go crazy)
                 if (body.healthComponent.health - totalDamageTaken > body.maxHealth)

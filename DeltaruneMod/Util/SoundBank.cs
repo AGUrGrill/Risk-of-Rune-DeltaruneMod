@@ -13,10 +13,10 @@ namespace DeltaruneMod.Util
     public static class SoundBank
     {
         public static uint _soundBankId;
-        //public const string soundBankFolder = "SoundBanks";
+        public const string soundBankFolderName = "AGU-DeltaruneMod";
         public const string soundBankFileName = "DeltaruneSoundBank.bnk";
-        public const string soundBankName = "DeltaruneSoundBank";
-        public static string SoundBankDirectory => Path.Combine(Path.GetDirectoryName(DeltarunePlugin.Instance.Info.Location));
+        //public const string soundBankName = "DeltaruneSoundBank";
+        public static string SoundBankDirectory => Path.GetDirectoryName(DeltarunePlugin.Instance.Info.Location);
 
         // Setup soundbank
         public static void Init()
@@ -24,14 +24,24 @@ namespace DeltaruneMod.Util
             UnityEngine.Debug.Log(SoundBankDirectory);
             try
             {
-                string fullBankPath = Path.Combine(SoundBankDirectory, soundBankFileName);
+                string fullBankPath;
+                if (SoundBankDirectory.Contains(soundBankFolderName))
+                {
+                    fullBankPath = Path.Combine(SoundBankDirectory, soundBankFileName);
+                }
+                else
+                {
+                    fullBankPath = Path.Combine(SoundBankDirectory, soundBankFolderName, soundBankFileName);
+                }
+                    
+                UnityEngine.Debug.Log(SoundBankDirectory + " ||| " + soundBankFileName);
                 UnityEngine.Debug.Log($"SoundBank size: {new FileInfo(fullBankPath).Length} bytes");
 
                 UnityEngine.Debug.Log($"Attempting to load sound bank...");
 
                 if (!File.Exists(fullBankPath))
                 {
-                    Log.Error($"Sound bank path does not exist!!");
+                    UnityEngine.Debug.Log($"Sound bank path does not exist!!");
                     return;
                 }
 
@@ -39,16 +49,16 @@ namespace DeltaruneMod.Util
 
                 if (result == AKRESULT.AK_Success)
                 {
-                    Log.Info($"SoundBank loaded successfully!");
+                    UnityEngine.Debug.Log($"SoundBank loaded successfully!");
                 }
                 else
                 {
-                    Log.Error($"SoundBank failed to load. {result}");
+                    UnityEngine.Debug.Log($"SoundBank failed to load. {result}");
                 }
 
                 SoundAPI.SoundBanks.Add(fullBankPath);
             }
-            catch ( Exception ex ) { UnityEngine.Debug.Log( ex ); }
+            catch ( Exception ex ) { UnityEngine.Debug.Log("Failed to load soundbank: " + ex); }
             
             
             

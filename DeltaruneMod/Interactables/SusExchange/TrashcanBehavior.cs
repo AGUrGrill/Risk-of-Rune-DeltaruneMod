@@ -81,23 +81,26 @@ namespace DeltaruneMod.Interactables.SusExchange
         {
             if (!NetworkServer.active) return;
 
-            // If out of tries, broadcast message
-            if (timesUsed <= 0)
+            if (timesUsed >= 0)
             {
-                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: SHOP IS [Closed for the season] TRY AGAIN [Next time]." });
-                return;
-            }
-            
-            // Spawn shrine effect
-            EffectManager.SpawnEffect(shrineUseEffect, new EffectData()
-            {
-                origin = gameObject.transform.position,
-                rotation = Quaternion.identity,
-                scale = 3f,
-                color = Color.blue
-            }, true);
+                // Spawn shrine effect
+                EffectManager.SpawnEffect(shrineUseEffect, new EffectData()
+                {
+                    origin = gameObject.transform.position,
+                    rotation = Quaternion.identity,
+                    scale = 3f,
+                    color = Color.blue
+                }, true);
 
-            ApplySpamtonShop(interactor);
+                ApplySpamtonShop(interactor);
+                
+            }
+            else if (timesUsed < 0)
+            {
+                // If out of tries, broadcast message
+                Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: SHOP IS [Closed for the season] TRY AGAIN [Next time]." });
+                purchaseInteraction.available = false;
+            }
             timesUsed--;
         }
 

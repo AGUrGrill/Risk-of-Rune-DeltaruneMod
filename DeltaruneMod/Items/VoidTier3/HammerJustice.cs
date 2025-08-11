@@ -177,10 +177,10 @@ namespace DeltaruneMod.Items.VoidTier3
 
         public override void Init()
         {
-            CreateItem();
-            CreateLang();
-            CreateProjectile();
-            Hooks();
+            //CreateItem();
+            //CreateLang();
+            //CreateProjectile();
+            //Hooks();
         }
 
         public class ShellController : MonoBehaviour

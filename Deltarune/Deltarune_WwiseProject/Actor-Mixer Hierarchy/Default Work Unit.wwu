@@ -23,7 +23,7 @@
 							<PropertyList>
 								<Property Name="Volume" Type="Real64">
 									<ValueList>
-										<Value>8</Value>
+										<Value>10</Value>
 									</ValueList>
 								</Property>
 							</PropertyList>
@@ -83,7 +83,7 @@
 								<Property Name="OverridePositioning" Type="bool" Value="True"/>
 								<Property Name="Volume" Type="Real64">
 									<ValueList>
-										<Value>-2</Value>
+										<Value>-5</Value>
 									</ValueList>
 								</Property>
 							</PropertyList>
@@ -196,6 +196,64 @@
 							</ChildrenList>
 							<ActiveSourceList>
 								<ActiveSource Name="rude_buster_hit" ID="{84F3A8B8-3D44-478F-9837-F571EE90794D}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="snd_heal" ID="{6C4FC11C-2AA9-420D-A473-1AF4F5015AB0}" ShortID="176788654">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>2</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{481865C0-BE72-413A-8025-7525F4A8FF64}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{43900400-78A3-49BA-AE6B-A6F12A3796FA}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="snd_heal" ID="{426519B4-3F66-4476-9A1B-81B20E412219}">
+									<Language>SFX</Language>
+									<AudioFile>snd_heal.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="268160823"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="snd_heal" ID="{426519B4-3F66-4476-9A1B-81B20E412219}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="snd_knight_cut" ID="{13739FB6-10FE-41CE-90B9-1FBB3539CA5F}" ShortID="835802265">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>3</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{481865C0-BE72-413A-8025-7525F4A8FF64}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{43900400-78A3-49BA-AE6B-A6F12A3796FA}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="snd_knight_cut" ID="{0F682F2F-F8B1-4715-93FA-F5649DCC4FE4}">
+									<Language>SFX</Language>
+									<AudioFile>snd_knight_cut.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="23743213"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="snd_knight_cut" ID="{0F682F2F-F8B1-4715-93FA-F5649DCC4FE4}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
 					</ChildrenList>

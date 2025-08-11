@@ -18,6 +18,8 @@ namespace AK
         static const AkUniqueID PLAY_DIALTONE = 2011881192U;
         static const AkUniqueID PLAY_RUDE_BUSTER = 3925164868U;
         static const AkUniqueID PLAY_RUDE_BUSTER_HIT = 2646491066U;
+        static const AkUniqueID PLAY_SND_HEAL = 767763152U;
+        static const AkUniqueID PLAY_SND_KNIGHT_CUT = 537817528U;
         static const AkUniqueID PLAY_SPAMTON = 3865094552U;
     } // namespace EVENTS
 
