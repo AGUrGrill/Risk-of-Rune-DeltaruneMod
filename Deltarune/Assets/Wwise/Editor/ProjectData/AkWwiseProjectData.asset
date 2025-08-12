@@ -124,9 +124,9 @@ MonoBehaviour:
         ObjectType: 3
         guid: a45a5e390552684bb7053d9088eb19b3
       Path: Events\Default Work Unit\Play_aquire_lancer
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxAttenuation: 75
+      maxDuration: 2.2998412
+      minDuration: 2.2998412
     - name: Play_BIGSHOT
       guid: fe881917628b5746ae887e4e8b5adff2
       id: 1506173320
@@ -141,9 +141,9 @@ MonoBehaviour:
         ObjectType: 3
         guid: fe881917628b5746ae887e4e8b5adff2
       Path: Events\Default Work Unit\Play_BIGSHOT
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxAttenuation: 25
+      maxDuration: 1.3931973
+      minDuration: 1.3931973
     - name: Play_Dialtone
       guid: e3d888d3f372fa4196a3a657a4d77004
       id: 2011881192
@@ -158,9 +158,9 @@ MonoBehaviour:
         ObjectType: 3
         guid: e3d888d3f372fa4196a3a657a4d77004
       Path: Events\Default Work Unit\Play_Dialtone
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxAttenuation: 75
+      maxDuration: 1.1609977
+      minDuration: 1.1609977
     - name: Play_rude_buster
       guid: e4392cc829b2d34ba40ed2909474dde2
       id: 3925164868
@@ -175,9 +175,9 @@ MonoBehaviour:
         ObjectType: 3
         guid: e4392cc829b2d34ba40ed2909474dde2
       Path: Events\Default Work Unit\Play_rude_buster
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxAttenuation: 75
+      maxDuration: 0.9533787
+      minDuration: 0.9533787
     - name: Play_rude_buster_hit
       guid: 293d4e53151ebe4d9d2ab2d151da1151
       id: 2646491066
@@ -192,9 +192,9 @@ MonoBehaviour:
         ObjectType: 3
         guid: 293d4e53151ebe4d9d2ab2d151da1151
       Path: Events\Default Work Unit\Play_rude_buster_hit
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxAttenuation: 75
+      maxDuration: 0.9533787
+      minDuration: 0.9533787
     - name: Play_snd_heal
       guid: 5d2c0521a74e75429abc8f221199db26
       id: 767763152
@@ -209,9 +209,9 @@ MonoBehaviour:
         ObjectType: 3
         guid: 5d2c0521a74e75429abc8f221199db26
       Path: Events\Default Work Unit\Play_snd_heal
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxAttenuation: 75
+      maxDuration: 0.435375
+      minDuration: 0.435375
     - name: Play_snd_knight_cut
       guid: 7a19b417c96a554eb0db9b9c1fd83aca
       id: 537817528
@@ -226,9 +226,9 @@ MonoBehaviour:
         ObjectType: 3
         guid: 7a19b417c96a554eb0db9b9c1fd83aca
       Path: Events\Default Work Unit\Play_snd_knight_cut
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxAttenuation: 75
+      maxDuration: 1.02
+      minDuration: 1.02
     - name: Play_Spamton
       guid: 4d593b2df4a39048abcb6840da2971c3
       id: 3865094552
@@ -243,7 +243,7 @@ MonoBehaviour:
         ObjectType: 3
         guid: 4d593b2df4a39048abcb6840da2971c3
       Path: Events\Default Work Unit\Play_Spamton
-      maxAttenuation: 0
+      maxAttenuation: 75
       maxDuration: -1
       minDuration: -1
   RtpcWwu:

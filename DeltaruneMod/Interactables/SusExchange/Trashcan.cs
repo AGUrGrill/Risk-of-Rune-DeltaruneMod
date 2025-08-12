@@ -1,18 +1,23 @@
 ﻿using BepInEx.Configuration;
+using DeltaruneMod.Util;
 using R2API;
 using Rewired.UI;
 using RoR2;
 using RoR2.ExpansionManagement;
 using RoR2.Hologram;
+using RoR2.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 using static DeltaruneMod.DeltarunePlugin;
+using static Rewired.UI.ControlMapper.ControlMapper;
 
 namespace DeltaruneMod.Interactables.SusExchange
 {
@@ -22,9 +27,10 @@ namespace DeltaruneMod.Interactables.SusExchange
 
         public override string InteractableContext => "WANNA CHANCE TO BECOME A <style=cDeath>[[Big Shot]]</style>? ";//"Pss... Wanna become a <style=cDeath>[Big Shot]</style>?";
 
-        public override string InteractableLangToken => "SPAMTON_TRASH";
+        public readonly static string gloablLangToken = "SPAMTON_TRASH";
+        public override string InteractableLangToken => gloablLangToken;
 
-        public override GameObject InteractableModel => MainAssets.LoadAsset<GameObject>("spamton_trash.prefab");
+        public override GameObject InteractableModel => MainAssets.LoadAsset<GameObject>("spamton_shop.prefab");
 
         public override bool isChapter1 => false;
 
@@ -52,20 +58,20 @@ namespace DeltaruneMod.Interactables.SusExchange
             InteractableBodyModelPrefab.AddComponent<NetworkIdentity>();
             InteractableBodyModelPrefab.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
 
-            #region PurchaseInteraction
-            PurchaseInteraction purchaseInteraction = InteractableBodyModelPrefab.AddComponent<PurchaseInteraction>();
+            #region Purchase Interaction
+            var purchaseInteraction = InteractableBodyModelPrefab.AddComponent<PurchaseInteraction>();
             purchaseInteraction.displayNameToken = $"INTERACTABLE_{InteractableLangToken}_NAME";
             purchaseInteraction.contextToken = $"INTERACTABLE_{InteractableLangToken}_CONTEXT";
             purchaseInteraction.available = true;
             purchaseInteraction.setUnavailableOnTeleporterActivated = false;
             purchaseInteraction.isShrine = true;
             purchaseInteraction.isGoldShrine = false;
+
+            var purchaseManager = InteractableBodyModelPrefab.AddComponent<TrashcanPurchaseManager>();
+            purchaseManager.purchaseInteraction = purchaseInteraction;
             #endregion
 
-            # region Manager and Text Controls
-            TrashcanBehavior mgr = InteractableBodyModelPrefab.AddComponent<TrashcanBehavior>();
-            mgr.purchaseInteraction = purchaseInteraction;
-
+            #region Interactable Settings
             var pingInfoProvider = InteractableBodyModelPrefab.AddComponent<PingInfoProvider>();
             pingInfoProvider.pingIconOverride = MainAssets.LoadAsset<Sprite>("spamton_ping.png");
 
@@ -96,6 +102,71 @@ namespace DeltaruneMod.Interactables.SusExchange
 
             var textController = InteractableBodyModelPrefab.AddComponent<Util.Components.TextController>();
             textController.textMesh = textMesh;
+            #endregion
+
+            #region Picker UI
+            var pickerUIPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Scrapper/ScrapperPickerPanel.prefab").WaitForCompletion().InstantiateClone("TrashcanPickerPanel", false);
+            Util.Helpers.GetAllTransformNames(pickerUIPrefab);
+            var imagePanel = pickerUIPrefab.transform.Find("MainPanel/Juice/BG");
+            if (imagePanel != null)
+            {
+                var img = imagePanel.GetComponent<Image>();
+                img.sprite = MainAssets.LoadAsset<Sprite>("balatro");
+            }
+            var label = pickerUIPrefab.transform.Find("MainPanel/Juice/Label");
+            if (label != null)
+            {
+                var text = label.GetComponent<LanguageTextMeshController>();
+                if (text != null)
+                {
+                    text.token = "SHOP FOR BIG [[Big] DEALS. NOW!!!!";
+                }
+            }
+
+            //MainAssets.LoadAsset<Sprite>("balatro");
+            var scrapperInfo = pickerUIPrefab.GetComponent<ScrapperInfoPanelHelper>();
+            var repairInfo = pickerUIPrefab.AddComponent<TrashcanInfoPanelHelper>();
+            var cont = repairInfo.inspectPanelController = scrapperInfo.inspectPanelController;
+            repairInfo.correspondingScrapImage = scrapperInfo.correspondingScrapImage;
+            UnityEngine.Object.DestroyImmediate(scrapperInfo);
+
+            var panel = pickerUIPrefab.GetComponent<PickupPickerPanel>();
+            panel.pickupSelected.AddPersistentListener(repairInfo.ShowInfo);
+            panel.pickupBaseContentReady.AddPersistentListener(repairInfo.AddQuantityToPickerButton);
+
+            repairInfo.panel = panel;
+            #endregion
+
+            #region Picker Controller
+            var uiPromptController = InteractableBodyModelPrefab.AddComponent<NetworkUIPromptController>();
+
+            var pickupManager = InteractableBodyModelPrefab.AddComponent<TrashcanPickerManager>();
+
+            var pickerController = InteractableBodyModelPrefab.AddComponent<PickupPickerController>();
+            pickerController.panelPrefab = pickerUIPrefab;
+            pickerController.onPickupSelected = new PickupPickerController.PickupIndexUnityEvent();
+            pickerController.onPickupSelected.AddPersistentListener(pickupManager.HandleSelection);
+            pickerController.onServerInteractionBegin = new GenericInteraction.InteractorUnityEvent();
+            pickerController.onServerInteractionBegin.AddPersistentListener(pickupManager.HandleInteraction);
+            pickerController.cutoffDistance = 10f;
+            pickerController.contextString = $"INTERACTABLE_{InteractableLangToken}_CONTEXT";
+
+            pickupManager.pickerController = pickerController;
+
+            /*
+            var inspectDef = ScriptableObject.CreateInstance<InspectDef>();
+            (inspectDef as ScriptableObject).name = "idTrashcan";
+            inspectDef.Info = new RoR2.UI.InspectInfo
+            {
+                Visual = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texShrineIconOutlined.png").WaitForCompletion(),
+                TitleToken = $"INTERACTABLE_{InteractableLangToken}_CONTEXT",
+                DescriptionToken = $"INTERACTABLE_{InteractableLangToken}_DESCRIPTION_PICKER",
+                FlavorToken = $"INTERACTABLE_{InteractableLangToken}_LORE",
+                TitleColor = UnityEngine.Color.white,
+                isConsumedItem = false
+            };
+            InteractableBodyModelPrefab.AddComponent<GenericInspectInfoProvider>().InspectInfo = inspectDef;
+            */
             #endregion
 
             #region Instantiation

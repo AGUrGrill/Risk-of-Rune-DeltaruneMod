@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1891120790
+CRC: 10911454
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ed0c97fd94b4af0cff87bfeb70a0b40d
+    Hash: 1b80fd3932011ca4939aaa89ee330b76
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 52db0694ae9afb787851f12fee870b59
+    Hash: 2005b9fe1e1e5552973c83f075bde9b3
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -35,19 +35,9 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 74
   Script: {instanceID: 0}
-- Class: 82
-  Script: {instanceID: 0}
 - Class: 91
   Script: {instanceID: 0}
 - Class: 95
-  Script: {instanceID: 0}
-- Class: 114
-  Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
-- Class: 115
-  Script: {instanceID: 0}
-- Class: 128
   Script: {instanceID: 0}
 - Class: 198
   Script: {instanceID: 0}
@@ -55,205 +45,63 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
-- Class: 224
-  Script: {instanceID: 0}
-SerializeReferenceClassIdentifiers:
-- AssemblyName: Unity.TextMeshPro
-  ClassName: TMPro.FaceInfo_Legacy
-- AssemblyName: Unity.TextMeshPro
-  ClassName: TMPro.FontAssetCreationSettings
-- AssemblyName: Unity.TextMeshPro
-  ClassName: TMPro.KerningTable
-- AssemblyName: Unity.TextMeshPro
-  ClassName: TMPro.TMP_Character
-- AssemblyName: Unity.TextMeshPro
-  ClassName: TMPro.TMP_FontFeatureTable
-- AssemblyName: Unity.TextMeshPro
-  ClassName: TMPro.TMP_FontWeightPair
-- AssemblyName: Unity.TextMeshPro
-  ClassName: TMPro.VertexGradient
-- AssemblyName: UnityEngine.CoreModule
-  ClassName: UnityEngine.Events.PersistentCallGroup
-- AssemblyName: UnityEngine.TextCoreFontEngineModule
-  ClassName: UnityEngine.TextCore.FaceInfo
-- AssemblyName: UnityEngine.TextCoreFontEngineModule
-  ClassName: UnityEngine.TextCore.Glyph
-- AssemblyName: UnityEngine.TextCoreFontEngineModule
-  ClassName: UnityEngine.TextCore.GlyphMetrics
-- AssemblyName: UnityEngine.TextCoreFontEngineModule
-  ClassName: UnityEngine.TextCore.GlyphRect
-- AssemblyName: UnityEngine.UI
-  ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
+SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/Import/roaring_blade/swoon_effect_icon.png
-- Assets/Import/spamton_trash/M_Black.mat
-- Assets/Import/roaring_blade/roaring_blade_icon.png
-- Assets/Import/spamton_trash/Trash_Can_Long_Plank.mat
-- Assets/Import/roaring_blade/edge_dark_metal.mat
-- Assets/Import/lancer_card/cracker.mat
-- "Assets/Import/spamton_trash/Spamton_Shop.fbm/Screenshot 2025-06-26 at 12.19.33\u202FAM.png"
-- Assets/Import/jack_key/jackkeynoff.prefab
-- Assets/Import/devils_knife/knife_texture.mat
-- Assets/Import/spamton_trash/Trash_Can_Other_planks.mat
-- Assets/Import/neo/combine_neo.prefab
-- Assets/Import/roaring_blade/swoon.prefab
-- Assets/Import/mystery_mask/wingshit.prefab
-- Assets/Import/devils_knife/devils_knife_icon.png
-- Assets/Import/roaring_blade/swoon_left.prefab
-- Assets/Import/spamton_trash/Materials/M_Garbage.mat
-- Assets/Import/gacha/golden_idol_icon.png
-- Assets/Import/spamton_trash/Materials/Beam_Color.mat
-- Assets/Import/gacha/exec_buffet_icon.png
-- Assets/Import/susie_axe/Susie_Axe_textured.fbx
-- Assets/Import/hammer/hammer_justice_icon.png
-- Assets/Import/spamton_trash/Materials/Trash_Can_Long_Plank.mat
-- Assets/Import/mystery_mask/wing_cont.controller
-- Assets/Import/spamton_trash/Big_Shot__Glasses_NEW_yellow_glass.mat
-- "Assets/Import/spamton_trash/Spamton_Shop.fbm/Screenshot 2025-06-25 at 1.37.59\u202FAM.png"
-- Assets/Import/lancer_card/lancer_card.fbx
-- Assets/Import/spamton_trash/Trash_Can_Trash_Body.mat
-- Assets/Import/guide_book/guide_book_icon.png
-- Assets/Import/big_shot/Black.mat
-- "Assets/Import/spamton_trash/Spamton_Shop.fbm/Screenshot 2025-06-25 at 3.27.56\u202FPM.png"
+- Assets/Import/mystery_mask/corrupt_effect_icon.png
+- Assets/Import/mystery_mask/mystery_cont.controller
+- Assets/Import/spamton_trash/spamton_shop.prefab
 - Assets/Import/susie_axe/rude_buster.prefab
 - Assets/Import/roaring_blade/swoon_right.prefab
-- Assets/Import/spamton_trash/Materials/M_Spamton_Wall.mat
-- Assets/Import/pipis/pipis_icon.png
-- Assets/Import/tenna_buckle/tenna_buckle.fbx
-- Assets/Import/susie_axe/monster_axe_icon.png
-- Assets/Import/neo/wing_mat_purple.mat
-- Assets/Import/lancer_card/typeOpenPBRSurface5.mat
-- Assets/Import/spamton_trash/sheet_metal_sheet.mat
-- Assets/Import/spamton_trash/Tenna_Pillow.mat
-- Assets/Import/comm_ring/Commemorative Ring.fbx
-- Assets/Import/susie_axe/Rude Buster.fbx
-- Assets/Import/spamton_trash/Materials/Big_Shot_Blanket_Texture.mat
-- Assets/Import/tenna_buckle/tenna_buckle.prefab
-- Assets/Import/devils_knife/devils_knife.prefab
-- Assets/Import/susie_axe/rude_buster_effect_icon.png
-- Assets/Import/roaring_blade/roaring_anim_controller.controller
-- Assets/Import/spamton_trash/Materials/M_Dial.mat
-- Assets/Import/spamton_trash/M_Spamton_Wall_Ba_k.mat
-- Assets/Import/big_shot/White.mat
 - Assets/Import/jack_key/sugma_balls.prefab
-- Assets/Import/tenna_head/updated and uv mapped tenna.fbx
-- Assets/Import/spamton_trash/Materials/Trash_Can_Trash_Body.mat
+- Assets/Import/roaring_blade/swoon_effect_icon.png
 - Assets/Import/kromer/kromer.png
-- Assets/Import/mystery_mask/jim_carry.prefab
-- Assets/Import/spamton_trash/Big_Shot__Glasses_NEW_red_glass.mat
-- Assets/Import/big_shot/big_shot_effect_icon.png
-- Assets/Import/big_shot/NEW_yellow_glass.mat
-- Assets/Import/spamton_trash/Big_Shot__Glasses_Gloss_Black1.mat
-- Assets/Import/spamton_trash/Trash_Can_Trash_Lid.mat
-- Assets/Import/guide_book/Ralsei_Book_hopefully_final.fbx
-- Assets/Import/thorn_ring/Thorn_Ring.fbx
-- Assets/Import/spamton_trash/M_White.mat
-- Assets/Import/gacha/tv_dinner_icon.png
-- Assets/Import/neo/wing_mat_pink.mat
-- Assets/Import/tenna_head/tenna_head.prefab
-- Assets/Import/mystery_mask/wingdumbdumb.prefab
-- "Assets/Import/spamton_trash/Spamton_Shop.fbm/Screenshot 2025-06-25 at 2.50.13\u202FPM.png"
-- Assets/Import/spamton_trash/Spamton_Shop.fbx
-- Assets/Import/spamton_trash/Materials/openPBR_shader1.mat
-- Assets/Import/neo/Neo 50 Piece Wings.fbx
-- Assets/Import/spamton_trash/Materials/Trash_Can_Trash_Lid.mat
-- Assets/Import/spamton_trash/Spamton_Shop.fbm/5482622-deltarune-bricks-pixel-art-spamton.png
-- Assets/Import/lancer_card/spades_512ConverterShader5.mat
-- Assets/Import/tenna_buckle/tenna_buckle_icon.png
-- Assets/Import/pipis/Standard_Pipis.fbx
-- Assets/UnityTechnologies/ParticlePack/EffectExamples/Smoke & Steam Effects/Materials/Twinkle.mat
-- Assets/Import/spamton_trash/spamton_trash.prefab
-- Assets/Import/gacha/gacha_ball.prefab
-- Assets/Import/grave/Gravestone.fbx
-- Assets/Import/guide_book/twinkle_heal.png
-- Assets/Import/kromer/kromer.prefab
-- Assets/Import/susie_axe/susie_axe_effect_icon.png
-- Assets/Import/grave/stoned.jpg
-- Assets/Import/spamton_trash/M_Garbage.mat
-- Assets/Import/thorn_ring/snowgrave_effect_icon.png
-- Assets/Import/big_shot/Text_BIGSHOT.fbx
-- Assets/Import/spamton_trash/Materials/Big_Shot__Glasses_NEW_yellow_glass.mat
-- Assets/Import/pipis/Mr. Pipis.fbx
-- Assets/Import/spamton_trash/Materials/Big_Shot__Glasses_NEW_red_glass.mat
-- Assets/Import/comm_ring/comm_ring_icon.png
-- Assets/Import/tenna_buckle/aiStandardSurface1.mat
-- Assets/Import/neo/wing_mat_piss.mat
-- Assets/Import/mystery_mask/Mask_Test.fbx
-- Assets/Import/spamton_trash/spamton_ping.png
-- Assets/Import/thorn_ring/thorn_ring_icon.png
-- Assets/Import/spamton_trash/Materials/M_Brown.mat
-- Assets/Import/roaring_blade/roaring_blade.prefab
-- Assets/Import/devils_knife/LATEST AND GREATEST DEVILS KNIFE.fbx
-- Assets/Import/spamton_trash/Materials/Trash_Can_Other_planks.mat
-- Assets/Import/spamton_trash/Beam_Color.mat
-- Assets/Import/spamton_trash/M_Dial.mat
-- Assets/Import/spamton_trash/Spamton_Shop.fbm/og-image.jpeg
-- Assets/Import/spamton_trash/M_Yield_Sign.mat
-- Assets/Import/thorn_ring/Blue_Glass.mat
-- Assets/Import/neo/neo_wings.prefab
-- Assets/Import/kromer/Kromer.fbx
-- Assets/Import/roaring_blade/black_metal.mat
-- Assets/Import/spamton_trash/Materials/Tenna_Pillow.mat
-- Assets/Import/roaring_blade/swoon_particle.prefab
-- Assets/Import/lancer_card/lancer_card_icon.png
-- Assets/Import/lancer_card/lancer_card.prefab
-- Assets/Import/big_shot/NEW_red_glass.mat
-- "Assets/Import/spamton_trash/Spamton_Shop.fbm/Screenshot 2025-06-25 at 3.26.50\u202FPM.png"
-- Assets/Import/spamton_trash/Concrete.mat
-- Assets/Import/susie_axe/Black_Band_Combined_AxeShape_1001.exr
-- Assets/Import/spamton_trash/Materials/sheet_metal_sheet.mat
-- Assets/Import/spamton_trash/Materials/Big_Shot__Glasses_Gloss_Black1.mat
-- Assets/Import/mystery_mask/mystery_cont.controller
-- Assets/Import/spamton_trash/Materials/M_White.mat
-- Assets/Import/pipis/pipis.prefab
-- Assets/Import/spamton_trash/M_Spamton_Wall.mat
-- Assets/Import/pipis/velvet_tie.mat
-- Assets/Import/guide_book/guide_book_heal.prefab
-- Assets/Import/spamton_trash/NEW_yellow_glass 1.mat
-- Assets/Import/mystery_mask/creepy_move.anim
-- Assets/Import/hammer/Hammer of Justice.fbx
-- Assets/Import/grave/gravestone.prefab
-- Assets/Import/neo/wing_mat_green.mat
-- Assets/Import/roaring_blade/Roaring_Blade 2.fbx
-- Assets/Import/big_shot/big_shot.prefab
-- Assets/Import/spamton_trash/M_Brown.mat
-- Assets/Import/devils_knife/Devils Knife Texture.exr
-- Assets/Import/grave/Stone.mat
-- Assets/Import/guide_book/Book_Texture.mat
-- Assets/Import/mystery_mask/corrupt_effect_icon.png
-- Assets/Import/susie_axe/susie_axe.prefab
-- "Assets/Import/spamton_trash/Spamton_Shop.fbm/Screenshot 2025-06-25 at 9.48.21\u202FPM.png"
-- Assets/Import/pipis/mr_pipis.prefab
-- Assets/Import/big_shot/New_glasses.fbx
-- Assets/Import/roaring_blade/SWOON.fbx
-- Assets/Import/spamton_trash/Materials/M_Spamton_Wall_Ba_k.mat
 - Assets/Import/roaring_blade/swoon_animation.anim
-- Assets/Import/neo/neo armor chest.fbx
-- Assets/Import/shop_sight/shop_sight_icon.png
-- Assets/Import/spamton_trash/openPBR_shader1.mat
-- Assets/Import/big_shot/Text_BIGSHOT1.fbx
-- Assets/Import/guide_book/Ralsei_Book_new.fbx
-- Assets/Import/lancer_card/Blue.mat
-- Assets/Import/hammer/hammer_justice.prefab
-- Assets/Import/jack_key/jack_key_icon.png
-- Assets/Import/hammer/metal_HammerShape_1001.exr
-- Assets/Import/thorn_ring/thorn_ring.prefab
-- Assets/Import/spamton_trash/M_Silver.mat
-- Assets/Import/big_shot/Gloss_Black1.mat
-- Assets/Import/spamton_trash/NEW_red_glass 1.mat
-- Assets/Import/mystery_mask/gaster_mask_icon.png
-- Assets/Import/thorn_ring/New Material.mat
-- Assets/Import/guide_book/green.png
-- Assets/Import/guide_book/guide_book.prefab
-- Assets/Import/spamton_trash/Materials/M_Black.mat
-- Assets/Import/spamton_trash/Big_Shot_Blanket_Texture.mat
-- Assets/Import/big_shot/big_shot_icon.png
-- Assets/Import/spamton_trash/Materials/M_Silver.mat
-- Assets/Import/pipis/mr_pipis_icon.png
-- Assets/Import/spamton_trash/Materials/M_Yield_Sign.mat
-- Assets/Import/comm_ring/comm_ring.prefab
-- Assets/Import/guide_book/Ralsei_Hat_M_Pink1_Combined_Book_Final_HopefullyShape_1001.exr
-- Assets/Import/big_shot/big_shot_projectile.prefab
-- "Assets/Import/spamton_trash/Spamton_Shop.fbm/Screenshot 2025-06-25 at 2.55.18\u202FPM.png"
+- Assets/Import/susie_axe/susie_axe.prefab
 - Assets/Import/mystery_mask/eye_tweak.anim
+- Assets/Import/gacha/golden_idol_icon.png
+- Assets/Import/spamton_trash/spamton_ping.png
+- Assets/Import/big_shot/big_shot_icon.png
+- Assets/Import/grave/gravestone.prefab
+- Assets/Import/tenna_buckle/tenna_buckle_icon.png
+- Assets/Import/devils_knife/devils_knife.prefab
+- Assets/Import/roaring_blade/swoon.prefab
+- Assets/Import/mystery_mask/gaster_mask_icon.png
+- Assets/Import/susie_axe/monsters_axe_icon.png
+- Assets/Import/lancer_card/lancer_card.prefab
+- Assets/Import/guide_book/guide_book_icon.png
+- Assets/Import/guide_book/guide_book_heal.prefab
+- Assets/Import/gacha/exec_buffet_icon.png
+- Assets/Import/roaring_blade/roaring_anim_controller.controller
+- Assets/Import/roaring_blade/roaring_blade.prefab
+- Assets/Import/thorn_ring/snowgrave_effect_icon.png
+- Assets/Import/pipis/mr_pipis.prefab
+- Assets/Import/mystery_mask/wing_cont.controller
+- Assets/Import/pipis/pipis.prefab
+- Assets/Import/devils_knife/devils_knife_icon.png
+- Assets/Import/lancer_card/lancer_card_icon.png
+- Assets/Import/gacha/tv_dinner_icon.png
+- Assets/Import/big_shot/big_shot_effect_icon.png
+- Assets/Import/comm_ring/comm_ring.prefab
+- Assets/Import/mystery_mask/jim_carry.prefab
+- Assets/Import/jack_key/jackkeynoff.prefab
+- Assets/Import/mystery_mask/wingshit.prefab
+- Assets/Import/shop_sight/shop_sight_icon.png
+- Assets/Import/jack_key/jack_key_icon.png
+- Assets/Import/pipis/mr_pipis_icon.png
+- Assets/Import/big_shot/big_shot.prefab
+- Assets/Import/thorn_ring/thorn_ring.prefab
+- Assets/Import/guide_book/guide_book.prefab
+- Assets/Import/roaring_blade/roaring_blade_icon.png
+- Assets/Import/hammer/hammer_justice.prefab
+- Assets/Import/thorn_ring/thorn_ring_icon.png
+- Assets/Import/mystery_mask/creepy_move.anim
+- Assets/Import/roaring_blade/swoon_left.prefab
+- Assets/Import/hammer/hammer_justice_icon.png
+- Assets/Import/tenna_buckle/tenna_buckle.prefab
+- Assets/Import/susie_axe/rude_buster_effect_icon.png
+- Assets/balatro.png
+- Assets/Import/gacha/gacha_ball.prefab
+- Assets/Import/big_shot/big_shot_projectile.prefab
+- Assets/Import/kromer/kromer.prefab
+- Assets/Import/comm_ring/comm_ring_icon.png
 Dependencies: []

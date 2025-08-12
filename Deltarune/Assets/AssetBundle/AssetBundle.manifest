@@ -1,10 +1,7 @@
 ManifestFileVersion: 0
-CRC: 1373367747
+CRC: 4106994847
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
       Name: deltarune_mod
-      Dependencies: {}
-    Info_1:
-      Name: rezeromod
       Dependencies: {}

@@ -3,16 +3,18 @@ using DeltaruneMod.Items;
 using DeltaruneMod.Items.Tier2;
 using R2API;
 using RoR2;
+using RoR2.Projectile;
+using RoR2.UI;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
-using RoR2.Projectile;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Events;
 using UnityEngine.Networking;
 
 namespace DeltaruneMod.Util
 {
-    public class Helpers
+    public static class Helpers
     {
         #region Item Defs
         // 99: ALL, 0: Tier 1, 1: Tier 2, 2: Tier, 3: Tier Boss
@@ -163,10 +165,64 @@ namespace DeltaruneMod.Util
         #region Extras
         public static void GetAllComponentNames(GameObject obj)
         {
-            foreach (var componenet in obj.GetComponents<Component>())
+            foreach (var component in obj.GetComponents<Component>())
             {
-                Debug.Log(componenet);
+                Debug.Log(obj + ": " + component);
+                /*
+                foreach (var componentChild in component.GetComponents<Component>())
+                {
+                    Debug.Log(component + ": " + componentChild);
+                }
+                */
             }
+        }
+
+        public static void GetAllTransformNames(GameObject obj)
+        {
+            foreach (Transform child in obj.GetComponentsInChildren<Transform>())
+            {
+                Debug.Log(child.parent.name + ": " + child.name);
+            }
+        }
+        #endregion
+
+        #region Interactable UI
+        // Thank you to viliger for this code from Shrine of Repair
+
+        public static void AddPersistentListener(this UnityEvent<MPButton, PickupDef> unityEvent, UnityAction<MPButton, PickupDef> action)
+        {
+            unityEvent.m_PersistentCalls.AddListener(new PersistentCall
+            {
+                m_Target = action.Target as UnityEngine.Object,
+                m_TargetAssemblyTypeName = UnityEventTools.TidyAssemblyTypeName(action.Method.DeclaringType.AssemblyQualifiedName),
+                m_MethodName = action.Method.Name,
+                m_CallState = UnityEventCallState.RuntimeOnly,
+                m_Mode = PersistentListenerMode.EventDefined,
+            });
+        }
+
+        public static void AddPersistentListener(this UnityEvent<int> unityEvent, UnityAction<int> action)
+        {
+            unityEvent.m_PersistentCalls.AddListener(new PersistentCall
+            {
+                m_Target = action.Target as UnityEngine.Object,
+                m_TargetAssemblyTypeName = UnityEventTools.TidyAssemblyTypeName(action.Method.DeclaringType.AssemblyQualifiedName),
+                m_MethodName = action.Method.Name,
+                m_CallState = UnityEventCallState.RuntimeOnly,
+                m_Mode = PersistentListenerMode.EventDefined,
+            });
+        }
+
+        public static void AddPersistentListener(this UnityEvent<Interactor> unityEvent, UnityAction<Interactor> action)
+        {
+            unityEvent.m_PersistentCalls.AddListener(new PersistentCall
+            {
+                m_Target = action.Target as UnityEngine.Object,
+                m_TargetAssemblyTypeName = UnityEventTools.TidyAssemblyTypeName(action.Method.DeclaringType.AssemblyQualifiedName),
+                m_MethodName = action.Method.Name,
+                m_CallState = UnityEventCallState.RuntimeOnly,
+                m_Mode = PersistentListenerMode.EventDefined,
+            });
         }
         #endregion
     }
