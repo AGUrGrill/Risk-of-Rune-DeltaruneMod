@@ -32,6 +32,7 @@ namespace DeltaruneMod
     [BepInDependency(DirectorAPI.PluginGUID)]
     [BepInDependency(OrbAPI.PluginGUID)]
     [BepInDependency(SoundAPI.PluginGUID)]
+    [BepInDependency(DeployableAPI.PluginGUID)]
     [BepInDependency(NetworkingAPI.PluginGUID)]
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
 

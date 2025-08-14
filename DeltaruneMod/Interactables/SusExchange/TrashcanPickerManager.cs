@@ -202,7 +202,7 @@ namespace DeltaruneMod.Interactables.SusExchange
                     {
                         options.Add(new PickupPickerController.Option
                         {
-                            available = false,
+                            available = true,
                             pickupIndex = PickupCatalog.FindPickupIndex(item.itemIndex)
                         });
                         Debug.Log("Added " + item);

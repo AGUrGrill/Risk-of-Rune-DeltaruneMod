@@ -1,5 +1,6 @@
 ﻿using BepInEx.Configuration;
 using DeltaruneMod.Util;
+using LeTai.Asset.TranslucentImage;
 using R2API;
 using Rewired.UI;
 using RoR2;
@@ -16,6 +17,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using UnityEngine.UIElements.UIR;
 using static DeltaruneMod.DeltarunePlugin;
 using static Rewired.UI.ControlMapper.ControlMapper;
 
@@ -25,7 +27,7 @@ namespace DeltaruneMod.Interactables.SusExchange
     {
         public override string InteractableName => "Suspicious Exchange";
 
-        public override string InteractableContext => "WANNA CHANCE TO BECOME A <style=cDeath>[[Big Shot]]</style>? ";//"Pss... Wanna become a <style=cDeath>[Big Shot]</style>?";
+        public override string InteractableContext => "WANNA CHANCE TO BECOME A <style=cDeath>[[Big Shot]]</style>? ";
 
         public readonly static string gloablLangToken = "SPAMTON_TRASH";
         public override string InteractableLangToken => gloablLangToken;
@@ -106,12 +108,16 @@ namespace DeltaruneMod.Interactables.SusExchange
 
             #region Picker UI
             var pickerUIPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Scrapper/ScrapperPickerPanel.prefab").WaitForCompletion().InstantiateClone("TrashcanPickerPanel", false);
+
             Util.Helpers.GetAllTransformNames(pickerUIPrefab);
             var imagePanel = pickerUIPrefab.transform.Find("MainPanel/Juice/BG");
             if (imagePanel != null)
             {
                 var img = imagePanel.GetComponent<Image>();
                 img.sprite = MainAssets.LoadAsset<Sprite>("balatro");
+                var tempColor = img.color;
+                tempColor.a = 0f;
+                img.color = tempColor;
             }
             var label = pickerUIPrefab.transform.Find("MainPanel/Juice/Label");
             if (label != null)
@@ -122,6 +128,8 @@ namespace DeltaruneMod.Interactables.SusExchange
                     text.token = "SHOP FOR BIG [[Big] DEALS. NOW!!!!";
                 }
             }
+
+            var transImage = pickerUIPrefab.GetComponent<TranslucentImage>();
 
             //MainAssets.LoadAsset<Sprite>("balatro");
             var scrapperInfo = pickerUIPrefab.GetComponent<ScrapperInfoPanelHelper>();

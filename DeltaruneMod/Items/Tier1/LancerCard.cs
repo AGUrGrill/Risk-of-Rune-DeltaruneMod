@@ -43,22 +43,16 @@ namespace DeltaruneMod.Items.Tier1
         
         public override void Hooks()
         {
-            On.RoR2.CharacterBody.Start += CharacterBody_Start;
+            On.RoR2.CharacterMaster.OnBodyStart += CharacterMaster_OnBodyStart;
             On.RoR2.CharacterMaster.OnServerStageBegin += CharacterMaster_OnServerStageBegin;
         }
 
-        private void CharacterBody_Start(On.RoR2.CharacterBody.orig_Start orig, CharacterBody self)
+        private void CharacterMaster_OnBodyStart(On.RoR2.CharacterMaster.orig_OnBodyStart orig, CharacterMaster self, CharacterBody body)
         {
-            orig(self);
+            orig(self, body);
 
             #region Apply Lancer Unlocks
             var itemCount = GetCount(self);
-            var body = self;
-            while (!body)
-            {
-                body = self.GetBody();
-                Debug.Log("Searching for body...");
-            }
             if (GetCount(self) > 0 && canUseEffect)
             {
                 for (int i = 0; i < itemCount; i++)

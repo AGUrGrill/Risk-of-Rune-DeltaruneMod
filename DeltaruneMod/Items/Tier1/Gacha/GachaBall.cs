@@ -43,12 +43,12 @@ namespace DeltaruneMod.Items.Tier1.Gacha
 
         public override void Hooks()
         {
-            On.RoR2.CharacterBody.Start += CharacterBody_Start;
+            On.RoR2.CharacterMaster.OnBodyStart += CharacterMaster_OnBodyStart;
         }
 
-        private void CharacterBody_Start(On.RoR2.CharacterBody.orig_Start orig, CharacterBody self)
+        private void CharacterMaster_OnBodyStart(On.RoR2.CharacterMaster.orig_OnBodyStart orig, CharacterMaster self, CharacterBody body)
         {
-            orig(self);
+            orig(self, body);
 
             if (gachaItems.Count <= 0) GetGachaItems();
 
@@ -69,7 +69,6 @@ namespace DeltaruneMod.Items.Tier1.Gacha
             {
                 Debug.Log("Error removing gacha items.");
             }
-            
 
             // On stage start give random items
             if (GetCount(self) > 0)
