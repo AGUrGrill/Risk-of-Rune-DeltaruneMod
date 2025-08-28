@@ -36,7 +36,7 @@ namespace DeltaruneMod.Items.Tier2
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("susie_axe.prefab");
 
-        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("monster_axe_icon.png");
+        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("monsters_axe_icon.png");
 
         public Sprite BuffIcon = MainAssets.LoadAsset<Sprite>("rude_buster_effect_icon.png");
 
@@ -76,7 +76,7 @@ namespace DeltaruneMod.Items.Tier2
             RecalculateStatsAPI.GetStatCoefficients += SusieAxeEffect;
         }
 
-        
+
         public void SusieAxeEffect(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
         {
             var itemCount = GetCount(sender);
@@ -108,7 +108,7 @@ namespace DeltaruneMod.Items.Tier2
         {
             RudeBusterSFX = Util.Helpers.CreateNetworkSoundEventDef("Play_rude_buster");
         }
-        
+
         public void CreateProjectile()
         {
             ProjectilePrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/ShurikenProjectile").InstantiateClone("SusieAxeProjectile", false);
