@@ -12,13 +12,13 @@ namespace DeltaruneMod.Interactables.SusExchange.TradingItems
 {
     internal class CommRingTradingItem : ItemBase<CommRingTradingItem>
     {
-        public override string ItemName => "Commemorative Ring";
+        public override string ItemName => "6 Kromer -> Commemorative Ring";
 
         public override string ItemLangTokenName => "RING_TRADE_ITEM";
 
-        public override string ItemPickupDesc => "";
+        public override string ItemPickupDesc => "10% increased luck at Suspicious Exchange.";
 
-        public override string ItemFullDescription => "";
+        public override string ItemFullDescription => "Gain a <style=cIsUtility>10%</style> higher roll chance at Suspicious Exchange.";
 
         public override string ItemLore => "";
 
@@ -26,7 +26,7 @@ namespace DeltaruneMod.Interactables.SusExchange.TradingItems
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("fake.prefab");
 
-        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("fake.png");
+        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("comm_ring_icon.png");
 
         public override bool isChapter1 => false;
 

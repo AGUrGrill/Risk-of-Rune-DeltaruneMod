@@ -12,13 +12,13 @@ namespace DeltaruneMod.Interactables.SusExchange.TradingItems
 {
     public class BrokenHeartTradingItem : ItemBase<BrokenHeartTradingItem>
     {
-        public override string ItemName => "Misshapen Heart";
+        public override string ItemName => "10 Kromer -> Misshapen Heart";
 
         public override string ItemLangTokenName => "HEART_TRADE_ITEM";
 
-        public override string ItemPickupDesc => "";
+        public override string ItemPickupDesc => "Spawn an orbiting, armor piercing projectile every 2 seconds.";
 
-        public override string ItemFullDescription => "";
+        public override string ItemFullDescription => "Every <style=cIsUtility>2</style> seconds, spawn an armor piercing projectile that orbits the player in stasis.\" +\r\n            \"\\nSpawn up to 2 maximum projectiles, deals <style=cIsDamage>199.7% base damage</style> <style=cStack>(+199.7% per stack)</style>.";
 
         public override string ItemLore => "";
 
@@ -26,7 +26,7 @@ namespace DeltaruneMod.Interactables.SusExchange.TradingItems
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("fake.prefab");
 
-        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("fake.png");
+        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("mis_heart_icon.png");
 
         public override bool isChapter1 => false;
 

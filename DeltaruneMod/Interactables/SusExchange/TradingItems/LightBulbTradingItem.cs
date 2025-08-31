@@ -12,13 +12,13 @@ namespace DeltaruneMod.Interactables.SusExchange.TradingItems
 {
     public class LightBulbTradingItem : ItemBase<LightBulbTradingItem>
     {
-        public override string ItemName => "Fractured Light";
+        public override string ItemName => "3 Kromer -> Fractured Light";
 
         public override string ItemLangTokenName => "BULB_TRADE_ITEM";
 
-        public override string ItemPickupDesc => "";
+        public override string ItemPickupDesc => "Increase all lightning damage by 25%.";
 
-        public override string ItemFullDescription => "";
+        public override string ItemFullDescription => "All forms of lightning damage are increased by <style=cIsUtility>25%</style> <style=cStack>(+25% per stack)</style>.";
 
         public override string ItemLore => "";
 
@@ -26,7 +26,7 @@ namespace DeltaruneMod.Interactables.SusExchange.TradingItems
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("fake.prefab");
 
-        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("fake.png");
+        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("bulb_icon.png");
 
         public override bool isChapter1 => false;
 

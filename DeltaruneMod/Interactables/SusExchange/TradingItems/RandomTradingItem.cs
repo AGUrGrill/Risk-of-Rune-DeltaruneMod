@@ -16,7 +16,7 @@ namespace DeltaruneMod.Interactables.SusExchange.TradingItems
 
         public override string ItemLangTokenName => "RANDOM_TRADE_ITEM";
 
-        public override string ItemPickupDesc => "";
+        public override string ItemPickupDesc => "1 Random White or Green Item -> Chance for Upgraded Item...";
 
         public override string ItemFullDescription => "";
 

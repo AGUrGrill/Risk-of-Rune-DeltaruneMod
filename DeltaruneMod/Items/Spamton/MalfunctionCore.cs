@@ -28,7 +28,7 @@ namespace DeltaruneMod.Items.Spamton
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("yoru_orb_plus.prefab");
 
-        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("ok.png");
+        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("yoru_orb_icon.png");
 
         public override bool isChapter1 => false;
 

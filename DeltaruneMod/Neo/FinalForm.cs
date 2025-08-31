@@ -36,7 +36,7 @@ namespace DeltaruneMod.Neo
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("final_form.prefab");
 
-        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("ok.png");
+        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("final_form_icon.png");
 
         public override bool isChapter1 => false;
 

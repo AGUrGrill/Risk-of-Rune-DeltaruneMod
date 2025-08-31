@@ -12,13 +12,13 @@ namespace DeltaruneMod.Interactables.SusExchange.TradingItems
 {
     public class MalfunctionCoreTradingItem : ItemBase<MalfunctionCoreTradingItem>
     {
-        public override string ItemName => "Malfunctioning Core";
+        public override string ItemName => "6 Kromer -> Malfunctioning Core";
 
         public override string ItemLangTokenName => "CORE_TRADE_ITEM";
 
-        public override string ItemPickupDesc => "";
+        public override string ItemPickupDesc => "On kill, enemies drop an orb, giving 2 temporary shield.";
 
-        public override string ItemFullDescription => "";
+        public override string ItemFullDescription => "On kill, enemies will drop an orb that gives <style=cIsUtility>2</style> temporary shield <style=cStack>(+1 per stack)</style>.";
 
         public override string ItemLore => "";
 
@@ -26,7 +26,7 @@ namespace DeltaruneMod.Interactables.SusExchange.TradingItems
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("fake.prefab");
 
-        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("fake.png");
+        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("yoru_orb_icon.png");
 
         public override bool isChapter1 => false;
 

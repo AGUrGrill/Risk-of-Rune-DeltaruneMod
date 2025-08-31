@@ -1,4 +1,5 @@
 ﻿using DeltaruneMod.Items;
+using DeltaruneMod.Neo;
 using R2API;
 using RoR2;
 using RoR2.Projectile;
@@ -36,7 +37,7 @@ namespace DeltaruneMod.Items.Spamton
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("mis_heart.prefab");
 
-        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("ok.png");
+        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("mis_heart_icon.png");
 
         public override bool isChapter1 => false;
 
@@ -60,6 +61,27 @@ namespace DeltaruneMod.Items.Spamton
         public override void Hooks()
         {
             On.RoR2.CharacterMaster.OnInventoryChanged += CharacterMaster_OnInventoryChanged;
+            RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
+        }
+
+        private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
+        {
+            #region Change to Final Form if applicable
+            try
+            {
+                var heartCount = GetCount(sender);
+                var coreCount = sender.inventory.GetItemCount(MalfunctionCore.instance.ItemDef);
+                var bulbCount = sender.inventory.GetItemCount(LightBulb.instance.ItemDef);
+                if (heartCount > 0 && coreCount > 0 && bulbCount > 0)
+                {
+                    sender.inventory.RemoveItem(ItemDef);
+                    sender.inventory.RemoveItem(MalfunctionCore.instance.ItemDef);
+                    sender.inventory.RemoveItem(LightBulb.instance.ItemDef);
+                    sender.inventory.GiveItem(FinalForm.instance.ItemDef);
+                }
+            }
+            catch { }
+            #endregion
         }
 
         private void CharacterMaster_OnInventoryChanged(On.RoR2.CharacterMaster.orig_OnInventoryChanged orig, CharacterMaster self)
