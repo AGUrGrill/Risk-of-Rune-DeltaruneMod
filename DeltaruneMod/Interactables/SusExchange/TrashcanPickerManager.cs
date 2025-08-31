@@ -1,4 +1,5 @@
-﻿using DeltaruneMod.Items.Spamton;
+﻿using DeltaruneMod.Interactables.SusExchange.TradingItems;
+using DeltaruneMod.Items.Spamton;
 using DeltaruneMod.Items.Yellow;
 using RoR2;
 using System;
@@ -7,8 +8,6 @@ using System.Reflection;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
-using static RoR2.BlastAttack;
-using static RoR2.Networking.HostDescription;
 
 namespace DeltaruneMod.Interactables.SusExchange
 {
@@ -32,7 +31,8 @@ namespace DeltaruneMod.Interactables.SusExchange
         public List<ItemDef> allTier2 = new List<ItemDef>();
         public List<ItemDef> allTier3 = new List<ItemDef>();
         public List<ItemDef> allTakeableItems = new List<ItemDef>();
-        public ItemDef kromer, pearl, shinyPearl, pipis, mrPipis, commRing;
+        public List<ItemDef> allDisplayItems = new List<ItemDef>();
+        public ItemDef pearl, shinyPearl;
 
         public void Start()
         {
@@ -50,12 +50,24 @@ namespace DeltaruneMod.Interactables.SusExchange
                 {
                     if (itemDef.name == "Pearl") { allTakeableItems.Add(itemDef); pearl = itemDef; }
                     else if (itemDef.name == "ShinyPearl") { allTakeableItems.Add(itemDef); shinyPearl = itemDef; }
-                    else if (itemDef.name == "ITEM_KROMER") kromer = itemDef;
-                    else if (itemDef.name == "ITEM_PIPIS") pipis = itemDef;
-                    else if (itemDef.name == "ITEM_MR_PIPIS") mrPipis = itemDef;
-                    else if (itemDef.name == "ITEM_COMM_RING") commRing = itemDef;
                 }
             }
+            // Add trade items to display
+            allDisplayItems.Add(RandomTradingItem.instance.ItemDef);
+            allDisplayItems.Add(LightBulbTradingItem.instance.ItemDef);
+            allDisplayItems.Add(MalfunctionCoreTradingItem.instance.ItemDef);
+            allDisplayItems.Add(BrokenHeartTradingItem.instance.ItemDef);
+        }
+
+        public List<ItemDef> ListTakeableInventoryItems(List<ItemDef> allInventoryItems)
+        {
+            List<ItemDef> returnList = new List<ItemDef>();
+            for (int i = 0; i < allTakeableItems.Count; i++)
+            {
+                if (allInventoryItems.Contains(allTakeableItems[i]))
+                    returnList.Add(allTakeableItems[i]);
+            }
+            return returnList;
         }
 
         public void HandleSelection(int selection)
@@ -70,10 +82,11 @@ namespace DeltaruneMod.Interactables.SusExchange
                 PickupDef pickupDef = PickupCatalog.GetPickupDef(new PickupIndex(selection));
                 CharacterBody body = interactor.GetComponent<CharacterBody>();
                 var choosenItem = pickupDef.itemIndex;
-                var isItem = pickupDef.itemTier == ItemTier.Tier1 || pickupDef.itemTier == ItemTier.Tier2;
+                //var isItem = pickupDef.itemTier == ItemTier.Tier1 || pickupDef.itemTier == ItemTier.Tier2;
                 ItemTier tier = ItemCatalog.GetItemDef(choosenItem).tier;
                 List<ItemDef> allInventoryItems = Util.Helpers.GetAllItemsFromInventory(body.inventory);
                 List<ItemDef> allTakeableInvItems = new List<ItemDef>();
+                var numOfTakeableItems = 0;
                 ItemDef randomTier2 = allTier2[UnityEngine.Random.Range(0, allTier2.Count)];
                 ItemDef randomTier3 = allTier3[UnityEngine.Random.Range(0, allTier3.Count)];
                 ItemDef itemGiven = null;
@@ -82,76 +95,101 @@ namespace DeltaruneMod.Interactables.SusExchange
                 Debug.Log("Finding takeable items");
                 #region Get all takeable items from inventory
                 // Collects all takeable items into special list
-                for (int i = 0; i < allTakeableItems.Count; i++)
-                {
-                    if (allInventoryItems.Contains(allTakeableItems[i]))
-                        allTakeableInvItems.Add(allTakeableItems[i]);
-                }
-                /*
-                if (allTakeableInvItems.Count <= 0)
-                {
-                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: NO [[Usable]] ITEMS." });
-                    return;
-                }
-                */
+                allTakeableInvItems = ListTakeableInventoryItems(allInventoryItems);
+                numOfTakeableItems = allTakeableInvItems.Count;
                 #endregion
 
                 Debug.Log("Deciding item to give");
                 #region Choose given item based on options
+                // Others
                 if (choosenItem == pearl.itemIndex)
                 {
-                    itemGiven = pipis;
+                    itemGiven = Pipis.instance.ItemDef;
+                    body.inventory.RemoveItem(choosenItem);
                     Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOUR FIRST STEP TO BECOMING A [[Big shot]]. [" + (uses - 1) + "] tries left." });
                 }
                 else if (choosenItem == shinyPearl.itemIndex)
                 {
-                    itemGiven = mrPipis;
+                    itemGiven = MrPipis.instance.ItemDef;
+                    body.inventory.RemoveItem(choosenItem);
                     Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOU WON WON WON MY [[Hyperlink blocked]]. [" + (uses - 1) + "] tries left." });
                 }
-                else if (choosenItem == kromer.itemIndex)
+                // Kromer Items
+                else if (choosenItem == CommRingTradingItem.instance.ItemDef.itemIndex) 
                 {
+                    choosenItem = Kromer.instance.ItemDef.itemIndex;
+                    for (int i = 0; i < 6; i++)
+                    {
+                        body.inventory.RemoveItem(Kromer.instance.ItemDef);
+                    }
+                    itemGiven = CommRingTradingItem.instance.ItemDef;
+                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOU ARE THE FIRST TO OWN MY <style=cIsUtility>[[Commemorative Ring]]</style>. [" + (uses - 1) + "] tries left." });
+                }
+                else if (choosenItem == LightBulbTradingItem.instance.ItemDef.itemIndex)
+                {
+                    choosenItem = Kromer.instance.ItemDef.itemIndex;
+                    for (int i = 0; i < 3; i++)
+                    {
+                        body.inventory.RemoveItem(Kromer.instance.ItemDef);
+                    }
+                    itemGiven = LightBulbTradingItem.instance.ItemDef;
+                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: HEY WATCH WHERE YOU'RE [[Looking]]!!! [" + (uses - 1) + "] tries left." });
+                }
+                else if (choosenItem == MalfunctionCoreTradingItem.instance.ItemDef.itemIndex)
+                {
+                    choosenItem = Kromer.instance.ItemDef.itemIndex;
+                    for (int i = 0; i < 6; i++)
+                    {
+                        body.inventory.RemoveItem(Kromer.instance.ItemDef);
+                    }
+                    itemGiven = MalfunctionCoreTradingItem.instance.ItemDef;
+                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: MY SIGNATURE [[Orb]] FOR SA-[[Error]]!! [" + (uses - 1) + "] tries left." });
+                }
+                else if (choosenItem == BrokenHeartTradingItem.instance.ItemDef.itemIndex)
+                {
+                    choosenItem = Kromer.instance.ItemDef.itemIndex;
                     for (int i = 0; i < 10; i++)
                     {
-                        body.inventory.RemoveItem(kromer);
+                        body.inventory.RemoveItem(Kromer.instance.ItemDef);
                     }
-                    itemGiven = commRing;
-                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOU ARE THE FIRST TO OWN MY <style=cIsUtility>[Commemorative Ring]</style>!!! [" + (uses - 1) + "] tries left." });
+                    itemGiven = BrokenHeartTradingItem.instance.ItemDef;
+                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: MY POOR OL' HEART CAN'T TAKE THIS LOSS!! [[Help me...]] [" + (uses - 1) + "] tries left." });
                 }
-                else
+                // Random Item
+                else if (choosenItem == RandomTradingItem.instance.ItemDef.itemIndex)
                 {
-                    int roll_chance = 40;
-                    //if (commRingItemCount > 0) roll_chance = 60;
+                    var commRingCount = body.inventory.GetItemCount(CommRing.instance.ItemDef);
+                    var roll_chance = 40 + (commRingCount * 10);
+
+                    // Choose Random Item
+                    var getRandomItem = allTakeableInvItems[UnityEngine.Random.Range(0, numOfTakeableItems)];
+                    choosenItem = getRandomItem.itemIndex;
+                    body.inventory.RemoveItem(choosenItem);
 
                     bool giveItem = RoR2.Util.CheckRoll(roll_chance, body.master);
                     if (giveItem)
                     {
-                        if (tier == ItemTier.Tier1) itemGiven = randomTier2;
-                        else if (tier == ItemTier.Tier2) itemGiven = randomTier3;
+                        if (getRandomItem.tier == ItemTier.Tier1) itemGiven = randomTier2;
+                        else if (getRandomItem.tier == ItemTier.Tier2) itemGiven = randomTier3;
+                        else itemGiven = Kromer.instance.ItemDef; // Just in case weird bugs happen
                         Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: THAT'S A REAL <style=cDeath>[[Big Shot]]</style> MOVE KID!!! YOU'RE JUST LIKE [Me]... [" + (uses - 1) + "] tries left." });
                     }
                     else
                     {
-                        itemGiven = kromer;
+                        itemGiven = Kromer.instance.ItemDef;
                         Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: DELICIOUS KROMER. [" + (uses - 1) + "] tries left." });
                     }
                 }
                 #endregion
 
                 Debug.Log("Taken " + choosenItem + " | Given " + itemGiven);
-                string pickupColorHex, pickupName, pickupAmountString;
-                if (isItem && itemGiven)
-                {
-                    body.inventory.RemoveItem(choosenItem);
-                    body.inventory.GiveItem(itemGiven.itemIndex);
-                    CharacterMasterNotificationQueue.SendTransformNotification(body.master, choosenItem, itemGiven.itemIndex, CharacterMasterNotificationQueue.TransformationType.Default);
+                string pickupColorHex, pickupName;
+                body.inventory.GiveItem(itemGiven.itemIndex);
+                CharacterMasterNotificationQueue.SendTransformNotification(body.master, choosenItem, itemGiven.itemIndex, CharacterMasterNotificationQueue.TransformationType.Default);
 
-                    pickupColorHex = ColorCatalog.GetColorHexString(ItemTierCatalog.GetItemTierDef(tier).colorIndex);
-                    pickupName = Language.GetString(ItemCatalog.GetItemDef(choosenItem).nameToken);
-                }
-                else
-                {
-                    return;
-                }
+                pickupColorHex = ColorCatalog.GetColorHexString(ItemTierCatalog.GetItemTierDef(tier).colorIndex);
+                pickupName = Language.GetString(ItemCatalog.GetItemDef(choosenItem).nameToken);
+                Debug.Log("Finished Interaction.");
 
                 EffectManager.SpawnEffect(Resources.Load<GameObject>("Prefabs/Effects/ShrineUseEffect"), new EffectData()
                 {
@@ -161,15 +199,7 @@ namespace DeltaruneMod.Interactables.SusExchange
                     color = (Color32)Color.yellow
                 }, true);
 
-                /*
-                Chat.SendBroadcastChat(new Chat.SubjectFormatChatMessage
-                {
-                    subjectAsCharacterBody = body,
-                    baseToken = $"INTERACTABLE_{Trashcan.gloablLangToken}_INTERACT_PICKER",
-                    paramTokens = new string[] { "<color=#" + pickupColorHex + ">" + pickupName + "</color>"}
-                });
-                */
-
+                // Count down uses
                 uses--;
                 if (uses <= 0)
                 {
@@ -193,21 +223,133 @@ namespace DeltaruneMod.Interactables.SusExchange
 
             var charBody = interactor.GetComponent<CharacterBody>();
 
+            List<ItemDef> allInventoryItems = Util.Helpers.GetAllItemsFromInventory(charBody.inventory);
+            List<ItemDef> allTakeableInvItems = ListTakeableInventoryItems(allInventoryItems);
+
+            // Add items to screen
             if (charBody && charBody.master)
             {
-                foreach (var item in allTakeableItems)
+                // Normal Method
+                /*
+                // Random Item
+                if (allTakeableItems.Count > 0)
                 {
-                    var itemCount = charBody.inventory.GetItemCount(item);
-                    if (itemCount > 0)
+                    options.Add(new PickupPickerController.Option
                     {
-                        options.Add(new PickupPickerController.Option
-                        {
-                            available = true,
-                            pickupIndex = PickupCatalog.FindPickupIndex(item.itemIndex)
-                        });
-                        Debug.Log("Added " + item);
-                    }
+                        available = true,
+                        pickupIndex = PickupCatalog.FindPickupIndex(RandomTradingItem.instance.ItemDef.itemIndex)
+                    });
                 }
+
+                // Neo Items
+                var Kromer.instance.ItemDefCount = charBody.inventory.GetItemCount(Kromer.instance.ItemDef);
+                if (Kromer.instance.ItemDefCount >= 3)
+                {
+                    options.Add(new PickupPickerController.Option
+                    {
+                        available = true,
+                        pickupIndex = PickupCatalog.FindPickupIndex(LightBulbTradingItem.instance.ItemDef.itemIndex)
+                    });
+                }
+                if (Kromer.instance.ItemDefCount >= 6)
+                {
+                    options.Add(new PickupPickerController.Option
+                    {
+                        available = true,
+                        pickupIndex = PickupCatalog.FindPickupIndex(MalfunctionCoreTradingItem.instance.ItemDef.itemIndex)
+                    });
+                }
+                if (Kromer.instance.ItemDefCount >= 10)
+                {
+                    options.Add(new PickupPickerController.Option
+                    {
+                        available = true,
+                        pickupIndex = PickupCatalog.FindPickupIndex(BrokenHeartTradingItem.instance.ItemDef.itemIndex)
+                    });
+                }
+
+                //Others
+                var pearlCount = charBody.inventory.GetItemCount(pearl);
+                var shinyPearlCount = charBody.inventory.GetItemCount(shinyPearl);
+                if (pearlCount > 0)
+                {
+                    options.Add(new PickupPickerController.Option
+                    {
+                        available = true,
+                        pickupIndex = PickupCatalog.FindPickupIndex(pearl.itemIndex)
+                    });
+                }
+                if (shinyPearlCount > 0)
+                {
+                    options.Add(new PickupPickerController.Option
+                    {
+                        available = true,
+                        pickupIndex = PickupCatalog.FindPickupIndex(shinyPearl.itemIndex)
+                    });
+                }
+                */
+
+                // Unlock Method
+                var ranItemAvaliable = false;
+                var commRingAvaliable = false;
+                var lightBulbAvaliable = false;
+                var malfunctionCoreAvaliable = false;
+                var brokenHeartAvaliable = false;
+                var pearlAvaliable = false;
+                var shinyPearlAvaliable = false;
+
+                if (allTakeableInvItems.Count > 0) ranItemAvaliable = true;
+                // Random Item
+                options.Add(new PickupPickerController.Option
+                {
+                    available = ranItemAvaliable,
+                    pickupIndex = PickupCatalog.FindPickupIndex(RandomTradingItem.instance.ItemDef.itemIndex)
+                });
+
+                // Kromer Items
+                var kromerCount = charBody.inventory.GetItemCount(Kromer.instance.ItemDef);
+                if (kromerCount >= 3) lightBulbAvaliable = true;
+                options.Add(new PickupPickerController.Option
+                {
+                    available = lightBulbAvaliable,
+                    pickupIndex = PickupCatalog.FindPickupIndex(LightBulbTradingItem.instance.ItemDef.itemIndex)
+                });
+                if (kromerCount >= 6) commRingAvaliable = true;
+                options.Add(new PickupPickerController.Option
+                {
+                    available = commRingAvaliable,
+                    pickupIndex = PickupCatalog.FindPickupIndex(CommRingTradingItem.instance.ItemDef.itemIndex)
+                });
+                if (kromerCount >= 6) malfunctionCoreAvaliable = true;
+                options.Add(new PickupPickerController.Option
+                {
+                    available = malfunctionCoreAvaliable,
+                    pickupIndex = PickupCatalog.FindPickupIndex(MalfunctionCoreTradingItem.instance.ItemDef.itemIndex)
+                });
+                if (kromerCount >= 10) brokenHeartAvaliable = true;
+                options.Add(new PickupPickerController.Option
+                {
+                    available = brokenHeartAvaliable,
+                    pickupIndex = PickupCatalog.FindPickupIndex(BrokenHeartTradingItem.instance.ItemDef.itemIndex)
+                });
+
+                //Others
+                var pearlCount = charBody.inventory.GetItemCount(pearl);
+                var shinyPearlCount = charBody.inventory.GetItemCount(shinyPearl);
+                var commRingCount = charBody.inventory.GetItemCount(CommRing.instance.ItemDef);
+                if (pearlCount > 0) pearlAvaliable = true;
+                options.Add(new PickupPickerController.Option
+                {
+                    available = pearlAvaliable,
+                    pickupIndex = PickupCatalog.FindPickupIndex(pearl.itemIndex)
+                });
+                if (shinyPearlCount > 0) shinyPearlAvaliable = true;
+                options.Add(new PickupPickerController.Option
+                {
+                    available = shinyPearlAvaliable,
+                    pickupIndex = PickupCatalog.FindPickupIndex(shinyPearl.itemIndex)
+                });
+
                 pickerController.SetOptionsServer(options.ToArray());
             }
         }

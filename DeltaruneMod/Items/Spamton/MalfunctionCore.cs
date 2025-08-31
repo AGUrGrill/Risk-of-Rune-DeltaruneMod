@@ -10,7 +10,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using static DeltaruneMod.DeltarunePlugin;
 
-namespace DeltaruneMod.Neo
+namespace DeltaruneMod.Items.Spamton
 {
     public class MalfunctionCore : ItemBase<MalfunctionCore>
     {
@@ -18,15 +18,15 @@ namespace DeltaruneMod.Neo
 
         public override string ItemLangTokenName => "MALFUNCTION_CORE";
 
-        public override string ItemPickupDesc => "On kill, spawn an orb that gives 10 barrier.";
+        public override string ItemPickupDesc => "On kill, enemies drop an orb, giving 2 temporary shield.";
 
-        public override string ItemFullDescription => "";
+        public override string ItemFullDescription => "On kill, enemies will drop an orb that gives <style=cIsUtility>2</style> temporary shield <style=cStack>(+1 per stack)</style>.";
 
         public override string ItemLore => "";
 
-        public override ItemTier Tier => ItemTier.Tier2;
+        public override ItemTier Tier => ItemTier.AssignedAtRuntime;
 
-        public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("ok.prefab");
+        public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("yoru_orb_plus.prefab");
 
         public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("ok.png");
 
@@ -38,9 +38,11 @@ namespace DeltaruneMod.Neo
 
         public override bool isChapter4 => false;
 
-        public readonly int additionalOvershield = 5;
+        public readonly int additionalShield = 1;
 
-        public readonly int baseOvershield = 10;
+        public readonly int baseShield = 2;
+
+        public static readonly int shieldCap = 1997;
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {
@@ -57,6 +59,7 @@ namespace DeltaruneMod.Neo
             orig(self, damageReport);
 
             var body = damageReport.attackerBody;
+            var enemyBody = damageReport.victimBody;
             if (!body || !body.isPlayerControlled) return;
             var itemCount = GetCount(body);
 
@@ -64,7 +67,7 @@ namespace DeltaruneMod.Neo
             {
                 CoreOrb orb = new CoreOrb();
                 orb.target = body.mainHurtBox;
-                orb.barrierValue = baseOvershield + (additionalOvershield * itemCount);
+                orb.shieldValue = baseShield + additionalShield * (itemCount-1);
                 OrbManager.instance.AddOrb(orb);
             }
         }
@@ -84,7 +87,7 @@ namespace DeltaruneMod.Neo
 
         public class CoreOrb : Orb
         {
-            public float barrierValue;
+            public float shieldValue;
 
             public bool scaleOrb = true;
 
@@ -94,13 +97,13 @@ namespace DeltaruneMod.Neo
             {
                 if (target)
                 {
-                    base.duration = overrideDuration;
-                    float scale = (scaleOrb ? Mathf.Min(barrierValue / target.healthComponent.fullBarrier, 1f) : 1f);
+                    duration = overrideDuration;
+                    float scale = scaleOrb ? Mathf.Min(shieldValue / target.healthComponent.fullShield, 1f) : 1f;
                     EffectData effectData = new EffectData
                     {
                         scale = scale,
                         origin = origin,
-                        genericFloat = base.duration
+                        genericFloat = duration
                     };
                     effectData.SetHurtBoxReference(target);
                     EffectManager.SpawnEffect(OrbStorageUtility.Get("Prefabs/Effects/OrbEffects/SquidOrbEffect"), effectData, transmit: true);
@@ -114,7 +117,8 @@ namespace DeltaruneMod.Neo
                     var healthComp = target.healthComponent;
                     if (healthComp)
                     {
-                        healthComp.AddBarrier(barrierValue);
+                        if (healthComp.shield + shieldValue <= shieldCap)
+                            healthComp.shield += shieldValue;
                     }
                 }
             }

@@ -8,7 +8,7 @@ using System.Text;
 using UnityEngine;
 using static DeltaruneMod.DeltarunePlugin;
 
-namespace DeltaruneMod.Neo
+namespace DeltaruneMod.Items.Spamton
 {
     public class LightBulb : ItemBase<LightBulb>
     {
@@ -16,15 +16,15 @@ namespace DeltaruneMod.Neo
 
         public override string ItemLangTokenName => "LIGHT_BULB";
 
-        public override string ItemPickupDesc => "";
+        public override string ItemPickupDesc => "Increase all lightning damage by 25%.";
 
-        public override string ItemFullDescription => "";
+        public override string ItemFullDescription => "All forms of lightning damage are increased by <style=cIsUtility>25%</style> <style=cStack>(+25% per stack)</style>.";
 
         public override string ItemLore => "";
 
-        public override ItemTier Tier => ItemTier.Tier1;
+        public override ItemTier Tier => ItemTier.AssignedAtRuntime;
 
-        public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("ok.prefab");
+        public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("light_bulb.prefab");
 
         public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("ok.png");
 
@@ -45,6 +45,7 @@ namespace DeltaruneMod.Neo
 
         public override void Hooks()
         {
+            // Concept adapted from Startstorm 2
             On.RoR2.Orbs.LightningOrb.OnArrival += LightningOrb_OnArrival; // uke tesla BFG arti loader 
             On.RoR2.Orbs.SimpleLightningStrikeOrb.OnArrival += SimpleLightningStrikeOrb_OnArrival; ; // charged perforator
             On.RoR2.Orbs.LightningStrikeOrb.OnArrival += LightningStrikeOrb_OnArrival; // royal capacitor
@@ -59,7 +60,7 @@ namespace DeltaruneMod.Neo
                 var body = attacker.GetComponent<CharacterBody>();
                 if (body && body.isPlayerControlled)
                 {
-                    self.damageValue *= 1 + (damageMultiplier * GetCount(body));
+                    self.damageValue *= 1 + damageMultiplier * GetCount(body);
                 }
             }
             orig(self);
@@ -73,7 +74,7 @@ namespace DeltaruneMod.Neo
                 var body = attacker.GetComponent<CharacterBody>();
                 if (body && body.isPlayerControlled)
                 {
-                    self.damageValue *= 1 + (damageMultiplier * GetCount(body));
+                    self.damageValue *= 1 + damageMultiplier * GetCount(body);
                 }
             }
             orig(self);
@@ -87,7 +88,7 @@ namespace DeltaruneMod.Neo
                 var body = attacker.GetComponent<CharacterBody>();
                 if (body && body.isPlayerControlled)
                 {
-                    self.damageValue *= 1 + (damageMultiplier * GetCount(body));
+                    self.damageValue *= 1 + damageMultiplier * GetCount(body);
                 }
             }
             orig(self);
@@ -101,7 +102,7 @@ namespace DeltaruneMod.Neo
                 var body = attacker.GetComponent<CharacterBody>();
                 if (body && body.isPlayerControlled)
                 {
-                    self.damageValue *= 1 + (damageMultiplier * GetCount(body));
+                    self.damageValue *= 1 + damageMultiplier * GetCount(body);
                 }
             }
             orig(self);

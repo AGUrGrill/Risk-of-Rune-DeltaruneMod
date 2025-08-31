@@ -1,20 +1,20 @@
 ﻿using DeltaruneMod.Items;
+using DeltaruneMod.Items.Spamton;
 using R2API;
 using RoR2;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
-using UnityEngine.Networking;
 using static DeltaruneMod.DeltarunePlugin;
 
-namespace DeltaruneMod.Neo.NeoMithrix
+namespace DeltaruneMod.Interactables.SusExchange.TradingItems
 {
-    public class NeoMithrixMain : ItemBase<NeoMithrixMain>
+    public class BrokenHeartTradingItem : ItemBase<BrokenHeartTradingItem>
     {
-        public override string ItemName => "NEO_MITHRIX_BASE_ITEM";
+        public override string ItemName => "Misshapen Heart";
 
-        public override string ItemLangTokenName => "NEO_MITHRIX_BASE";
+        public override string ItemLangTokenName => "HEART_TRADE_ITEM";
 
         public override string ItemPickupDesc => "";
 
@@ -24,9 +24,9 @@ namespace DeltaruneMod.Neo.NeoMithrix
 
         public override ItemTier Tier => ItemTier.AssignedAtRuntime;
 
-        public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("combined_neo.prefab");
+        public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("fake.prefab");
 
-        public override Sprite ItemIcon => null;
+        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("fake.png");
 
         public override bool isChapter1 => false;
 
@@ -36,32 +36,29 @@ namespace DeltaruneMod.Neo.NeoMithrix
 
         public override bool isChapter4 => false;
 
-        private bool StatsUpgraded = false;
-
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {
             return null;
         }
 
         public override void Hooks()
-        { 
+        {
             RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
         }
 
         private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
         {
-            if (!NetworkServer.active) return;
+            var hostItem = BrokenHeart.instance.ItemDef;
 
-            if (sender.inventory && GetCount(sender) > 0 && !StatsUpgraded)
+            var itemCount = GetCount(sender);
+            if (itemCount > 0)
             {
-                sender.baseMaxHealth *= 4;
-                sender.baseDamage *= 3;
-                sender.baseRegen *= 2;
-                sender.baseMoveSpeed *= 1.5f;
-                StatsUpgraded = true;
+                for (int i = 0; i < itemCount; i++)
+                {
+                    sender.inventory.RemoveItem(ItemDef);
+                    sender.inventory.GiveItem(hostItem);
+                }
             }
-
-            // Give other display items
         }
 
         public override void Init()

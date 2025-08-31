@@ -15,10 +15,9 @@ namespace DeltaruneMod.Items.Spamton
 
         public override string ItemLangTokenName => "COMM_RING";
 
-        public override string ItemPickupDesc => "Gain barrier on hit. 10% increased luck at Suspicious Exchange.";
+        public override string ItemPickupDesc => "10% increased luck at Suspicious Exchange.";
 
-        public override string ItemFullDescription => "On hit, gain <style=cIsHealing>1 temporary barrier</style> <style=cStack>(+1 barrier per stack)</style>." +
-            "\nGain 10% higher roll chance at Suspicious Exchange.";
+        public override string ItemFullDescription => "Gain a <style=cIsUtility>10%</style> higher roll chance at Suspicious Exchange.";
 
         public override string ItemLore => "WHEN KIDS LIKE YOU ARE <style=cEvent>[Beating People Up]</style>," +
             "\n[Spitting] IN THEIR EYES, THROWING SAND IN THEIR <style=cEvent>[Face]</style>," +
@@ -272,31 +271,19 @@ namespace DeltaruneMod.Items.Spamton
 
         public override void Hooks()
         {
-            On.RoR2.GlobalEventManager.OnHitEnemy += CommRingEffect;
+            RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
         }
 
-        private void CommRingEffect(On.RoR2.GlobalEventManager.orig_OnHitEnemy orig, GlobalEventManager self, DamageInfo damageInfo, GameObject victim)
+        private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
         {
-            orig(self, damageInfo, victim);
 
-            if (!NetworkServer.active) return;
-
-            var body = damageInfo.attacker.GetComponent<CharacterBody>();
-            var enemyBody = victim.GetComponent<CharacterBody>();
-            var itemCount = GetCount(body);
-
-            if (body.inventory && itemCount > 0)
-            {
-                var healing = itemCount * 1;
-                if (!(body.healthComponent.barrier + healing > body.maxBarrier)) body.healthComponent.barrier += healing;
-            }     
         }
 
         public override void Init()
         {
-            //CreateItem();
-            //CreateLang();
-            //Hooks();
+            CreateItem();
+            CreateLang();
+            Hooks();
         }
     }
 }

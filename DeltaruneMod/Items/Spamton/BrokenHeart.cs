@@ -11,7 +11,7 @@ using UnityEngine.Networking;
 using static DeltaruneMod.DeltarunePlugin;
 using static R2API.DeployableAPI;
 
-namespace DeltaruneMod.Neo
+namespace DeltaruneMod.Items.Spamton
 {
     public class BrokenHeart : ItemBase<BrokenHeart>
     {
@@ -19,15 +19,22 @@ namespace DeltaruneMod.Neo
 
         public override string ItemLangTokenName => "BROKE_HEART";
 
-        public override string ItemPickupDesc => "";
+        public override string ItemPickupDesc => "Spawn an orbiting, armor piercing projectile every 2 seconds.";
 
-        public override string ItemFullDescription => "";
+        public override string ItemFullDescription => "Every <style=cIsUtility>2</style> seconds, spawn an armor piercing projectile that orbits the player in stasis." +
+            "\nSpawn up to 2 maximum projectiles, deals <style=cIsDamage>199.7% base damage</style> <style=cStack>(+199.7% per stack)</style>.";
 
-        public override string ItemLore => "";
+        public override string ItemLore => "Distorted laughter emenates from the dark and empty room." +
+            "\nThe laughter is mixed with another emotion... you can feel it, its an overwhelming sadness reverberating within." +
+            "\nYou walk closer, feeling its pain as its emotions take control of you." +
+            "\n\n\"Is this you?\", you call out, but no one awnsers." +
+            "\nYou pick up the ominous heart, you can feel it, the rush, the excitement, the laughter, the pain..." +
+            "\nAll these emotions swell inside you, you feel the <style=cMono>DETERMINATION</style>, " +
+            "\nthe <style=cMono>DETERMINATION</style> to become a <style=cDeath>[[Big Shot]]</style>.";
 
         public override ItemTier Tier => ItemTier.Tier3;
 
-        public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("ok.prefab");
+        public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("mis_heart.prefab");
 
         public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("ok.png");
 
@@ -40,6 +47,8 @@ namespace DeltaruneMod.Neo
         public override bool isChapter4 => false;
 
         public static GameObject orbProjectile;
+
+        public static GameObject ShardPrefab = MainAssets.LoadAsset<GameObject>("spam_projectile.prefab");
 
         public DeployableSlot BeadOrbs;
 
@@ -69,6 +78,7 @@ namespace DeltaruneMod.Neo
                 {
                     beadBehavior = player.gameObject.AddComponent<BeadBehavior>();
                     beadBehavior.body = player;
+                    beadBehavior.stack = itemCount;
                     beadBehavior.enabled = true;
                     beadBehavior.projectilePrefab = orbProjectile;
                     beadBehavior.orbDeployable = BeadOrbs;
@@ -93,36 +103,41 @@ namespace DeltaruneMod.Neo
             // Create Deployable
             int limit(CharacterMaster self, int deployableCountMultiplier)
             {
-                return 12;
+                return 2;
             }
-            BeadOrbs = DeployableAPI.RegisterDeployableSlot(limit);
+            BeadOrbs = RegisterDeployableSlot(limit);
 
             // Create Projectile
             orbProjectile = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/LunarSunProjectile").InstantiateClone("BeadProjectile", false);
 
-            var oldProjCont = orbProjectile.GetComponent<LunarSunProjectileController>();
-            if (oldProjCont)
+            // Add Ghost
+            var ghost = ShardPrefab.InstantiateClone("ShardPrefabGhost", false);
+            ghost.AddComponent<ProjectileGhostController>();
+            ghost.AddComponent<NetworkIdentity>();
+            ghost.transform.localScale = new Vector3(10f, 10f, 10f);
+
+            var projCont = orbProjectile.GetComponent<ProjectileController>();
+            if (projCont.ghostPrefab) UnityEngine.Object.Destroy(projCont.ghostPrefab);
+            projCont.shouldPlaySounds = false;
+            projCont.startSound = "";
+            projCont.ghostPrefab = ghost;
+
+            // Replace Special Controller
+            var lunarSunProjCont = orbProjectile.GetComponent<LunarSunProjectileController>();
+            if (lunarSunProjCont)
             {
                 Debug.Log("Deleting old controller!");
                 UnityEngine.Object.DestroyImmediate(orbProjectile.GetComponent<LunarSunProjectileController>());
             }
-            orbProjectile.AddComponent<BeadProjectileController>();
+           var beadProjCont = orbProjectile.AddComponent<BeadProjectileController>();
 
+            // Change Deployable Type
             var projectileDeployToOwner = orbProjectile.GetComponent<ProjectileDeployToOwner>();
             projectileDeployToOwner.deployableSlot = BeadOrbs;
 
-
-            var oldOrbiter = orbProjectile.GetComponent<ProjectileOwnerOrbiter>();
-            //var newOrbiter = orbProjectile.AddComponent<BeadProjectileOwnerOrbiter>();
-            // idk maybe this helps
-            if (oldOrbiter)
-            {
-                Debug.Log("Deleting old orbiter!");
-                // UnityEngine.Object.DestroyImmediate(orbProjectile.GetComponent<ProjectileOwnerOrbiter>());
-            }
-
             var projSimple = orbProjectile.GetComponent<ProjectileSimple>();
-            projSimple.oscillate = false;
+            var fwrdSpd = projSimple.desiredForwardSpeed;
+            projSimple.desiredForwardSpeed = fwrdSpd * 3;
 
             Util.Helpers.GetAllComponentNames(orbProjectile);
             Util.Helpers.CreateNetworkedProjectilePrefab(orbProjectile);
@@ -134,21 +149,17 @@ namespace DeltaruneMod.Neo
             CreateLang();
             CreatePrefab();
             Hooks();
-
-
         }
 
         public class BeadBehavior : CharacterBody.ItemBehavior
         {
             private const float secondsPerProjectile = 2f;
 
-            private const int baseMaxProjectiles = 12;
-
-            private const int maxProjectilesPerStack = 2;
+            private const int baseMaxProjectiles = 2;
 
             private const float baseOrbitRadius = 2f;
 
-            private const float baseDamageCoefficient = 1f;
+            private const float baseDamageCoefficient = 1.997f;
 
             private float projectileTimer;
 
@@ -160,7 +171,7 @@ namespace DeltaruneMod.Neo
 
             public static int GetMaxProjectiles(Inventory inventory)
             {
-                return baseMaxProjectiles + (maxProjectilesPerStack * inventory.GetItemCount(BrokenHeart.instance.ItemDef));
+                return baseMaxProjectiles;
             }
 
             public void FInitializeOrbiter(BeadProjectileOwnerOrbiter orbiter, BeadProjectileController controller)
@@ -168,7 +179,7 @@ namespace DeltaruneMod.Neo
                 //OG does not work with upward arc
                 float radius = body.radius + baseOrbitRadius;
                 Quaternion quaternion = Quaternion.AngleAxis(UnityEngine.Random.Range(180f, 180f), Vector3.up); // front to back
-                Quaternion quaternion2 = Quaternion.AngleAxis(UnityEngine.Random.Range(0f, 0f), Vector3.forward);
+                Quaternion quaternion2 = Quaternion.AngleAxis(UnityEngine.Random.Range(0f, 180f), Vector3.forward);
                 Vector3 planeNormal = quaternion * quaternion2 * Vector3.forward;
                 float initialDegreesFromOwnerUp = UnityEngine.Random.Range(75f, -75f); // left to right
                 orbiter.Initialize(planeNormal, radius, 0, initialDegreesFromOwnerUp);
@@ -184,10 +195,10 @@ namespace DeltaruneMod.Neo
             public void InitializeOrbiter(ProjectileOwnerOrbiter orbiter, BeadProjectileController controller)
             {
                 float radius = body.radius + baseOrbitRadius;
-                Quaternion quaternion = Quaternion.AngleAxis(UnityEngine.Random.Range(0f, 360f), Vector3.up);
-                Quaternion quaternion2 = Quaternion.AngleAxis(UnityEngine.Random.Range(0f, 80f), Vector3.forward); // low point to high point
+                Quaternion quaternion = Quaternion.AngleAxis(UnityEngine.Random.Range(180f, 180f), Vector3.up); // 0, 360 Sphere | 180, 180 Halo Circle Thing | 90, 90 Spot Behind Characters
+                Quaternion quaternion2 = Quaternion.AngleAxis(UnityEngine.Random.Range(0f, 180f), Vector3.forward); // horizontal plane, left to right
                 Vector3 planeNormal = quaternion * quaternion2 * Vector3.up;
-                float initialDegreesFromOwnerForward = UnityEngine.Random.Range(0f, 360f);
+                float initialDegreesFromOwnerForward = UnityEngine.Random.Range(30f, -210f); // vertical plane, left to right
                 orbiter.Initialize(planeNormal, radius, 0, initialDegreesFromOwnerForward);
                 onDisabled += DestroyOrbiter;
                 void DestroyOrbiter(BeadBehavior beadBehavior)
@@ -201,7 +212,7 @@ namespace DeltaruneMod.Neo
 
             private void Awake()
             {
-                base.enabled = false;
+                enabled = false;
             }
 
             private void OnEnable()
@@ -210,8 +221,8 @@ namespace DeltaruneMod.Neo
 
             private void OnDisable()
             {
-                this.onDisabled?.Invoke(this);
-                this.onDisabled = null;
+                onDisabled?.Invoke(this);
+                onDisabled = null;
             }
 
             private void FixedUpdate()
@@ -226,12 +237,12 @@ namespace DeltaruneMod.Neo
                     {
                         projectilePrefab = projectilePrefab,
                         crit = body.RollCrit(),
-                        damage = body.damage * baseDamageCoefficient,
+                        damage = body.damage * baseDamageCoefficient * stack,
                         damageColorIndex = DamageColorIndex.Item,
                         force = 0f,
                         owner = body.gameObject,
                         position = body.transform.position,
-                        rotation = RoR2.Util.QuaternionSafeLookRotation(aimRay.direction),
+                        rotation = RoR2.Util.QuaternionSafeLookRotation(aimRay.direction) * Quaternion.Euler(90f, 0f, 0f),
                         damageTypeOverride = DamageType.BypassArmor
                     };
                     ProjectileManager.instance.FireProjectile(fireProjectileInfo);
@@ -240,7 +251,7 @@ namespace DeltaruneMod.Neo
         }
 
         [DisallowMultipleComponent]
-        [RequireComponent(typeof(BeadProjectileOwnerOrbiter))]
+        [RequireComponent(typeof(ProjectileOwnerOrbiter))]
         [RequireComponent(typeof(ProjectileController))]
         [RequireComponent(typeof(ProjectileImpactExplosion))]
         public class BeadProjectileController : MonoBehaviour
@@ -293,8 +304,6 @@ namespace DeltaruneMod.Neo
                 }
             }
         }
-
-
     }
 
     [DisallowMultipleComponent]
@@ -473,7 +482,7 @@ namespace DeltaruneMod.Neo
                 Vector3 position = ownerTransform.position + offset + Quaternion.AngleAxis(angle, planeNormal) * initialRadialDirection * radius;
                 if (!rigidBody || doSnap)
                 {
-                    base.transform.position = position;
+                    transform.position = position;
                 }
                 else if ((bool)rigidBody)
                 {
@@ -531,72 +540,72 @@ namespace DeltaruneMod.Neo
                 return true;
             }
             bool flag = false;
-            if ((base.syncVarDirtyBits & 1) != 0)
+            if ((syncVarDirtyBits & 1) != 0)
             {
                 if (!flag)
                 {
-                    writer.WritePackedUInt32(base.syncVarDirtyBits);
+                    writer.WritePackedUInt32(syncVarDirtyBits);
                     flag = true;
                 }
                 writer.Write(offset);
             }
-            if ((base.syncVarDirtyBits & 2) != 0)
+            if ((syncVarDirtyBits & 2) != 0)
             {
                 if (!flag)
                 {
-                    writer.WritePackedUInt32(base.syncVarDirtyBits);
+                    writer.WritePackedUInt32(syncVarDirtyBits);
                     flag = true;
                 }
                 writer.Write(initialDegreesFromOwnerForward);
             }
-            if ((base.syncVarDirtyBits & 4) != 0)
+            if ((syncVarDirtyBits & 4) != 0)
             {
                 if (!flag)
                 {
-                    writer.WritePackedUInt32(base.syncVarDirtyBits);
+                    writer.WritePackedUInt32(syncVarDirtyBits);
                     flag = true;
                 }
                 writer.Write(degreesPerSecond);
             }
-            if ((base.syncVarDirtyBits & 8) != 0)
+            if ((syncVarDirtyBits & 8) != 0)
             {
                 if (!flag)
                 {
-                    writer.WritePackedUInt32(base.syncVarDirtyBits);
+                    writer.WritePackedUInt32(syncVarDirtyBits);
                     flag = true;
                 }
                 writer.Write(radius);
             }
-            if ((base.syncVarDirtyBits & 0x10) != 0)
+            if ((syncVarDirtyBits & 0x10) != 0)
             {
                 if (!flag)
                 {
-                    writer.WritePackedUInt32(base.syncVarDirtyBits);
+                    writer.WritePackedUInt32(syncVarDirtyBits);
                     flag = true;
                 }
                 writer.Write(planeNormal);
             }
-            if ((base.syncVarDirtyBits & 0x20) != 0)
+            if ((syncVarDirtyBits & 0x20) != 0)
             {
                 if (!flag)
                 {
-                    writer.WritePackedUInt32(base.syncVarDirtyBits);
+                    writer.WritePackedUInt32(syncVarDirtyBits);
                     flag = true;
                 }
                 writer.Write(initialRadialDirection);
             }
-            if ((base.syncVarDirtyBits & 0x40) != 0)
+            if ((syncVarDirtyBits & 0x40) != 0)
             {
                 if (!flag)
                 {
-                    writer.WritePackedUInt32(base.syncVarDirtyBits);
+                    writer.WritePackedUInt32(syncVarDirtyBits);
                     flag = true;
                 }
                 writer.Write(initialRunTime);
             }
             if (!flag)
             {
-                writer.WritePackedUInt32(base.syncVarDirtyBits);
+                writer.WritePackedUInt32(syncVarDirtyBits);
             }
             return flag;
         }
@@ -648,5 +657,6 @@ namespace DeltaruneMod.Neo
         public override void PreStartClient()
         {
         }
+    
     }
 }

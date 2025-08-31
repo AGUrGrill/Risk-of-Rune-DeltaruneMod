@@ -92,7 +92,7 @@ namespace DeltaruneMod.Interactables.Grave
 
             DirectorCard directorCard = new DirectorCard
             {
-                selectionWeight = 0, // 230 = Normal Chest
+                selectionWeight = 5, // 230 = Normal Chest
                 spawnCard = InteractableSpawnCard,
             };
 

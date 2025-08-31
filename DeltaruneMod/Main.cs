@@ -199,6 +199,7 @@ namespace DeltaruneMod
             {
                 //var testing_item = GasterMask.instance.ItemDef.itemIndex;
 
+                // Spawn all items
                 var transform = PlayerCharacterMasterController.instances[0].master.GetBodyObject().transform;
                 foreach (ItemBase item in Items)
                 {

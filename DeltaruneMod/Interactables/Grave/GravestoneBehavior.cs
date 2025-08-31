@@ -49,7 +49,7 @@ namespace DeltaruneMod.Interactables.Grave
             var commRing = CommRing.instance.ItemDef;
             var thornRing = ThornRing.instance.ItemDef;
 
-            if (body.inventory && body.inventory.GetItemCount(commRing) > 0)
+            if (body.inventory.GetItemCount(commRing) > 0)
             {
                 body.inventory.RemoveItem(commRing);
                 body.inventory.GiveItem(thornRing);

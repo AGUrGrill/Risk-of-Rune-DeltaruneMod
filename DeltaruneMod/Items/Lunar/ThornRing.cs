@@ -20,12 +20,12 @@ namespace DeltaruneMod.Items.Lunar
 
         public override string ItemFullDescription => "Apply <style=cIsUtility>1</style> stack of <style=cIsUtility>frostbite on hit </style><style=cStack>(+1 per stack)</style>" +
             "\nStacks of frostbite cause enemies to <style=cIsUtility>freeze</style>." +
-            "\nLose <style=cIsHealth>-5% hp</style> on hit <style=cStack>(-3% hp per stack)</style>." +
+            "\nLose <style=cIsHealth>-3% hp</style> on hit <style=cStack>(-2% hp per stack)</style>." +
             "\nYou cannot lose more than <style=cIsHealth>5% hp</style>.";
 
         public override string ItemLore => "<style=cShrine>[Angel]</style>, <style=cShrine>[Angel]</style> \nARE YOU LOOKING FOR THE <style=cIsUtility>[Ring]</style>\n OF <style=cDeath>[Thorns]</style> ?";
 
-        public override ItemTier Tier => ItemTier.Lunar;
+        public override ItemTier Tier => ItemTier.AssignedAtRuntime;
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("thorn_ring.prefab");
 
@@ -278,15 +278,66 @@ namespace DeltaruneMod.Items.Lunar
         // Blacklist from lunar shop
         public override void Init()
         {
-            //CreateItem();
-            //CreateLang();
-            //Hooks();
+            CreateItem();
+            CreateLang();
+            Hooks();
         }
 
         public override void Hooks()
         {
-            On.RoR2.GlobalEventManager.OnHitEnemy += ThornRingEffect;
+            On.RoR2.GlobalEventManager.OnHitEnemy += GlobalEventManager_OnHitEnemy;
             RecalculateStatsAPI.GetStatCoefficients += CommRingToThornRing;
+        }
+
+        public void CreateEffect()
+        {
+            frostbite = DLC2Content.Buffs.Frost;
+            frostbite.name = "FrostbiteDebuff";
+            frostbite.iconSprite = FrostbiteEffectIcon;
+            frostbite.isDebuff = true;
+        }
+
+        private void GlobalEventManager_OnHitEnemy(On.RoR2.GlobalEventManager.orig_OnHitEnemy orig, GlobalEventManager self, DamageInfo damageInfo, GameObject victim)
+        {
+            orig(self, damageInfo, victim);
+
+            if (!NetworkServer.active) return;
+
+            var attacker = damageInfo.attacker;
+            if (!attacker) return;
+            var attackerBody = attacker.GetComponent<CharacterBody>();
+            if (!attackerBody || !attackerBody.isPlayerControlled) return;
+            var victimBody = victim.GetComponent<CharacterBody>();
+            if (!victimBody || victimBody.isPlayerControlled) return;
+
+            int itemCount = GetCount(attackerBody);
+
+            // This works like nowhere cause "frost buff isnt created yet or some shi" like bruh ok
+            if (!frostbite)
+            {
+                CreateEffect();
+            }
+
+            // Add debuff to enemy and slightly hurt player
+            if (attackerBody.inventory && itemCount > 0)
+            {
+                var thornDmg = attackerBody.maxHealth * (0.03f + (0.02f * (itemCount - 1)));
+                var totalHPAfterThornDamage = attackerBody.healthComponent.health - thornDmg;
+                var maxDamagePossible = attackerBody.maxHealth * 0.05f;
+
+                for (int i = 0; i < itemCount; i++)
+                {
+                    victimBody.AddBuff(frostbite);
+                }
+                if (totalHPAfterThornDamage < maxDamagePossible)
+                {
+                    attackerBody.healthComponent.health = maxDamagePossible;
+                }
+                else
+                {
+                    attackerBody.healthComponent.health -= thornDmg;
+                }     
+            }
         }
 
         private void CommRingToThornRing(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
@@ -317,41 +368,6 @@ namespace DeltaruneMod.Items.Lunar
                 sender.baseMaxHealth /= 0.7f;
                 sender.healthComponent.health = sender.maxHealth;
                 healthAmputated = false;
-            }
-        }
-
-        public void ThornRingEffect(On.RoR2.GlobalEventManager.orig_OnHitEnemy orig, GlobalEventManager self, DamageInfo damageInfo, GameObject victim)
-        {
-            // Need to reduce player hp
-            orig(self, damageInfo, victim);
-
-            if (!NetworkServer.active) return;
-
-            var attacker = damageInfo.attacker;
-            CharacterBody sender = attacker.GetComponent<CharacterBody>();
-            CharacterBody victimBody = victim.GetComponent<CharacterBody>();
-
-            if (!sender.isPlayerControlled || victimBody.isPlayerControlled) return;
-
-            int itemCount = GetCount(sender);
-
-            // Change frost debuff to look cool and custom
-            frostbite = DLC2Content.Buffs.Frost;
-            frostbite.name = "FrostbiteDebuff";
-            frostbite.iconSprite = FrostbiteEffectIcon;
-            frostbite.isDebuff = true;
-
-            //float thornDmg = sender.baseMaxHealth * (0.05f + (0.03f * (itemCount-1)));
-            //int stacksFrostbite = victimBody.GetBuffCount(frostbite);
-
-            // Add debuff to enemy and slightly hurt player
-            if (sender.inventory && itemCount > 0)
-            {
-                for (int i = 0; i < itemCount; i++)
-                {
-                    victimBody.AddBuff(frostbite);
-                    sender.healthComponent.health -= (sender.maxHealth * 0.01f);
-                }
             }
         }
     }
