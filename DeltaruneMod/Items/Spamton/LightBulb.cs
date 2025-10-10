@@ -26,7 +26,7 @@ namespace DeltaruneMod.Items.Spamton
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("light_bulb.prefab");
 
-        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("bulb_icon.png");
+        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("bulb_icon");
 
         public override bool isChapter1 => false;
 

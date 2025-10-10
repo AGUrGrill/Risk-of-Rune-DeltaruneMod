@@ -10,7 +10,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using static DeltaruneMod.DeltarunePlugin;
-using static DeltaruneMod.Items.Spamton.MalfunctionCore;
+using static DeltaruneMod.Items.Spamton.MalfunctiongCore;
 using static R2API.DeployableAPI;
 
 namespace DeltaruneMod.Neo
@@ -26,9 +26,9 @@ namespace DeltaruneMod.Neo
         public override string ItemFullDescription => "Perfected Heart: Every <style=cIsUtility>" + OrbCooldown + "</style> seconds, spawn an armor piercing projectile that orbits the player in stasis." +
             "\nSpawn up to " + MaxOrbs + " maximum projectiles, deals <style=cIsDamage>199.7% base damage</style> <style=cStack>(+199.7% per stack)</style>." +
             "\n" +
-            "\nPerfected Core: On kill, enemies will drop an orb that gives <style=cIsUtility>" + BaseShield + "</style> temporary shield <style=cStack>(+" + AdditionalShield + " per stack)</style>." +
+            "\nPerfected Core: Gain a permenant <style=cIsUtility>" + critPercent*100 + "%</style> crit chance. <style=cStack>(+" + additionalCritPercent*100 + "% per stack)</style>" +
             "\n" +
-            "\nPerfected Bulb: All forms of lightning damage are increased by <style=cIsUtility>" + LightningDamageMultiplier + "%</style> <style=cStack>(+" + LightningDamageMultiplier + "% per stack)</style>.";
+            "\nPerfected Bulb: All forms of lightning damage are increased by <style=cIsUtility>" + LightningDamageMultiplier*100 + "%</style> <style=cStack>(+" + LightningDamageMultiplier + "% per stack)</style>.";
 
         public override string ItemLore => "";
 
@@ -36,7 +36,7 @@ namespace DeltaruneMod.Neo
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("final_form.prefab");
 
-        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("final_form_icon.png");
+        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("final_form_icon");
 
         public override bool isChapter1 => false;
 
@@ -58,11 +58,9 @@ namespace DeltaruneMod.Neo
 
         public static float LightningDamageMultiplier = 0.33f;
 
-        public readonly int AdditionalShield = 1;
+        public static float critPercent = 0.25f;
 
-        public readonly int BaseShield = 2;
-
-        public static readonly int ShieldCap = 1997;
+        public static float additionalCritPercent = 0.1f;
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {
@@ -79,7 +77,15 @@ namespace DeltaruneMod.Neo
             On.RoR2.Orbs.LightningStrikeOrb.OnArrival += LightningStrikeOrb_OnArrival; // royal capacitor
             On.RoR2.Orbs.VoidLightningOrb.OnArrival += VoidLightningOrb_OnArrival; // polylute
 
-            On.RoR2.GlobalEventManager.OnCharacterDeath += GlobalEventManager_OnCharacterDeath;
+            RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
+        }
+
+        private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
+        {
+            if (GetCount(sender) > 0)
+            {
+                args.critAdd += critPercent + ((GetCount(sender) - 1) + additionalCritPercent);
+            }
         }
 
         private void VoidLightningOrb_OnArrival(On.RoR2.Orbs.VoidLightningOrb.orig_OnArrival orig, VoidLightningOrb self)
@@ -174,24 +180,6 @@ namespace DeltaruneMod.Neo
             #endregion
         }
 
-        private void GlobalEventManager_OnCharacterDeath(On.RoR2.GlobalEventManager.orig_OnCharacterDeath orig, GlobalEventManager self, DamageReport damageReport)
-        {
-            orig(self, damageReport);
-
-            var body = damageReport.attackerBody;
-            var enemyBody = damageReport.victimBody;
-            if (!body || !body.isPlayerControlled) return;
-            var itemCount = GetCount(body);
-
-            if (GetCount(body) > 0)
-            {
-                PerfectedCoreOrb orb = new PerfectedCoreOrb();
-                orb.target = body.mainHurtBox;
-                orb.shieldValue = BaseShield + (AdditionalShield * (itemCount - 1));
-                OrbManager.instance.AddOrb(orb);
-            }
-        }
-
         public void CreatePrefab()
         {
             // Create Deployable
@@ -202,10 +190,10 @@ namespace DeltaruneMod.Neo
             FinalFormOrbs = DeployableAPI.RegisterDeployableSlot(limit);
 
             // Create Projectile
-            orbProjectile = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/LunarSunProjectile").InstantiateClone("BeadProjectile", false);
+            orbProjectile = PrefabAPI.InstantiateClone(LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/LunarSunProjectile"), "BeadProjectile", false);
 
             // Add Ghost
-            var ghost = ShardPrefab.InstantiateClone("ShardPrefabGhost", false);
+            var ghost = ShardPrefab.InstantiateClone("ShardPrefabGhostNeo", false);
             ghost.AddComponent<ProjectileGhostController>();
             ghost.AddComponent<NetworkIdentity>();
             ghost.transform.localScale = new Vector3(10f, 10f, 10f);
@@ -231,15 +219,11 @@ namespace DeltaruneMod.Neo
 
             var projSimple = orbProjectile.GetComponent<ProjectileSimple>();
             var fwrdSpd = projSimple.desiredForwardSpeed;
-            projSimple.desiredForwardSpeed = fwrdSpd * 3;
+            projSimple.desiredForwardSpeed = fwrdSpd * 5;
+            projSimple.oscillate = false;
 
             Util.Helpers.GetAllComponentNames(orbProjectile);
             Util.Helpers.CreateNetworkedProjectilePrefab(orbProjectile);
-        }
-
-        public void CreateOrb()
-        {
-            OrbAPI.AddOrb<PerfectedCoreOrb>();
         }
 
         public override void Init()
@@ -247,47 +231,7 @@ namespace DeltaruneMod.Neo
             CreateItem();
             CreateLang();
             CreatePrefab();
-            CreateOrb();
             Hooks();
-        }
-
-        public class PerfectedCoreOrb : Orb
-        {
-            public float shieldValue;
-
-            public bool scaleOrb = true;
-
-            public float overrideDuration = 0.6f;
-
-            public override void Begin()
-            {
-                if (target)
-                {
-                    base.duration = overrideDuration;
-                    float scale = (scaleOrb ? Mathf.Min(shieldValue / target.healthComponent.fullShield, 1f) : 1f);
-                    EffectData effectData = new EffectData
-                    {
-                        scale = scale,
-                        origin = origin,
-                        genericFloat = base.duration
-                    };
-                    effectData.SetHurtBoxReference(target);
-                    EffectManager.SpawnEffect(OrbStorageUtility.Get("Prefabs/Effects/OrbEffects/SquidOrbEffect"), effectData, transmit: true);
-                }
-            }
-
-            public override void OnArrival()
-            {
-                if (target)
-                {
-                    var healthComp = target.healthComponent;
-                    if (healthComp)
-                    {
-                        if (healthComp.shield + shieldValue <= ShieldCap)
-                            healthComp.shield += shieldValue;
-                    }
-                }
-            }
         }
 
         public class BeadBehavior : CharacterBody.ItemBehavior
@@ -320,7 +264,7 @@ namespace DeltaruneMod.Neo
                 Quaternion quaternion2 = Quaternion.AngleAxis(UnityEngine.Random.Range(0f, 180f), Vector3.forward); // horizontal plane, left to right
                 Vector3 planeNormal = quaternion * quaternion2 * Vector3.up;
                 float initialDegreesFromOwnerForward = UnityEngine.Random.Range(30f, -210f); // vertical plane, left to right
-                orbiter.Initialize(planeNormal, radius, 0, initialDegreesFromOwnerForward);
+                orbiter.Initialize(planeNormal, radius, 180, initialDegreesFromOwnerForward);
                 onDisabled += DestroyOrbiter;
                 void DestroyOrbiter(BeadBehavior beadBehavior)
                 {

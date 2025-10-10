@@ -7,6 +7,8 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using static DeltaruneMod.DeltarunePlugin;
+using DeltaruneMod.Items.Tier1;
+using IL.RoR2.Artifacts;
 
 namespace DeltaruneMod.Items.Tier1
 {

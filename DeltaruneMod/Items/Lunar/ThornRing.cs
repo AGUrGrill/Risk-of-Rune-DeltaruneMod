@@ -45,8 +45,6 @@ namespace DeltaruneMod.Items.Lunar
 
         public static bool healthAmputated = false;
 
-        public static float playerNormalHP;
-
         public static Sprite FrostbiteEffectIcon = MainAssets.LoadAsset<Sprite>("snowgrave_effect_icon.png");
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()
@@ -286,7 +284,37 @@ namespace DeltaruneMod.Items.Lunar
         public override void Hooks()
         {
             On.RoR2.GlobalEventManager.OnHitEnemy += GlobalEventManager_OnHitEnemy;
-            RecalculateStatsAPI.GetStatCoefficients += CommRingToThornRing;
+            RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
+        }
+
+        private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
+        {
+            if (!NetworkServer.active) return;
+
+            
+            int itemCount = GetCount(sender);
+            if (sender.inventory && itemCount > 0)
+            {
+                float curseHPReduction = 0.3f + (0.1f * (itemCount - 1));
+
+                // Cap HP reduction cause, well ya
+                if (curseHPReduction >= 0.7f) curseHPReduction = 0.7f;
+
+                // Force HP mult to be curse amount
+                args.healthTotalMult *= (1 - curseHPReduction);
+
+                // Convert comm ring to thorn ring if applicable
+                ItemDef commRing = CommRing.instance.ItemDef;
+                int commRingItemCount = sender.inventory.GetItemCount(commRing);
+                if (commRingItemCount > 0)
+                {
+                    for (int i = 0; i < commRingItemCount; i++)
+                    {
+                        sender.inventory.RemoveItem(commRing);
+                        sender.inventory.GiveItem(ItemDef);
+                    }
+                }
+            }
         }
 
         public void CreateEffect()
@@ -319,55 +347,12 @@ namespace DeltaruneMod.Items.Lunar
             }
 
             // Add debuff to enemy and slightly hurt player
-            if (attackerBody.inventory && itemCount > 0)
+            if (attackerBody.isPlayerControlled && itemCount > 0)
             {
-                var thornDmg = attackerBody.maxHealth * (0.03f + (0.02f * (itemCount - 1)));
-                var totalHPAfterThornDamage = attackerBody.healthComponent.health - thornDmg;
-                var maxDamagePossible = attackerBody.maxHealth * 0.05f;
-
                 for (int i = 0; i < itemCount; i++)
                 {
                     victimBody.AddBuff(frostbite);
-                }
-                if (totalHPAfterThornDamage < maxDamagePossible)
-                {
-                    attackerBody.healthComponent.health = maxDamagePossible;
-                }
-                else
-                {
-                    attackerBody.healthComponent.health -= thornDmg;
-                }     
-            }
-        }
-
-        private void CommRingToThornRing(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
-        {
-            if (!NetworkServer.active) return;
-
-            // Convert comm ring to thorn ring if applicable
-            int itemCount = GetCount(sender);
-            if (sender.inventory && itemCount > 0)
-            {
-                ItemDef commRing = CommRing.instance.ItemDef;
-                int commRingItemCount = sender.inventory.GetItemCount(commRing);
-                if (commRingItemCount > 0)
-                {
-                    for (int i = 0; i < commRingItemCount; i++)
-                    {
-                        sender.inventory.RemoveItem(commRing);
-                        sender.inventory.GiveItem(ItemDef);
-                    }
-                }
-
-                sender.healthComponent.health = sender.maxHealth * 0.7f;
-                
-
-            }
-            else if (healthAmputated && itemCount <= 0 && sender.inventory)
-            {
-                sender.baseMaxHealth /= 0.7f;
-                sender.healthComponent.health = sender.maxHealth;
-                healthAmputated = false;
+                }    
             }
         }
     }

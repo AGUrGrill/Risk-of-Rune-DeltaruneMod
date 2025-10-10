@@ -24,7 +24,7 @@ namespace DeltaruneMod.Interactables.SusExchange
 
         public readonly static int maxUses = 10;
 
-        public int uses;
+        public static int uses;
 
         public List<ItemDef> allItems = new List<ItemDef>();
         public List<ItemDef> allTier1 = new List<ItemDef>();
@@ -34,8 +34,20 @@ namespace DeltaruneMod.Interactables.SusExchange
         public List<ItemDef> allDisplayItems = new List<ItemDef>();
         public ItemDef pearl, shinyPearl;
 
+        enum ShopItemCosts
+        {
+            Bulb=3,
+            Ring=6,
+            Core=6,
+            Heart=10,
+            Pipis=2,
+            MrPipis=3
+        }
+
         public void Start()
         {
+            AkSoundEngine.PostEvent(3865094552, gameObject);
+
             uses = maxUses;
             allItems = Util.Helpers.GetItems(99);
             allTier1 = Util.Helpers.GetItems(0);
@@ -48,15 +60,17 @@ namespace DeltaruneMod.Interactables.SusExchange
                 ItemDef itemDef = ItemCatalog.GetItemDef(i);
                 if (itemDef != null)
                 {
-                    if (itemDef.name == "Pearl") { allTakeableItems.Add(itemDef); pearl = itemDef; }
-                    else if (itemDef.name == "ShinyPearl") { allTakeableItems.Add(itemDef); shinyPearl = itemDef; }
+                    if (itemDef.name == "Pearl") pearl = itemDef;
+                    else if (itemDef.name == "ShinyPearl") shinyPearl = itemDef;
                 }
             }
             // Add trade items to display
             allDisplayItems.Add(RandomTradingItem.instance.ItemDef);
             allDisplayItems.Add(LightBulbTradingItem.instance.ItemDef);
-            allDisplayItems.Add(MalfunctionCoreTradingItem.instance.ItemDef);
+            allDisplayItems.Add(MalfunctiongCoreTradingItem.instance.ItemDef);
             allDisplayItems.Add(BrokenHeartTradingItem.instance.ItemDef);
+
+            
         }
 
         public List<ItemDef> ListTakeableInventoryItems(List<ItemDef> allInventoryItems)
@@ -105,20 +119,26 @@ namespace DeltaruneMod.Interactables.SusExchange
                 if (choosenItem == pearl.itemIndex)
                 {
                     itemGiven = Pipis.instance.ItemDef;
-                    body.inventory.RemoveItem(choosenItem);
+                    for (int i = 0; i < (int) ShopItemCosts.Pipis; i++)
+                    {
+                        body.inventory.RemoveItem(choosenItem);
+                    }
                     Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOUR FIRST STEP TO BECOMING A [[Big shot]]. [" + (uses - 1) + "] tries left." });
                 }
                 else if (choosenItem == shinyPearl.itemIndex)
                 {
                     itemGiven = MrPipis.instance.ItemDef;
-                    body.inventory.RemoveItem(choosenItem);
+                    for (int i = 0; i < (int)ShopItemCosts.MrPipis; i++)
+                    {
+                        body.inventory.RemoveItem(choosenItem);
+                    }
                     Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOU WON WON WON MY [[Hyperlink blocked]]. [" + (uses - 1) + "] tries left." });
                 }
                 // Kromer Items
                 else if (choosenItem == CommRingTradingItem.instance.ItemDef.itemIndex) 
                 {
                     choosenItem = Kromer.instance.ItemDef.itemIndex;
-                    for (int i = 0; i < 6; i++)
+                    for (int i = 0; i < (int)ShopItemCosts.Ring; i++)
                     {
                         body.inventory.RemoveItem(Kromer.instance.ItemDef);
                     }
@@ -128,27 +148,27 @@ namespace DeltaruneMod.Interactables.SusExchange
                 else if (choosenItem == LightBulbTradingItem.instance.ItemDef.itemIndex)
                 {
                     choosenItem = Kromer.instance.ItemDef.itemIndex;
-                    for (int i = 0; i < 3; i++)
+                    for (int i = 0; i < (int)ShopItemCosts.Bulb; i++)
                     {
                         body.inventory.RemoveItem(Kromer.instance.ItemDef);
                     }
                     itemGiven = LightBulbTradingItem.instance.ItemDef;
                     Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: HEY WATCH WHERE YOU'RE [[Looking]]!!! [" + (uses - 1) + "] tries left." });
                 }
-                else if (choosenItem == MalfunctionCoreTradingItem.instance.ItemDef.itemIndex)
+                else if (choosenItem == MalfunctiongCoreTradingItem.instance.ItemDef.itemIndex)
                 {
                     choosenItem = Kromer.instance.ItemDef.itemIndex;
-                    for (int i = 0; i < 6; i++)
+                    for (int i = 0; i < (int)ShopItemCosts.Core; i++)
                     {
                         body.inventory.RemoveItem(Kromer.instance.ItemDef);
                     }
-                    itemGiven = MalfunctionCoreTradingItem.instance.ItemDef;
+                    itemGiven = MalfunctiongCoreTradingItem.instance.ItemDef;
                     Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: MY SIGNATURE [[Orb]] FOR SA-[[Error]]!! [" + (uses - 1) + "] tries left." });
                 }
                 else if (choosenItem == BrokenHeartTradingItem.instance.ItemDef.itemIndex)
                 {
                     choosenItem = Kromer.instance.ItemDef.itemIndex;
-                    for (int i = 0; i < 10; i++)
+                    for (int i = 0; i < (int)ShopItemCosts.Heart; i++)
                     {
                         body.inventory.RemoveItem(Kromer.instance.ItemDef);
                     }
@@ -182,13 +202,28 @@ namespace DeltaruneMod.Interactables.SusExchange
                 }
                 #endregion
 
+                #region Give item and show stuff
                 Debug.Log("Taken " + choosenItem + " | Given " + itemGiven);
                 string pickupColorHex, pickupName;
-                body.inventory.GiveItem(itemGiven.itemIndex);
+                Transform dropletOrigin = body.transform;
+                PickupIndex give = new PickupIndex(itemGiven.itemIndex);
+                PickupDropletController.CreatePickupDroplet(give, dropletOrigin.position, dropletOrigin.forward * 20f);
+                //body.inventory.GiveItem(itemGiven.itemIndex);
                 CharacterMasterNotificationQueue.SendTransformNotification(body.master, choosenItem, itemGiven.itemIndex, CharacterMasterNotificationQueue.TransformationType.Default);
 
-                pickupColorHex = ColorCatalog.GetColorHexString(ItemTierCatalog.GetItemTierDef(tier).colorIndex);
-                pickupName = Language.GetString(ItemCatalog.GetItemDef(choosenItem).nameToken);
+                //pickupColorHex = ColorCatalog.GetColorHexString(ItemTierCatalog.GetItemTierDef(tier).colorIndex);
+                //pickupName = Language.GetString(ItemCatalog.GetItemDef(choosenItem).nameToken);
+                AkSoundEngine.PostEvent(2011881192, gameObject);
+                #endregion
+
+                // Count down uses
+                uses--;
+                if (uses <= 0)
+                {
+                    RpcHandleDeactivateClient();
+                    pickerController.SetAvailable(false);
+                }
+
                 Debug.Log("Finished Interaction.");
 
                 EffectManager.SpawnEffect(Resources.Load<GameObject>("Prefabs/Effects/ShrineUseEffect"), new EffectData()
@@ -198,14 +233,6 @@ namespace DeltaruneMod.Interactables.SusExchange
                     scale = 1f,
                     color = (Color32)Color.yellow
                 }, true);
-
-                // Count down uses
-                uses--;
-                if (uses <= 0)
-                {
-                    RpcHandleDeactivateClient();
-                    pickerController.SetAvailable(false);
-                }
             }
 
         }
@@ -308,42 +335,42 @@ namespace DeltaruneMod.Interactables.SusExchange
 
                 // Kromer Items
                 var kromerCount = charBody.inventory.GetItemCount(Kromer.instance.ItemDef);
-                if (kromerCount >= 3) lightBulbAvaliable = true;
+                if (kromerCount >= (int)ShopItemCosts.Bulb) lightBulbAvaliable = true;
                 options.Add(new PickupPickerController.Option
                 {
                     available = lightBulbAvaliable,
                     pickupIndex = PickupCatalog.FindPickupIndex(LightBulbTradingItem.instance.ItemDef.itemIndex)
                 });
-                if (kromerCount >= 6) commRingAvaliable = true;
+                if (kromerCount >= (int)ShopItemCosts.Ring) commRingAvaliable = true;
                 options.Add(new PickupPickerController.Option
                 {
                     available = commRingAvaliable,
                     pickupIndex = PickupCatalog.FindPickupIndex(CommRingTradingItem.instance.ItemDef.itemIndex)
                 });
-                if (kromerCount >= 6) malfunctionCoreAvaliable = true;
+                if (kromerCount >= (int)ShopItemCosts.Core) malfunctionCoreAvaliable = true;
                 options.Add(new PickupPickerController.Option
                 {
                     available = malfunctionCoreAvaliable,
-                    pickupIndex = PickupCatalog.FindPickupIndex(MalfunctionCoreTradingItem.instance.ItemDef.itemIndex)
+                    pickupIndex = PickupCatalog.FindPickupIndex(MalfunctiongCoreTradingItem.instance.ItemDef.itemIndex)
                 });
-                if (kromerCount >= 10) brokenHeartAvaliable = true;
+                if (kromerCount >= (int)ShopItemCosts.Heart) brokenHeartAvaliable = true;
                 options.Add(new PickupPickerController.Option
                 {
                     available = brokenHeartAvaliable,
-                    pickupIndex = PickupCatalog.FindPickupIndex(BrokenHeartTradingItem.instance.ItemDef.itemIndex)
+                    pickupIndex = PickupCatalog.FindPickupIndex(BrokenHeartTradingItem.instance.ItemDef.itemIndex),
                 });
 
                 //Others
                 var pearlCount = charBody.inventory.GetItemCount(pearl);
                 var shinyPearlCount = charBody.inventory.GetItemCount(shinyPearl);
                 var commRingCount = charBody.inventory.GetItemCount(CommRing.instance.ItemDef);
-                if (pearlCount > 0) pearlAvaliable = true;
+                if (pearlCount >= (int)ShopItemCosts.Pipis) pearlAvaliable = true;
                 options.Add(new PickupPickerController.Option
                 {
                     available = pearlAvaliable,
                     pickupIndex = PickupCatalog.FindPickupIndex(pearl.itemIndex)
                 });
-                if (shinyPearlCount > 0) shinyPearlAvaliable = true;
+                if (shinyPearlCount >= (int)ShopItemCosts.MrPipis) shinyPearlAvaliable = true;
                 options.Add(new PickupPickerController.Option
                 {
                     available = shinyPearlAvaliable,

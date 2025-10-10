@@ -36,6 +36,7 @@ namespace DeltaruneMod
     [BepInDependency(NetworkingAPI.PluginGUID)]
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
 
+    [BepInDependency("droppod.lookingglass", BepInDependency.DependencyFlags.SoftDependency)]
     public class DeltarunePlugin : BaseUnityPlugin
     {
         public const string PluginGUID = PluginAuthor + "." + PluginName;

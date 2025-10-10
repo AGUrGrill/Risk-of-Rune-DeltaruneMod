@@ -24,7 +24,7 @@ namespace DeltaruneMod.Interactables.SusExchange.TradingItems
 
         public override ItemTier Tier => ItemTier.AssignedAtRuntime;
 
-        public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("fake.prefab");
+        public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("comm_ring.prefab");
 
         public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("comm_ring_icon.png");
 

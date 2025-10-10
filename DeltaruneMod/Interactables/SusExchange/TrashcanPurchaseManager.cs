@@ -32,6 +32,8 @@ namespace DeltaruneMod.Interactables.SusExchange
                 purchaseInteraction.SetAvailable(true);
             }
 
+            AkSoundEngine.PostEvent(3865094552, gameObject);
+
             purchaseInteraction.onPurchase.AddListener(TrashcanPurchaseAttempt);
 
             uses = TrashcanPickerManager.maxUses;
@@ -53,6 +55,8 @@ namespace DeltaruneMod.Interactables.SusExchange
                     else if (itemDef.name == "ITEM_COMM_RING") commRing = itemDef;
                 }
             }
+
+            
         }
 
         [Server]
@@ -66,7 +70,7 @@ namespace DeltaruneMod.Interactables.SusExchange
             if (!interactor) { return; }
             var body = interactor.GetComponent<CharacterBody>();
             var pickerManager = GetComponent<TrashcanPickerManager>();
-            uses = pickerManager.uses;
+            //uses = pickerManager.uses;
             
             if (body && body.master)
             {
