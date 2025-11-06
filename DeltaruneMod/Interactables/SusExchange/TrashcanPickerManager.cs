@@ -119,7 +119,7 @@ namespace DeltaruneMod.Interactables.SusExchange
                 if (choosenItem == pearl.itemIndex)
                 {
                     itemGiven = Pipis.instance.ItemDef;
-                    for (int i = 0; i < (int) ShopItemCosts.Pipis; i++)
+                    for (int i = 0; i < (int)ShopItemCosts.Pipis; i++)
                     {
                         body.inventory.RemoveItem(choosenItem);
                     }

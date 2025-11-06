@@ -1,7 +1,9 @@
 using BepInEx;
 using BepInEx.Configuration;
 using DeltaruneMod.Interactables;
+using DeltaruneMod.Interactables.SusExchange.TradingItems;
 using DeltaruneMod.Items;
+using DeltaruneMod.Items.Spamton;
 using DeltaruneMod.Items.VoidTier3;
 using DeltaruneMod.Neo;
 using DeltaruneMod.Util;
@@ -116,6 +118,8 @@ namespace DeltaruneMod
 
             StartCoroutine(LoadSoundBankWhenReady());
 
+            RemoveFromLootPool();
+
             Log.Debug(PluginName + " loaded successfully!");
         }
 
@@ -192,6 +196,31 @@ namespace DeltaruneMod
                 interactableList.Add(interactable);
             }
             return enabled;
+        }
+
+        public void RemoveFromLootPool()
+        {
+            List<ItemDef> blacklistedItems = new List<ItemDef>();
+            blacklistedItems.Add(BrokenHeart.instance.ItemDef);
+            blacklistedItems.Add(CommRing.instance.ItemDef);
+            blacklistedItems.Add(Kromer.instance.ItemDef);
+            blacklistedItems.Add(LightBulb.instance.ItemDef);
+            blacklistedItems.Add(MalfunctiongCore.instance.ItemDef);
+            blacklistedItems.Add(BrokenHeartTradingItem.instance.ItemDef);
+            blacklistedItems.Add(CommRingTradingItem.instance.ItemDef);
+            blacklistedItems.Add(LightBulbTradingItem.instance.ItemDef);
+            blacklistedItems.Add(MalfunctiongCoreTradingItem.instance.ItemDef);
+            blacklistedItems.Add(RandomTradingItem.instance.ItemDef);
+            blacklistedItems.Add(FinalForm.instance.ItemDef);
+
+            Run.onRunSetRuleBookGlobal += (run, rulebook) =>
+            {
+                foreach (ItemDef item in blacklistedItems)
+                {
+                    run.availableItems.Remove(item.itemIndex);
+                }
+                PickupDropTable.RegenerateAll(run);
+            };
         }
 
         private void Update()

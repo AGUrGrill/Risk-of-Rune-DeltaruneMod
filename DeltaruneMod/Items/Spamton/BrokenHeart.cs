@@ -34,7 +34,7 @@ namespace DeltaruneMod.Items.Spamton
             "\nAll these emotions swell inside you, you feel the <style=cMono>DETERMINATION</style>, " +
             "\nthe <style=cMono>DETERMINATION</style> to become a <style=cDeath>[[Big Shot]]</style>.";
 
-        public override ItemTier Tier => ItemTier.AssignedAtRuntime;
+        public override ItemTier Tier => ItemTier.Tier3;
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("mis_heart.prefab");
 

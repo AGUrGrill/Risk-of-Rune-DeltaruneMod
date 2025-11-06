@@ -28,11 +28,11 @@ namespace DeltaruneMod.Neo
             "\n" +
             "\nPerfected Core: Gain a permenant <style=cIsUtility>" + critPercent*100 + "%</style> crit chance. <style=cStack>(+" + additionalCritPercent*100 + "% per stack)</style>" +
             "\n" +
-            "\nPerfected Bulb: All forms of lightning damage are increased by <style=cIsUtility>" + LightningDamageMultiplier*100 + "%</style> <style=cStack>(+" + LightningDamageMultiplier + "% per stack)</style>.";
+            "\nPerfected Bulb: All forms of lightning damage are increased by <style=cIsUtility>" + LightningDamageMultiplier*100 + "%</style> <style=cStack>(+" + LightningDamageMultiplier*100 + "% per stack)</style>.";
 
         public override string ItemLore => "";
 
-        public override ItemTier Tier => ItemTier.AssignedAtRuntime;
+        public override ItemTier Tier => ItemTier.Tier3;
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("final_form.prefab");
 
@@ -84,7 +84,7 @@ namespace DeltaruneMod.Neo
         {
             if (GetCount(sender) > 0)
             {
-                args.critAdd += critPercent + ((GetCount(sender) - 1) + additionalCritPercent);
+                args.critAdd += critPercent*100 + ((GetCount(sender) - 1) + additionalCritPercent*100);
             }
         }
 

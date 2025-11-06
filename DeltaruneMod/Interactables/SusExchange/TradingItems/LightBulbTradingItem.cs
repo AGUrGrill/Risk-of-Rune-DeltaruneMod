@@ -22,7 +22,7 @@ namespace DeltaruneMod.Interactables.SusExchange.TradingItems
 
         public override string ItemLore => "";
 
-        public override ItemTier Tier => ItemTier.AssignedAtRuntime;
+        public override ItemTier Tier => ItemTier.Tier1;
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("light_bulb.prefab");
 

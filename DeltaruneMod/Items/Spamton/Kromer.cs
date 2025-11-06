@@ -21,7 +21,7 @@ namespace DeltaruneMod.Items.Spamton
 
         public override string ItemLore => "Smells like <style=cKeywordName>KROMER</style>.";
 
-        public override ItemTier Tier => ItemTier.AssignedAtRuntime;
+        public override ItemTier Tier => ItemTier.Tier1;
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("kromer.prefab");
 

@@ -27,7 +27,7 @@ namespace DeltaruneMod.Items.Spamton
             "\nAND BEEN THE FIRST TO OWN MY <style=cEvent>[Commemorative Ring]</style>" +
             "\nTOO BAD! SEE YOU KID!";
 
-        public override ItemTier Tier => ItemTier.AssignedAtRuntime;
+        public override ItemTier Tier => ItemTier.Tier2;
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("comm_ring.prefab");
 

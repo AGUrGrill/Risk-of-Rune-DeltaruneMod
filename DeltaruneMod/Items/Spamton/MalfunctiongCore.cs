@@ -21,11 +21,11 @@ namespace DeltaruneMod.Items.Spamton
 
         public override string ItemPickupDesc => "Crit chance randomly increases by 25% for 3 seconds.";
 
-        public override string ItemFullDescription => "Every <style=cIsUtility>5 to 20</style> seconds, gain a <style=cIsUtility>25%</style> crit chance increase for <style=cIsUtility>3</style> seconds <style=cStack>(+1 second per stack)</style>.";
+        public override string ItemFullDescription => "Every <style=cIsUtility>5 to 20</style> seconds, gain a <style=cIsUtility>" + critPercent * 100 + "%</style> crit chance increase for <style=cIsUtility>3</style> seconds <style=cStack>(+1 second per stack)</style>.";
 
         public override string ItemLore => "";
 
-        public override ItemTier Tier => ItemTier.AssignedAtRuntime;
+        public override ItemTier Tier => ItemTier.Tier2;
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("yoru_orb_plus.prefab");
 
@@ -39,6 +39,9 @@ namespace DeltaruneMod.Items.Spamton
 
         public override bool isChapter4 => false;
 
+        public static float critPercent = 0.25f;
+
+        public static bool critReady = false;
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {
@@ -68,6 +71,12 @@ namespace DeltaruneMod.Items.Spamton
             }
             else if (controller && GetCount(sender) <= 0) controller.enabled = false;
             #endregion
+
+            if (GetCount(sender) > 0 && critReady)
+            {
+                args.critAdd += critPercent * 100 + ((GetCount(sender) - 1));
+            }
+
         }
 
         public override void Init()
@@ -87,7 +96,7 @@ namespace DeltaruneMod.Items.Spamton
             private bool appliedCrit = false;
             public CharacterBody body;
             public int itemStacks = 0;
-            public static float critPercent = 0.25f;
+            
 
             private void Awake()
             {
@@ -111,7 +120,7 @@ namespace DeltaruneMod.Items.Spamton
                     {
                         timer = UnityEngine.Random.Range(minTime, maxTime);
                         appliedCrit = false;
-                        body.crit -= critPercent;
+                        critReady = false;
                     }
                 }
             }
@@ -121,7 +130,7 @@ namespace DeltaruneMod.Items.Spamton
                 if (!appliedCrit)
                 {
                     appliedCrit = true;
-                    body.crit += critPercent;
+                    critReady = true;
                 }
             }
             
