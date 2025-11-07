@@ -22,11 +22,11 @@ namespace DeltaruneMod.Interactables.SusExchange.TradingItems
 
         public override string ItemLore => "";
 
-        public override ItemTier Tier => ItemTier.Tier1;
+        public override ItemTier Tier => ItemTier.AssignedAtRuntime;
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("light_bulb.prefab");
 
-        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("bulb_icon");
+        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("light_bulb_icon");
 
         public override bool isChapter1 => false;
 
@@ -43,22 +43,7 @@ namespace DeltaruneMod.Interactables.SusExchange.TradingItems
 
         public override void Hooks()
         {
-            RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
-        }
 
-        private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
-        {
-            var hostItem = LightBulb.instance.ItemDef;
-
-            var itemCount = GetCount(sender);
-            if (itemCount > 0)
-            {
-                for (int i = 0; i < itemCount; i++)
-                {
-                    sender.inventory.RemoveItem(ItemDef);
-                    sender.inventory.GiveItem(hostItem);
-                }
-            }
         }
 
         public override void Init()

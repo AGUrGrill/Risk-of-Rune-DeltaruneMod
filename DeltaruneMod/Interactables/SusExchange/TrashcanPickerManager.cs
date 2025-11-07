@@ -142,7 +142,7 @@ namespace DeltaruneMod.Interactables.SusExchange
                     {
                         body.inventory.RemoveItem(Kromer.instance.ItemDef);
                     }
-                    itemGiven = CommRingTradingItem.instance.ItemDef;
+                    itemGiven = CommRing.instance.ItemDef;
                     Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOU ARE THE FIRST TO OWN MY <style=cIsUtility>[[Commemorative Ring]]</style>. [" + (uses - 1) + "] tries left." });
                 }
                 else if (choosenItem == LightBulbTradingItem.instance.ItemDef.itemIndex)
@@ -152,7 +152,7 @@ namespace DeltaruneMod.Interactables.SusExchange
                     {
                         body.inventory.RemoveItem(Kromer.instance.ItemDef);
                     }
-                    itemGiven = LightBulbTradingItem.instance.ItemDef;
+                    itemGiven = LightBulb.instance.ItemDef;
                     Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: HEY WATCH WHERE YOU'RE [[Looking]]!!! [" + (uses - 1) + "] tries left." });
                 }
                 else if (choosenItem == MalfunctiongCoreTradingItem.instance.ItemDef.itemIndex)
@@ -162,7 +162,7 @@ namespace DeltaruneMod.Interactables.SusExchange
                     {
                         body.inventory.RemoveItem(Kromer.instance.ItemDef);
                     }
-                    itemGiven = MalfunctiongCoreTradingItem.instance.ItemDef;
+                    itemGiven = MalfunctiongCore.instance.ItemDef;
                     Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: MY SIGNATURE [[Orb]] FOR SA-[[Error]]!! [" + (uses - 1) + "] tries left." });
                 }
                 else if (choosenItem == BrokenHeartTradingItem.instance.ItemDef.itemIndex)
@@ -172,7 +172,7 @@ namespace DeltaruneMod.Interactables.SusExchange
                     {
                         body.inventory.RemoveItem(Kromer.instance.ItemDef);
                     }
-                    itemGiven = BrokenHeartTradingItem.instance.ItemDef;
+                    itemGiven = BrokenHeart.instance.ItemDef;
                     Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: MY POOR OL' HEART CAN'T TAKE THIS LOSS!! [[Help me...]] [" + (uses - 1) + "] tries left." });
                 }
                 // Random Item

@@ -22,7 +22,7 @@ namespace DeltaruneMod.Interactables.SusExchange.TradingItems
 
         public override string ItemLore => "";
 
-        public override ItemTier Tier => ItemTier.Tier3;
+        public override ItemTier Tier => ItemTier.AssignedAtRuntime;
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("mis_heart.prefab");
 
@@ -43,22 +43,7 @@ namespace DeltaruneMod.Interactables.SusExchange.TradingItems
 
         public override void Hooks()
         {
-            RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
-        }
 
-        private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
-        {
-            var hostItem = BrokenHeart.instance.ItemDef;
-
-            var itemCount = GetCount(sender);
-            if (itemCount > 0)
-            {
-                for (int i = 0; i < itemCount; i++)
-                {
-                    sender.inventory.RemoveItem(ItemDef);
-                    sender.inventory.GiveItem(hostItem);
-                }
-            }
         }
 
         public override void Init()

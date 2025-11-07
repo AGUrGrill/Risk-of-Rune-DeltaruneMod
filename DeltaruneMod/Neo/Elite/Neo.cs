@@ -10,7 +10,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using static DeltaruneMod.DeltarunePlugin;
 
-namespace DeltaruneMod.Neo
+namespace DeltaruneMod.Neo.Elite
 {
     public class Neo
     {
@@ -22,7 +22,7 @@ namespace DeltaruneMod.Neo
         public static float damageMult = 3f;
         public static float affixDropChance = 0.00025f;
         public static GameObject ItemModel = MainAssets.LoadAsset<GameObject>("neo_wings.prefab");
-        //private static Material NeoMat = Addressables.LoadAssetAsync<Material>("RoR2/Base/WardOnLevel/matWarbannerBuffRing.mat").WaitForCompletion();
+        private static Material NeoMat = Addressables.LoadAssetAsync<Material>("RoR2/Base/WardOnLevel/matWarbannerBuffRing.mat").WaitForCompletion();
         private static Texture2D eliteRamp = Addressables.LoadAssetAsync<Texture2D>("RoR2/Base/Common/ColorRamps/texRampMagmaWorm.png").WaitForCompletion();
         private static Sprite eliteIcon = MainAssets.LoadAsset<Sprite>("swoon_effect_icon.png");
         // RoR2/Base/Common/ColorRamps/texRampWarbanner.png 
@@ -131,9 +131,9 @@ namespace DeltaruneMod.Neo
             AffixNeoEquipment.passiveBuffDef = AffixNeoBuff;
             AffixNeoEquipment.dropOnDeathChance = affixDropChance;
             AffixNeoEquipment.enigmaCompatible = false;
-            //AffixNeoEquipment.pickupModelPrefab = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/EliteFire/PickupEliteFire.prefab").WaitForCompletion(), "PickupAffixNeo", false);
-            //foreach (Renderer componentsInChild in AffixNeoEquipment.pickupModelPrefab.GetComponentsInChildren<Renderer>())
-            //    componentsInChild.material = NeoMat;
+            AffixNeoEquipment.pickupModelPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/EliteFire/PickupEliteFire.prefab").WaitForCompletion().InstantiateClone("PickupAffixNeo", false);
+            foreach (Renderer componentsInChild in AffixNeoEquipment.pickupModelPrefab.GetComponentsInChildren<Renderer>())
+                componentsInChild.material = NeoMat;
             AffixNeoEquipment.pickupModelPrefab = ItemModel;
             AffixNeoEquipment.nameToken = "EQUIPMENT_AFFIX_NEO_NAME";
             AffixNeoEquipment.descriptionToken = "EQUIPMENT_AFFIX_NEO_DESC";

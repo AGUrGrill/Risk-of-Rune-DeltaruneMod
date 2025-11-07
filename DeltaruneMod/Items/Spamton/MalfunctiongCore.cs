@@ -29,7 +29,7 @@ namespace DeltaruneMod.Items.Spamton
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("yoru_orb_plus.prefab");
 
-        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("yoru_orb_icon");
+        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("mal_core_icon");
 
         public override bool isChapter1 => false;
 
@@ -74,7 +74,7 @@ namespace DeltaruneMod.Items.Spamton
 
             if (GetCount(sender) > 0 && critReady)
             {
-                args.critAdd += critPercent * 100 + ((GetCount(sender) - 1));
+                args.critAdd += critPercent * 100;
             }
 
         }
