@@ -84,7 +84,7 @@ namespace DeltaruneMod.Neo
         {
             if (GetCount(sender) > 0)
             {
-                args.critAdd += critPercent*100 + ((GetCount(sender) - 1) + additionalCritPercent*100);
+                args.critAdd += critPercent*100 + ((GetCount(sender) - 1) * additionalCritPercent*100);
             }
         }
 
