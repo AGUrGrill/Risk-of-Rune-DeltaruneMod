@@ -32,7 +32,7 @@ namespace DeltaruneMod.Neo
 
         public override string ItemLore => "";
 
-        public override ItemTier Tier => ItemTier.Tier3;
+        public override ItemTier Tier => ItemTier.Boss;
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("final_form.prefab");
 

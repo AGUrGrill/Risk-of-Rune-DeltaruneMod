@@ -26,7 +26,7 @@ namespace DeltaruneMod.Interactables.SusExchange.TradingItems
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("yoru_orb_plus.prefab");
 
-        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("mal_core_icon");
+        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("malfunction_core_icon");
 
         public override bool isChapter1 => false;
 
