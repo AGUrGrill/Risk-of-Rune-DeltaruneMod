@@ -31,6 +31,9 @@ namespace DeltaruneMod.Interactables.Grave
         public void OnPurchase(Interactor interactor)
         {
             if (!NetworkServer.active) return;
+            var player = interactor.GetComponent<CharacterBody>();
+            var commRingCount = player.inventory.GetItemCount(CommRing.instance.ItemDef);
+            if (commRingCount <= 0) return;
 
             EffectManager.SpawnEffect(shrineUseEffect, new EffectData()
             {
@@ -60,6 +63,7 @@ namespace DeltaruneMod.Interactables.Grave
                 PickupDropletController.CreatePickupDroplet(give, dropletOrigin.position, dropletOrigin.forward * 20f);
                 //body.inventory.GiveItem(thornRing);
                 Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "You will never wake from this nightmare..." });
+                purchaseInteraction.available = false;
             }
         }
     }

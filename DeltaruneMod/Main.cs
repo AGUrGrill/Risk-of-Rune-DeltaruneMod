@@ -3,9 +3,11 @@ using BepInEx.Configuration;
 using DeltaruneMod.Interactables;
 using DeltaruneMod.Interactables.SusExchange.TradingItems;
 using DeltaruneMod.Items;
+using DeltaruneMod.Items.Lunar;
 using DeltaruneMod.Items.Spamton;
 using DeltaruneMod.Items.VoidTier3;
 using DeltaruneMod.Neo;
+using DeltaruneMod.Neo.NeoMithrix;
 using DeltaruneMod.Util;
 using R2API;
 using R2API.Networking;
@@ -120,6 +122,8 @@ namespace DeltaruneMod
 
             RemoveFromLootPool();
 
+            new NeoMithrixController();
+
             Log.Debug(PluginName + " loaded successfully!");
         }
 
@@ -212,6 +216,7 @@ namespace DeltaruneMod
             blacklistedItems.Add(MalfunctiongCoreTradingItem.instance.ItemDef);
             blacklistedItems.Add(RandomTradingItem.instance.ItemDef);
             blacklistedItems.Add(FinalForm.instance.ItemDef);
+            blacklistedItems.Add(ThornRing.instance.ItemDef);
 
             Run.onRunSetRuleBookGlobal += (run, rulebook) =>
             {

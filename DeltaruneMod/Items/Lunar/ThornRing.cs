@@ -25,7 +25,7 @@ namespace DeltaruneMod.Items.Lunar
 
         public override string ItemLore => "<style=cShrine>[Angel]</style>, <style=cShrine>[Angel]</style> \nARE YOU LOOKING FOR THE <style=cIsUtility>[Ring]</style>\n OF <style=cDeath>[Thorns]</style> ?";
 
-        public override ItemTier Tier => ItemTier.AssignedAtRuntime;
+        public override ItemTier Tier => ItemTier.Lunar;
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("thorn_ring.prefab");
 
@@ -346,7 +346,8 @@ namespace DeltaruneMod.Items.Lunar
                 CreateEffect();
             }
 
-            // Add debuff to enemy and slightly hurt player
+            // Add debuff to enemy
+            if (victimBody.name == "BrotherBody(Clone)" || victimBody.name == "ITBrotherBody(Clone)" || victimBody.name == "BrotherHurtBody(Clone)" || victimBody.name == "BrotherGlassBody(Clone)") return;
             if (attackerBody.isPlayerControlled && itemCount > 0)
             {
                 for (int i = 0; i < itemCount; i++)

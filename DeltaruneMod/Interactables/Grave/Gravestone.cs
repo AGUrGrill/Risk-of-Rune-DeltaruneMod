@@ -77,7 +77,7 @@ namespace DeltaruneMod.Interactables.Grave
         public void CreateInteractableSpawnCard()
         {
             InteractableSpawnCard = ScriptableObject.CreateInstance<InteractableSpawnCard>();
-            InteractableSpawnCard.name = PluginName.ToUpper() + "_isSpamtonTrash";
+            InteractableSpawnCard.name = PluginName.ToUpper() + "_isGravestone";
             InteractableSpawnCard.prefab = InteractableBodyModelPrefab;
             InteractableSpawnCard.sendOverNetwork = true;
             InteractableSpawnCard.hullSize = HullClassification.Golem;
@@ -92,7 +92,7 @@ namespace DeltaruneMod.Interactables.Grave
 
             DirectorCard directorCard = new DirectorCard
             {
-                selectionWeight = 5, // 230 = Normal Chest
+                selectionWeight = 100, // 230 = Normal Chest
                 spawnCard = InteractableSpawnCard,
             };
 
@@ -102,7 +102,7 @@ namespace DeltaruneMod.Interactables.Grave
                 InteractableCategory = DirectorAPI.InteractableCategory.Shrines,
             };
 
-            DirectorAPI.Helpers.AddNewInteractable(directorCardHolder);
+            DirectorAPI.Helpers.AddNewInteractableToStage(directorCardHolder, DirectorAPI.Stage.RallypointDelta);
         }
     }
 }

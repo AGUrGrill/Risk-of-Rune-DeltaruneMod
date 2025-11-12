@@ -1,4 +1,5 @@
 ﻿using DeltaruneMod.Items;
+using DeltaruneMod.Items.Lunar;
 using R2API;
 using RoR2;
 using System;
@@ -10,7 +11,7 @@ using static DeltaruneMod.DeltarunePlugin;
 
 namespace DeltaruneMod.Neo.NeoMithrix
 {
-    public class NeoMithrixMain : ItemBase<NeoMithrixMain>
+    public class NeoMithrixItem : ItemBase<NeoMithrixItem>
     {
         public override string ItemName => "NEO_MITHRIX_BASE_ITEM";
 
@@ -36,8 +37,6 @@ namespace DeltaruneMod.Neo.NeoMithrix
 
         public override bool isChapter4 => false;
 
-        private bool StatsUpgraded = false;
-
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {
             return null;
@@ -52,16 +51,29 @@ namespace DeltaruneMod.Neo.NeoMithrix
         {
             if (!NetworkServer.active) return;
 
-            if (sender.inventory && GetCount(sender) > 0 && !StatsUpgraded)
+            // Provide mithrix with buffs
+            if (sender.inventory && GetCount(sender) > 0)
             {
-                sender.baseMaxHealth *= 4;
-                sender.baseDamage *= 3;
-                sender.baseRegen *= 2;
-                sender.baseMoveSpeed *= 1.5f;
-                StatsUpgraded = true;
+                // Remove frostbite when needed
+                if (sender.GetBuffCount(ThornRing.frostbite) > 0)
+                {
+                    for (int i = 0; i < sender.GetBuffCount(ThornRing.frostbite); i++)
+                    {
+                        sender.RemoveBuff(ThornRing.frostbite);
+                        Debug.Log("Removing fortbite stacks!");
+                    }
+                    
+                }
+                
+                args.healthMultAdd += 4;
+                args.armorTotalMult += 2;
+                args.attackSpeedMultAdd += 2f;
+                args.moveSpeedMultAdd += 10f;
+                args.critDamageMultAdd += 2f;
+                args.critAdd += 1.25f;
+                args.regenMultAdd += 2;
+                args.damageMultAdd += 2;
             }
-
-            // Give other display items
         }
 
         public override void Init()
