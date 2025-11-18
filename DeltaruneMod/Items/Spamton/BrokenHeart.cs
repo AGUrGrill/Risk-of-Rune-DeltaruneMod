@@ -25,7 +25,7 @@ namespace DeltaruneMod.Items.Spamton
         public override string ItemFullDescription => "Every <style=cIsUtility>2</style> seconds, spawn an armor piercing projectile that orbits the player in stasis." +
             "\nSpawn up to 3 maximum projectiles, deals <style=cIsDamage>199.7% base damage</style> <style=cStack>(+199.7% per stack)</style>.";
 
-        public override string ItemLore => "Distorted laughter emenates from the dark and empty room." +
+        public override string ItemLore => "Distorted laughter emanates from the dark and empty room." +
             "\nThe laughter is mixed with another emotion... you can feel it, its an overwhelming sadness reverberating within." +
             "\nYou walk closer, feeling its pain as its emotions take control of you." +
             "\n\n\"Is this you?\", you call out, but no one awnsers." +
