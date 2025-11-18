@@ -31,7 +31,7 @@ We plan to continue development to bring you more exciting content!
 
 | Elites | Image    | Description    |
 | :---:   | :---: | :---: |
-| N.E.O. | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/new_affix_icon.png?raw=true)   | Gain N.E.O. armor. HP is lower but DMG is higher. Gain 3 random buffs.  |
+| N.E.O. | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/neo_affix_icon.png?raw=true)   | Gain N.E.O. armor. HP is lower but DMG is higher. Gain 3 random buffs.  |
 
 
 Have a question or wanna share your experience? Join our discord! https://discord.gg/sC68pSNGa3
