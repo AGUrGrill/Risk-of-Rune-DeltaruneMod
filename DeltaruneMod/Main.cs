@@ -1,25 +1,30 @@
 using BepInEx;
 using BepInEx.Configuration;
+using DeltaruneMod.Elites;
 using DeltaruneMod.Interactables;
 using DeltaruneMod.Interactables.SusExchange.TradingItems;
 using DeltaruneMod.Items;
 using DeltaruneMod.Items.Lunar;
 using DeltaruneMod.Items.Spamton;
 using DeltaruneMod.Items.VoidTier3;
-using DeltaruneMod.Neo;
-using DeltaruneMod.Neo.NeoMithrix;
+using DeltaruneMod.NeoMithrix;
 using DeltaruneMod.Util;
 using R2API;
 using R2API.Networking;
 using RoR2;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using RiskOfOptions;
 using UnityEngine.Networking;
 using static DeltaruneMod.Util.Components;
+using RiskOfOptions.Options;
+using DeltaruneMod.Elite;
 
 namespace DeltaruneMod
 {
@@ -40,13 +45,14 @@ namespace DeltaruneMod
     [BepInDependency(NetworkingAPI.PluginGUID)]
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
 
-    [BepInDependency("droppod.lookingglass", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("droppod.lookingglass")]
+    [BepInDependency("com.rune580.riskofoptions")]
     public class DeltarunePlugin : BaseUnityPlugin
     {
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "AGU";
         public const string PluginName = "DeltaruneMod";
-        public const string PluginVersion = "1.8.6";
+        public const string PluginVersion = "2.0.0";
 
         public static DeltarunePlugin Instance;
         public static CharacterMaster characterMaster;
@@ -56,22 +62,32 @@ namespace DeltaruneMod
 
         public List<ItemBase> Items = new List<ItemBase>();
         public List<InteractableBase> Interactables = new List<InteractableBase>();
+        public List<EliteBase> Elites = new List<EliteBase>();
 
         public static HashSet<ItemDef> BlacklistedFromPrinter = new HashSet<ItemDef>();
 
-        public static bool useChapter1 = true;
-        public static bool useChapter2 = true;
-        public static bool useChapter3 = true;
-        public static bool useChapter4 = true;
+        public ConfigEntry<bool> useChapter1;
+        public ConfigEntry<bool> useChapter2;
+        public ConfigEntry<bool> useChapter3;
+        public ConfigEntry<bool> useChapter4;
 
         public const short TextSyncMsgId = 4242;
 
+        public static Material malachiteOverlayMat = new Material(Addressables.LoadAssetAsync<Material>("RoR2/Base/ElitePoison/matElitePoisonOverlay.mat").WaitForCompletion());
+
+
         public void Awake()
         {
-            useChapter1 = Config.Bind("Chapter Settings", "Use Chapter 1 Features", true, "Enable or Disable Chapter 1").Value;
-            useChapter2 = Config.Bind("Chapter Settings", "Use Chapter 2 Features", true, "Enable or Disable Chapter 2").Value;
-            useChapter3 = Config.Bind("Chapter Settings", "Use Chapter 3 Features", true, "Enable or Disable Chapter 3").Value;
-            useChapter4 = Config.Bind("Chapter Settings", "Use Chapter 4 Features", true, "Enable or Disable Chapter 4").Value;
+            //ModSettingsManager.SetModIcon(MainAssets.LoadAsset<Sprite>("swoon_effect_icon"));
+            ModSettingsManager.SetModDescription("Adds various aspects to the game inspired by Deltarune.");
+            useChapter1 = Config.Bind("Chapter Settings", "Use Chapter 1 Features", true, "Enable or Disable Chapter 1");
+            useChapter2 = Config.Bind("Chapter Settings", "Use Chapter 2 Features", true, "Enable or Disable Chapter 2");
+            useChapter3 = Config.Bind("Chapter Settings", "Use Chapter 3 Features", true, "Enable or Disable Chapter 3");
+            useChapter4 = Config.Bind("Chapter Settings", "Use Chapter 4 Features", true, "Enable or Disable Chapter 4");
+            ModSettingsManager.AddOption(new CheckBoxOption(useChapter1));
+            ModSettingsManager.AddOption(new CheckBoxOption(useChapter2));
+            ModSettingsManager.AddOption(new CheckBoxOption(useChapter3));
+            ModSettingsManager.AddOption(new CheckBoxOption(useChapter4));
 
             Instance = this;
 
@@ -116,7 +132,15 @@ namespace DeltaruneMod
             Log.Debug("Trashcan full!");
             #endregion
 
-            //Neo neoElite = new Neo();
+            #region Elite Initialization
+            var EliteTypes = Assembly.GetExecutingAssembly().GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(EliteBase)));
+            foreach (var eliteType in EliteTypes)
+            {
+                EliteBase elites = (EliteBase)System.Activator.CreateInstance(eliteType);
+                elites.Init();
+              Debug.Log("Interactable: " + elites.EliteName + " Initialized!");
+            }
+            #endregion
 
             StartCoroutine(LoadSoundBankWhenReady());
 
@@ -141,27 +165,39 @@ namespace DeltaruneMod
 
         public bool ValidateItem(ItemBase item, List<ItemBase> itemList)
         {
-            var enabled = Config.Bind(item.ConfigCategory, "Enable Item?", true, "Should this item appear in runs?").Value;
+            ConfigEntry<bool> enabled = Config.Bind("Enable Item?", item.ConfigCategory, true, "Should this item appear in runs?");
             bool itemAlreadyHasBlacklist = item.ItemTags.Contains(RoR2.ItemTag.AIBlacklist);
             var aiBlacklist = Config.Bind(item.ConfigCategory, "Blacklist Item from AI Use?", itemAlreadyHasBlacklist, "Should the AI not be able to obtain this item?").Value;
             var printerBlacklist = Config.Bind(item.ConfigCategory, "Blacklist Item from Printers?", false, "Should the printers be able to print this item?").Value;
-            if (!useChapter1 && item.isChapter1)
+            useChapter1.SettingChanged += (sender, args) =>
             {
-                enabled = false;
-            }
-            if (!useChapter2 && item.isChapter2)
+                if (!useChapter1.Value && item.isChapter1)
+                {
+                    enabled.Value = false;
+                }
+            };
+            useChapter2.SettingChanged += (sender, args) =>
             {
-                enabled = false;
-            }
-            if (!useChapter3 && item.isChapter3)
+                if (!useChapter2.Value && item.isChapter2)
+                {
+                    enabled.Value = false;
+                }
+            };
+            useChapter3.SettingChanged += (sender, args) =>
             {
-                enabled = false;
-            }
-            if (!useChapter4 && item.isChapter4)
+                if (!useChapter3.Value && item.isChapter3)
+                {
+                    enabled.Value = false;
+                }
+            };
+            useChapter4.SettingChanged += (sender, args) =>
             {
-                enabled = false;
-            }
-            if (enabled)
+                if (!useChapter4.Value && item.isChapter4)
+                {
+                    enabled.Value = false;
+                }
+            };
+            if (enabled.Value)
             {
                 itemList.Add(item);
                 if (printerBlacklist)
@@ -173,33 +209,47 @@ namespace DeltaruneMod
                     item.AIBlacklisted = true;
                 }
             }
-            return enabled;
+            //ModSettingsManager.AddOption(new CheckBoxOption(enabled));
+            return enabled.Value;
         }
 
         public bool ValidateInteractable(InteractableBase interactable, List<InteractableBase> interactableList)
         {
-            var enabled = Config.Bind(interactable.ConfigCategory, "Enable Interactable?", true, "Should this interactable appear in runs?").Value;
-            if (!useChapter1 && interactable.isChapter1)
+            ConfigEntry<bool> enabled = Config.Bind("Enable Interactable?", interactable.ConfigCategory, true, "Should this interactable appear in runs?");
+            useChapter1.SettingChanged += (sender, args) =>
             {
-                enabled = false;
-            }
-            if (!useChapter2 && interactable.isChapter2)
+                if (!useChapter1.Value && interactable.isChapter1)
+                {
+                    enabled.Value = false;
+                }
+            };
+            useChapter2.SettingChanged += (sender, args) =>
             {
-                enabled = false;
-            }
-            if (!useChapter3 && interactable.isChapter3)
+                if (!useChapter2.Value && interactable.isChapter2)
+                {
+                    enabled.Value = false;
+                }
+            };
+            useChapter3.SettingChanged += (sender, args) =>
             {
-                enabled = false;
-            }
-            if (!useChapter4 && interactable.isChapter4)
+                if (!useChapter3.Value && interactable.isChapter3)
+                {
+                    enabled.Value = false;
+                }
+            };
+            useChapter4.SettingChanged += (sender, args) =>
             {
-                enabled = false;
-            }
-            if (enabled)
+                if (!useChapter4.Value && interactable.isChapter4)
+                {
+                    enabled.Value = false;
+                }
+            };
+            if (enabled.Value)
             {
                 interactableList.Add(interactable);
             }
-            return enabled;
+            //ModSettingsManager.AddOption(new CheckBoxOption(enabled));
+            return enabled.Value;
         }
 
         public void RemoveFromLootPool()
@@ -217,6 +267,8 @@ namespace DeltaruneMod
             blacklistedItems.Add(RandomTradingItem.instance.ItemDef);
             blacklistedItems.Add(FinalForm.instance.ItemDef);
             blacklistedItems.Add(ThornRing.instance.ItemDef);
+            blacklistedItems.Add(PipisTradingItem.instance.ItemDef);
+            blacklistedItems.Add(MrPipisTradingItem.instance.ItemDef);
 
             Run.onRunSetRuleBookGlobal += (run, rulebook) =>
             {

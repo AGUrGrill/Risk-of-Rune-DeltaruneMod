@@ -31,7 +31,6 @@ namespace DeltaruneMod.Interactables.SusExchange
         public List<ItemDef> allTier2 = new List<ItemDef>();
         public List<ItemDef> allTier3 = new List<ItemDef>();
         public List<ItemDef> allTakeableItems = new List<ItemDef>();
-        public List<ItemDef> allDisplayItems = new List<ItemDef>();
         public ItemDef pearl, shinyPearl;
 
         enum ShopItemCosts
@@ -53,8 +52,12 @@ namespace DeltaruneMod.Interactables.SusExchange
             allTier1 = Util.Helpers.GetItems(0);
             allTier2 = Util.Helpers.GetItems(1);
             allTier3 = Util.Helpers.GetItems(2);
+            allTier3.Remove(FinalForm.instance.ItemDef);
             allTakeableItems.AddRange(allTier1);
             allTakeableItems.AddRange(allTier2);
+            allTakeableItems.Remove(MalfunctiongCore.instance.ItemDef);
+            allTakeableItems.Remove(CommRing.instance.ItemDef);
+            allTakeableItems.Remove(LightBulb.instance.ItemDef);
             for (ItemIndex i = 0; i < (ItemIndex)ItemCatalog.itemCount; i++)
             {
                 ItemDef itemDef = ItemCatalog.GetItemDef(i);
@@ -64,13 +67,6 @@ namespace DeltaruneMod.Interactables.SusExchange
                     else if (itemDef.name == "ShinyPearl") shinyPearl = itemDef;
                 }
             }
-            // Add trade items to display
-            allDisplayItems.Add(RandomTradingItem.instance.ItemDef);
-            allDisplayItems.Add(LightBulbTradingItem.instance.ItemDef);
-            allDisplayItems.Add(MalfunctiongCoreTradingItem.instance.ItemDef);
-            allDisplayItems.Add(BrokenHeartTradingItem.instance.ItemDef);
-
-            
         }
 
         public List<ItemDef> ListTakeableInventoryItems(List<ItemDef> allInventoryItems)
@@ -116,21 +112,21 @@ namespace DeltaruneMod.Interactables.SusExchange
                 Debug.Log("Deciding item to give");
                 #region Choose given item based on options
                 // Others
-                if (choosenItem == pearl.itemIndex)
+                if (choosenItem == PipisTradingItem.instance.ItemDef.itemIndex)
                 {
                     itemGiven = Pipis.instance.ItemDef;
                     for (int i = 0; i < (int)ShopItemCosts.Pipis; i++)
                     {
-                        body.inventory.RemoveItem(choosenItem);
+                        body.inventory.RemoveItem(pearl);
                     }
                     Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOUR FIRST STEP TO BECOMING A [[Big shot]]. [" + (uses - 1) + "] tries left." });
                 }
-                else if (choosenItem == shinyPearl.itemIndex)
+                else if (choosenItem == MrPipisTradingItem.instance.ItemDef.itemIndex)
                 {
                     itemGiven = MrPipis.instance.ItemDef;
                     for (int i = 0; i < (int)ShopItemCosts.MrPipis; i++)
                     {
-                        body.inventory.RemoveItem(choosenItem);
+                        body.inventory.RemoveItem(shinyPearl);
                     }
                     Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "[TRASH DWELLER]: YOU WON WON WON MY [[Hyperlink blocked]]. [" + (uses - 1) + "] tries left." });
                 }
@@ -256,77 +252,17 @@ namespace DeltaruneMod.Interactables.SusExchange
             // Add items to screen
             if (charBody && charBody.master)
             {
-                // Normal Method
-                /*
-                // Random Item
-                if (allTakeableItems.Count > 0)
-                {
-                    options.Add(new PickupPickerController.Option
-                    {
-                        available = true,
-                        pickupIndex = PickupCatalog.FindPickupIndex(RandomTradingItem.instance.ItemDef.itemIndex)
-                    });
-                }
-
-                // Neo Items
-                var Kromer.instance.ItemDefCount = charBody.inventory.GetItemCount(Kromer.instance.ItemDef);
-                if (Kromer.instance.ItemDefCount >= 3)
-                {
-                    options.Add(new PickupPickerController.Option
-                    {
-                        available = true,
-                        pickupIndex = PickupCatalog.FindPickupIndex(LightBulbTradingItem.instance.ItemDef.itemIndex)
-                    });
-                }
-                if (Kromer.instance.ItemDefCount >= 6)
-                {
-                    options.Add(new PickupPickerController.Option
-                    {
-                        available = true,
-                        pickupIndex = PickupCatalog.FindPickupIndex(MalfunctionCoreTradingItem.instance.ItemDef.itemIndex)
-                    });
-                }
-                if (Kromer.instance.ItemDefCount >= 10)
-                {
-                    options.Add(new PickupPickerController.Option
-                    {
-                        available = true,
-                        pickupIndex = PickupCatalog.FindPickupIndex(BrokenHeartTradingItem.instance.ItemDef.itemIndex)
-                    });
-                }
-
-                //Others
-                var pearlCount = charBody.inventory.GetItemCount(pearl);
-                var shinyPearlCount = charBody.inventory.GetItemCount(shinyPearl);
-                if (pearlCount > 0)
-                {
-                    options.Add(new PickupPickerController.Option
-                    {
-                        available = true,
-                        pickupIndex = PickupCatalog.FindPickupIndex(pearl.itemIndex)
-                    });
-                }
-                if (shinyPearlCount > 0)
-                {
-                    options.Add(new PickupPickerController.Option
-                    {
-                        available = true,
-                        pickupIndex = PickupCatalog.FindPickupIndex(shinyPearl.itemIndex)
-                    });
-                }
-                */
-
                 // Unlock Method
                 var ranItemAvaliable = false;
                 var commRingAvaliable = false;
                 var lightBulbAvaliable = false;
                 var malfunctionCoreAvaliable = false;
                 var brokenHeartAvaliable = false;
-                var pearlAvaliable = false;
-                var shinyPearlAvaliable = false;
+                var pipisAvaliable = false;
+                var mrPipisAvaliable = false;
 
-                if (allTakeableInvItems.Count > 0) ranItemAvaliable = true;
                 // Random Item
+                if (allTakeableInvItems.Count > 0) ranItemAvaliable = true;
                 options.Add(new PickupPickerController.Option
                 {
                     available = ranItemAvaliable,
@@ -362,19 +298,18 @@ namespace DeltaruneMod.Interactables.SusExchange
 
                 //Others
                 var pearlCount = charBody.inventory.GetItemCount(pearl);
-                var shinyPearlCount = charBody.inventory.GetItemCount(shinyPearl);
-                var commRingCount = charBody.inventory.GetItemCount(CommRing.instance.ItemDef);
-                if (pearlCount >= (int)ShopItemCosts.Pipis) pearlAvaliable = true;
+                if (pearlCount >= (int)ShopItemCosts.Pipis) pipisAvaliable = true;
                 options.Add(new PickupPickerController.Option
                 {
-                    available = pearlAvaliable,
-                    pickupIndex = PickupCatalog.FindPickupIndex(pearl.itemIndex)
+                    available = pipisAvaliable,
+                    pickupIndex = PickupCatalog.FindPickupIndex(PipisTradingItem.instance.ItemDef.itemIndex)
                 });
-                if (shinyPearlCount >= (int)ShopItemCosts.MrPipis) shinyPearlAvaliable = true;
+                var shinyPearlCount = charBody.inventory.GetItemCount(shinyPearl);
+                if (shinyPearlCount >= (int)ShopItemCosts.MrPipis) mrPipisAvaliable = true;
                 options.Add(new PickupPickerController.Option
                 {
-                    available = shinyPearlAvaliable,
-                    pickupIndex = PickupCatalog.FindPickupIndex(shinyPearl.itemIndex)
+                    available = mrPipisAvaliable,
+                    pickupIndex = PickupCatalog.FindPickupIndex(MrPipisTradingItem.instance.ItemDef.itemIndex)
                 });
 
                 pickerController.SetOptionsServer(options.ToArray());

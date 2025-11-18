@@ -14,7 +14,7 @@ namespace DeltaruneMod.Interactables.Grave
 {
     public class Gravestone : InteractableBase<Gravestone>
     {
-        public override string InteractableName => "Dess's Grave";
+        public override string InteractableName => "Dessolate Grave";
 
         public override string InteractableContext => "Forsake your SOUL..?";
 
@@ -59,7 +59,7 @@ namespace DeltaruneMod.Interactables.Grave
             mgr.purchaseInteraction = purchaseInteraction;
 
             var pingInfoProvider = InteractableBodyModelPrefab.AddComponent<PingInfoProvider>();
-            pingInfoProvider.pingIconOverride = MainAssets.LoadAsset<Sprite>("thorn_ring_icon.png");
+            pingInfoProvider.pingIconOverride = MainAssets.LoadAsset<Sprite>("grave_icon.png");
 
             var highlightController = InteractableBodyModelPrefab.GetComponent<Highlight>();
             highlightController.targetRenderer = InteractableBodyModelPrefab.GetComponentsInChildren<MeshRenderer>().Where(x => x.gameObject.name.Contains("Combined_Graved")).Single();
@@ -84,7 +84,7 @@ namespace DeltaruneMod.Interactables.Grave
             InteractableSpawnCard.nodeGraphType = RoR2.Navigation.MapNodeGroup.GraphType.Ground;
             InteractableSpawnCard.requiredFlags = RoR2.Navigation.NodeFlags.None;
             InteractableSpawnCard.forbiddenFlags = RoR2.Navigation.NodeFlags.NoShrineSpawn | RoR2.Navigation.NodeFlags.NoChestSpawn;
-            InteractableSpawnCard.directorCreditCost = 25;
+            InteractableSpawnCard.directorCreditCost = 10;
             InteractableSpawnCard.occupyPosition = true;
             InteractableSpawnCard.orientToFloor = false;
             InteractableSpawnCard.maxSpawnsPerStage = 1;
@@ -92,7 +92,7 @@ namespace DeltaruneMod.Interactables.Grave
 
             DirectorCard directorCard = new DirectorCard
             {
-                selectionWeight = 100, // 230 = Normal Chest
+                selectionWeight = 300, // 230 = Normal Chest
                 spawnCard = InteractableSpawnCard,
             };
 
@@ -102,7 +102,7 @@ namespace DeltaruneMod.Interactables.Grave
                 InteractableCategory = DirectorAPI.InteractableCategory.Shrines,
             };
 
-            DirectorAPI.Helpers.AddNewInteractableToStage(directorCardHolder, DirectorAPI.Stage.RallypointDelta);
+            DirectorAPI.Helpers.AddNewInteractable(directorCardHolder);
         }
     }
 }

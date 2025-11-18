@@ -225,5 +225,57 @@ namespace DeltaruneMod.Util
             });
         }
         #endregion
+
+        #region Elite Gradient
+        // Code extracted from Nuxlar's MoreElites
+        public static Texture2D CreateGradientTexture(Color32[] colors, int width, int height)
+        {
+            Texture2D texture = new Texture2D(width, height);
+            texture.wrapMode = TextureWrapMode.Clamp;
+
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    // Calculate the horizontal position as a value between 0 and 1
+                    float t = (float)x / (width - 1);
+
+                    // Determine which colors to interpolate between
+                    float scaledT = t * (colors.Length - 1);
+                    int colorIndex = Mathf.FloorToInt(scaledT);
+                    float lerpFactor = scaledT - colorIndex;
+
+                    // Ensure the last color is not out of bounds
+                    if (colorIndex >= colors.Length - 1)
+                    {
+                        colorIndex = colors.Length - 2;
+                        lerpFactor = 1.0f;
+                    }
+
+                    // Interpolate between the two colors
+                    Color32 color = LerpColor32(colors[colorIndex], colors[colorIndex + 1], lerpFactor);
+
+                    // Set the pixel color
+                    texture.SetPixel(x, y, color);
+                }
+            }
+
+            // Apply changes to the texture
+            texture.Apply();
+            DeltaruneMod.DeltarunePlugin.malachiteOverlayMat.SetTexture("_RemapTex", texture);
+
+            return texture;
+        }
+
+        public static Color32 LerpColor32(Color32 colorA, Color32 colorB, float t)
+        {
+            byte r = (byte)Mathf.Lerp(colorA.r, colorB.r, t);
+            byte g = (byte)Mathf.Lerp(colorA.g, colorB.g, t);
+            byte b = (byte)Mathf.Lerp(colorA.b, colorB.b, t);
+            byte a = (byte)Mathf.Lerp(colorA.a, colorB.a, t);
+            return new Color32(r, g, b, a);
+        }
+
+        #endregion
     }
 }

@@ -47,16 +47,14 @@ namespace DeltaruneMod.Interactables.SusExchange
                 ItemDef itemDef = ItemCatalog.GetItemDef(i);
                 if (itemDef != null)
                 {
-                    if (itemDef.name == "Pearl") { allTakeableItems.Add(itemDef); pearl = itemDef; }
-                    else if (itemDef.name == "ShinyPearl") { allTakeableItems.Add(itemDef); shinyPearl = itemDef; }
-                    else if (itemDef.name == "ITEM_KROMER") kromer = itemDef;
+                    //if (itemDef.name == "Pearl") { allTakeableItems.Add(itemDef); pearl = itemDef; }
+                    //else if (itemDef.name == "ShinyPearl") { allTakeableItems.Add(itemDef); shinyPearl = itemDef; }
+                    if (itemDef.name == "ITEM_KROMER") kromer = itemDef;
                     else if (itemDef.name == "ITEM_PIPIS") pipis = itemDef;
                     else if (itemDef.name == "ITEM_MR_PIPIS") mrPipis = itemDef;
                     else if (itemDef.name == "ITEM_COMM_RING") commRing = itemDef;
                 }
             }
-
-            
         }
 
         [Server]

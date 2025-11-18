@@ -1,5 +1,6 @@
 ﻿using DeltaruneMod.Items.Lunar;
 using DeltaruneMod.Items.Spamton;
+using R2API;
 using RoR2;
 using System;
 using System.Collections.Generic;
@@ -21,10 +22,28 @@ namespace DeltaruneMod.Interactables.Grave
             {
                 purchaseInteraction.SetAvailable(true);
             }
-
-            //AkSoundEngine.PostEvent(3865094552, gameObject);
-
+            
+            Stage.onStageStartGlobal += Stage_onStageStartGlobal;
             purchaseInteraction.onPurchase.AddListener(OnPurchase);
+        }
+        // On stage spawn, destory if not Rallypoint Delta
+        private void Stage_onStageStartGlobal(Stage obj)
+        {
+            if (!NetworkServer.active) return;
+            gameObject.transform.position = new Vector3(-176.39f, 14.6f, 195.54f);
+            gameObject.transform.Rotate(new Vector3(0f, -45f));
+            //Debug.Log("Location: " + gameObject.transform.position);
+            Debug.Log("Gravestone spawned on " + obj.sceneDef.cachedName + " or " + obj.sceneDef.nameToken);
+            if (obj.sceneDef.nameToken != "MAP_FROZENWALL_TITLE")
+            {
+                Debug.Log("Gravestone destroyed.");
+                NetworkServer.Destroy(gameObject);
+            }
+        }
+        // Unsubscribe when destoryed
+        void OnDestroy()
+        {
+            Stage.onStageStartGlobal -= Stage_onStageStartGlobal;
         }
 
         [Server]

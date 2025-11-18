@@ -26,7 +26,7 @@ namespace DeltaruneMod.Interactables.SusExchange.TradingItems
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("comm_ring.prefab");
 
-        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("comm_ring_icon.png");
+        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("trading_comm_ring_icon.png");
 
         public override bool isChapter1 => false;
 

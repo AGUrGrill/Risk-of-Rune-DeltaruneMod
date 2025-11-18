@@ -26,7 +26,7 @@ namespace DeltaruneMod.Interactables.SusExchange.TradingItems
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("light_bulb.prefab");
 
-        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("light_bulb_icon");
+        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("trading_light_bulb_icon");
 
         public override bool isChapter1 => false;
 

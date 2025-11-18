@@ -348,7 +348,6 @@ namespace DeltaruneMod.Items.VoidTier3
             var baseConversionTime = 10;
             var multConversionTime = 5;
 
-
             if (!NetworkServer.active) return;
 
             if (target.isPlayerControlled || target.bodyFlags.HasFlag(CharacterBody.BodyFlags.Mechanical)) return;
@@ -399,6 +398,7 @@ namespace DeltaruneMod.Items.VoidTier3
                     effectData.SetNetworkedObjectReference(voidAlly.gameObject);
 
                     EffectManager.SpawnEffect(CorruptedEffect, effectData, true);
+                    Debug.Log("Spawned Wingding effect.");
                 }
             }
             catch { Debug.Log("Could not apply wing ding effect."); }
@@ -410,7 +410,7 @@ namespace DeltaruneMod.Items.VoidTier3
 
         public void CreateEffect()
         {
-            CorruptedEffect = MainAssets.LoadAsset<GameObject>("wingshit.prefab").InstantiateClone("gaster_corrupt_effect", false);
+            CorruptedEffect = MainAssets.LoadAsset<GameObject>("wingshit_animated.prefab").InstantiateClone("gaster_corrupt_effect", false);
             CorruptedEffect.transform.localScale = new Vector3(1f, 1f, 1f);
             Util.Helpers.CreateNetworkedEffectPrefab(CorruptedEffect, true);
         }

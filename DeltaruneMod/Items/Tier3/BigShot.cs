@@ -13,6 +13,7 @@ using static DeltaruneMod.DeltarunePlugin;
 
 namespace DeltaruneMod.Items.Tier3
 {
+    // TIE DEALMAKER PRICE TP CHEST PRICE
     public class BigShot : ItemBase<BigShot>
     {
         public override string ItemName => "Dealmaker";

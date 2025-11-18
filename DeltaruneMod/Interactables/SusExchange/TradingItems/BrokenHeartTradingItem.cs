@@ -18,7 +18,8 @@ namespace DeltaruneMod.Interactables.SusExchange.TradingItems
 
         public override string ItemPickupDesc => "Spawn an orbiting, armor piercing projectile every 2 seconds.";
 
-        public override string ItemFullDescription => "Every <style=cIsUtility>2</style> seconds, spawn an armor piercing projectile that orbits the player in stasis.\" +\r\n            \"\\nSpawn up to 2 maximum projectiles, deals <style=cIsDamage>199.7% base damage</style> <style=cStack>(+199.7% per stack)</style>.";
+        public override string ItemFullDescription => "Every <style=cIsUtility>2</style> seconds, spawn an armor piercing projectile that orbits the player in stasis.\n" +
+            "Spawn up to 3 maximum projectiles, deals <style=cIsDamage>199.7% base damage</style> <style=cStack>(+199.7% per stack)</style>.";
 
         public override string ItemLore => "";
 
@@ -26,7 +27,7 @@ namespace DeltaruneMod.Interactables.SusExchange.TradingItems
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("mis_heart.prefab");
 
-        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("mis_heart_icon");
+        public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("trading_mis_heart_icon");
 
         public override bool isChapter1 => false;
 
