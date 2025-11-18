@@ -1,0 +1,13 @@
+{
+    "name": "DeltaruneMod",
+    "author": "AGU",
+    "version_number": "2.0.0",
+    "website_url": "https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod",
+    "description": "A mod that adds fun items and interactables from Deltarune into RoR2.",
+    "dependencies": [
+        "bbepis-BepInExPack-5.4.2120",
+        "tristanmcpherson-R2API-5.0.5",
+		"DropPod-LookingGlass-1.13.1",
+		"Rune580-Risk_Of_Options-2.8.4"
+    ]
+}
