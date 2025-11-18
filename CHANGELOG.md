@@ -1,5 +1,6 @@
-**v2.0.0
-*.* FROZEN SCARS UPDATE *.* 
+**v2.0.0**
+FROZEN SCARS UPDATE
+
 Added 6 New Items
 - Fractured Light
 - Malfunctioning Core
