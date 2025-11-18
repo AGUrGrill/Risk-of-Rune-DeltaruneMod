@@ -29,6 +29,10 @@ We plan to continue development to bring you more exciting content!
 | Suspicious Exchange | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/sus.png?raw=true)   | Come buy from your ol' pal SPAMTON! Upgrade your [items] or WIN [win] WIN the [utmost] valuable KROMER!! NO [refunds]!!!!!   |
 | ??? | ???   | Only pain lies here... |
 
+| Elites | Image    | Description    |
+| :---:   | :---: | :---: |
+| N.E.O. | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/new_affix_icon.png?raw=true)   | Gain N.E.O. armor. HP is lower but DMG is higher. Gain 3 random buffs.  |
+
 
 Have a question or wanna share your experience? Join our discord! https://discord.gg/sC68pSNGa3
 
