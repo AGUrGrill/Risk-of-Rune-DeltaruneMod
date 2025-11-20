@@ -25,6 +25,7 @@ using UnityEngine.Networking;
 using static DeltaruneMod.Util.Components;
 using RiskOfOptions.Options;
 using DeltaruneMod.Elite;
+using DeltaruneMod.Items.Yellow;
 
 namespace DeltaruneMod
 {
@@ -45,14 +46,14 @@ namespace DeltaruneMod
     [BepInDependency(NetworkingAPI.PluginGUID)]
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
 
-    [BepInDependency("droppod.lookingglass")]
+    //[BepInDependency("droppod.lookingglass")]
     [BepInDependency("com.rune580.riskofoptions")]
     public class DeltarunePlugin : BaseUnityPlugin
     {
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "AGU";
         public const string PluginName = "DeltaruneMod";
-        public const string PluginVersion = "2.0.0";
+        public const string PluginVersion = "2.0.1";
 
         public static DeltarunePlugin Instance;
         public static CharacterMaster characterMaster;
@@ -147,6 +148,8 @@ namespace DeltaruneMod
             RemoveFromLootPool();
 
             new NeoMithrixController();
+
+            new Hooks();
 
             Log.Debug(PluginName + " loaded successfully!");
         }
@@ -269,6 +272,8 @@ namespace DeltaruneMod
             blacklistedItems.Add(ThornRing.instance.ItemDef);
             blacklistedItems.Add(PipisTradingItem.instance.ItemDef);
             blacklistedItems.Add(MrPipisTradingItem.instance.ItemDef);
+            blacklistedItems.Add(Pipis.instance.ItemDef);
+            blacklistedItems.Add(MrPipis.instance.ItemDef);
 
             Run.onRunSetRuleBookGlobal += (run, rulebook) =>
             {

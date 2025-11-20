@@ -72,10 +72,10 @@ namespace DeltaruneMod.Elite
 
         protected void AddContent()
         {
-            //ContentAddition.AddEliteDef(EliteDefinition);
+            ContentAddition.AddEliteDef(EliteDefinition);
             ContentAddition.AddBuffDef(EliteBuff);
             ContentAddition.AddEquipmentDef(EliteEquip);
-
+            /*
             var tierDefs = GetVanillaEliteTierDef(EliteTierDef);
             if (tierDefs is null)
                 return;
@@ -91,7 +91,6 @@ namespace DeltaruneMod.Elite
                 EliteAPI.Add(CustomEliteDefHonor);
             }
             // Get tiers from addressables
-            /*
             CombatDirector.EliteTierDef tier1 = EliteAPI.VanillaEliteTiers[0];
             CombatDirector.EliteTierDef tier2 = EliteAPI.VanillaEliteTiers[1];
             List<EliteDef> tier1Elites = tier1.eliteTypes.ToList();
@@ -121,7 +120,7 @@ namespace DeltaruneMod.Elite
             EliteItem.pickupIconSprite = null;
             EliteItem.hidden = true;
             EliteItem.canRemove = false;
-            EliteItem.deprecatedTier = ItemTier.AssignedAtRuntime;
+            EliteItem.deprecatedTier = ItemTier.NoTier;
 
             ItemAPI.Add(new CustomItem(EliteItem, CreateItemDisplayRules()));
         }
@@ -153,7 +152,7 @@ namespace DeltaruneMod.Elite
             EliteEquip.passiveBuffDef = EliteBuff;
             EliteEquip.dropOnDeathChance = EliteAffixDropChance;
             EliteEquip.enigmaCompatible = false;
-            EliteEquip.pickupIconSprite = EliteIcon;
+            EliteEquip.pickupIconSprite = EliteAspectIcon;
             EliteEquip.pickupModelPrefab = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/EliteFire/PickupEliteFire.prefab").WaitForCompletion(), "PickupAffixEmpowering", false);
             foreach (Renderer componentsInChild in EliteEquip.pickupModelPrefab.GetComponentsInChildren<Renderer>())
                 componentsInChild.material = EliteAffixMaterial;

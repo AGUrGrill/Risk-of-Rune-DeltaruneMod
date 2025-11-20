@@ -84,7 +84,7 @@ namespace DeltaruneMod.Interactables.Grave
             InteractableSpawnCard.nodeGraphType = RoR2.Navigation.MapNodeGroup.GraphType.Ground;
             InteractableSpawnCard.requiredFlags = RoR2.Navigation.NodeFlags.None;
             InteractableSpawnCard.forbiddenFlags = RoR2.Navigation.NodeFlags.NoShrineSpawn | RoR2.Navigation.NodeFlags.NoChestSpawn;
-            InteractableSpawnCard.directorCreditCost = 10;
+            InteractableSpawnCard.directorCreditCost = 0;
             InteractableSpawnCard.occupyPosition = true;
             InteractableSpawnCard.orientToFloor = false;
             InteractableSpawnCard.maxSpawnsPerStage = 1;

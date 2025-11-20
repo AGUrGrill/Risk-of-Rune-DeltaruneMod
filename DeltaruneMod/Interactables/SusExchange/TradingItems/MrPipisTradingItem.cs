@@ -21,7 +21,7 @@ namespace DeltaruneMod.Interactables.SusExchange.TradingItems
 
         public override string ItemLore => "WOWZAS! You can't get THIS from an egg!";
 
-        public override ItemTier Tier => ItemTier.AssignedAtRuntime;
+        public override ItemTier Tier => ItemTier.NoTier;
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("fake");
 

@@ -10,6 +10,7 @@ namespace DeltaruneMod.Interactables.SusExchange
     public class TrashcanPurchaseManager : NetworkBehaviour
     {
         public PurchaseInteraction purchaseInteraction;
+        //public DetailedPurchaseEvent purchaseEvent;
         public float ScalingModifier;
         public bool UseDefaultScaling;
 

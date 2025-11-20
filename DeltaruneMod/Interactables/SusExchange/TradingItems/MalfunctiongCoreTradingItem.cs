@@ -16,13 +16,13 @@ namespace DeltaruneMod.Interactables.SusExchange.TradingItems
 
         public override string ItemLangTokenName => "CORE_TRADE_ITEM";
 
-        public override string ItemPickupDesc => "On kill, enemies drop an orb, giving 2 temporary shield.";
+        public override string ItemPickupDesc => "Crit chance randomly increases by 25% for 3 seconds.";
 
-        public override string ItemFullDescription => "On kill, enemies will drop an orb that gives <style=cIsUtility>2</style> temporary shield <style=cStack>(+1 per stack)</style>.";
+        public override string ItemFullDescription => "Every <style=cIsUtility>5 to 20</style> seconds, gain a <style=cIsUtility>25%</style> crit chance increase for <style=cIsUtility>3</style> seconds <style=cStack>(+1 second per stack)</style>.";
 
         public override string ItemLore => "";
 
-        public override ItemTier Tier => ItemTier.AssignedAtRuntime;
+        public override ItemTier Tier => ItemTier.NoTier;
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("yoru_orb_plus.prefab");
 

@@ -203,7 +203,7 @@ namespace DeltaruneMod.Interactables.SusExchange
             InteractableSpawnCard.nodeGraphType = RoR2.Navigation.MapNodeGroup.GraphType.Ground;
             InteractableSpawnCard.requiredFlags = RoR2.Navigation.NodeFlags.None;
             InteractableSpawnCard.forbiddenFlags = RoR2.Navigation.NodeFlags.NoShrineSpawn | RoR2.Navigation.NodeFlags.NoChestSpawn;
-            InteractableSpawnCard.directorCreditCost = 25;
+            InteractableSpawnCard.directorCreditCost = 5;
             InteractableSpawnCard.occupyPosition = true;
             InteractableSpawnCard.orientToFloor = false;
             InteractableSpawnCard.maxSpawnsPerStage = 1;
@@ -211,7 +211,7 @@ namespace DeltaruneMod.Interactables.SusExchange
 
             DirectorCard directorCard = new DirectorCard
             {
-                selectionWeight = 5, // 230 = Normal Chest
+                selectionWeight = 50, // 230 = Normal Chest
                 spawnCard = InteractableSpawnCard,
             };
 

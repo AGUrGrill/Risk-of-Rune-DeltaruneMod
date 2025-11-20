@@ -203,9 +203,9 @@ namespace DeltaruneMod.Items.Spamton
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
                     followerPrefab = ItemModel,
-                    childName = "Stomach",
-                    localPos = new Vector3(-0.32372F, 0.14683F, 0.07836F),
-                    localAngles = new Vector3(352.7583F, 152.0193F, 356.4997F),
+                    childName = "Chest",
+                    localPos = new Vector3(-0.28084F, -0.00622F, -0.01841F),
+                    localAngles = new Vector3(11.57164F, 129.4686F, 340.8464F),
                     localScale = new Vector3(5.43432F, 5.43432F, 5.43432F)
                 }
             });

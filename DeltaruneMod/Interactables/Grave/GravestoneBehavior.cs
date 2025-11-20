@@ -30,7 +30,7 @@ namespace DeltaruneMod.Interactables.Grave
         private void Stage_onStageStartGlobal(Stage obj)
         {
             if (!NetworkServer.active) return;
-            gameObject.transform.position = new Vector3(-176.39f, 14.6f, 195.54f);
+            gameObject.transform.position = new Vector3(-174.39f, 14.6f, 195.54f);
             gameObject.transform.Rotate(new Vector3(0f, -45f));
             //Debug.Log("Location: " + gameObject.transform.position);
             Debug.Log("Gravestone spawned on " + obj.sceneDef.cachedName + " or " + obj.sceneDef.nameToken);
@@ -79,7 +79,7 @@ namespace DeltaruneMod.Interactables.Grave
                 PickupIndex give = new PickupIndex(thornRing.itemIndex);
                 PickupDef pickupDef = take.pickupDef;
                 ScrapperController.CreateItemTakenOrb(body.corePosition, gameObject, pickupDef.itemIndex);
-                PickupDropletController.CreatePickupDroplet(give, dropletOrigin.position, dropletOrigin.forward * 20f);
+                PickupDropletController.CreatePickupDroplet(give, dropletOrigin.position + new Vector3(0, 0.5f, 0), dropletOrigin.forward * 20f);
                 //body.inventory.GiveItem(thornRing);
                 Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "You will never wake from this nightmare..." });
                 purchaseInteraction.available = false;

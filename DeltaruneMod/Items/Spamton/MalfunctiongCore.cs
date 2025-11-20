@@ -317,7 +317,7 @@ namespace DeltaruneMod.Items.Spamton
             }
             public void CritEffect()
             {
-                Debug.Log("Player Crit: " + body.crit);
+                //Debug.Log("Player Crit: " + body.crit);
                 if (!appliedCrit)
                 {
                     appliedCrit = true;

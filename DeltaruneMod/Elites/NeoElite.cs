@@ -17,7 +17,7 @@ namespace DeltaruneMod.Elites
 {
     public class NeoElite : EliteBase<NeoElite>
     {
-        public override string EliteName => "Neo";
+        public override string EliteName => "N.E.O.";
 
         public override string EliteAffixDesc => "Gain N.E.O. armor. HP is lower but DMG is higher. Gain 3 random buffs.";
 
@@ -37,9 +37,9 @@ namespace DeltaruneMod.Elites
             new Color32(255,242,0,1),
         }, 256, 8);
 
-        public override Sprite EliteIcon => MainAssets.LoadAsset<Sprite>("neo_equipment_icon.png");
+        public override Sprite EliteIcon => MainAssets.LoadAsset<Sprite>("neo_affix_icon.png");
 
-        public override Sprite EliteAspectIcon => MainAssets.LoadAsset<Sprite>("neo_affix_icon.png");
+        public override Sprite EliteAspectIcon => MainAssets.LoadAsset<Sprite>("neo_equipment_icon.png");
 
         public override GameObject EliteCrown => MainAssets.LoadAsset<GameObject>("switch");
 
@@ -48,6 +48,7 @@ namespace DeltaruneMod.Elites
         private int maxBuffs = 3;
         private List<RoR2.BuffDef> allBuffs = new List<RoR2.BuffDef>();
         private List<RoR2.BuffDef> currBuffs = new List<RoR2.BuffDef>();
+        private List<BuffDef> blacklistedBuffs = new List<BuffDef>();
 
         public override void Init()
         {
@@ -99,11 +100,23 @@ namespace DeltaruneMod.Elites
             if (self.name.Contains("Brother")) return;
 
             if (allBuffs.Count <= 0) allBuffs = Helpers.GetBuffs(0);
+            if (blacklistedBuffs.Count <= 0) BlacklistBuffs();
 
             if (self.inventory.GetItemCount(EliteItem) <= 0) self.inventory.GiveItem(EliteItem);
             for (int i = 0; i < maxBuffs; i++)
             {
                 BuffDef ranBuff = allBuffs[UnityEngine.Random.Range(0, allBuffs.Count)];
+                //Debug.Log("Picked buff: " + ranBuff);
+                foreach (BuffDef buff in blacklistedBuffs)
+                {
+                    //Debug.Log("Blacklisted buffs: " + buff);
+                    // Fallback buff for problematic buffs
+                    if (ranBuff == buff)
+                    {
+                        Debug.Log("Changed buff to: " + ranBuff);
+                        ranBuff = RoR2Content.Buffs.TonicBuff;
+                    }
+                }
                 currBuffs.Add(ranBuff);
                 self.AddBuff(ranBuff);
             }
@@ -122,6 +135,30 @@ namespace DeltaruneMod.Elites
                 self.RemoveBuff(currBuffs[i]);
             }
             currBuffs.Clear();
+        }
+
+        private void BlacklistBuffs()
+        {
+            blacklistedBuffs.Add(RoR2Content.Buffs.Immune);
+            blacklistedBuffs.Add(DLC2Content.Buffs.HiddenRejectAllDamage);
+            blacklistedBuffs.Add(RoR2Content.Buffs.HiddenInvincibility);
+            blacklistedBuffs.Add(DLC2Content.Buffs.DisableAllSkills);
+            blacklistedBuffs.Add(RoR2Content.Buffs.Intangible);
+            blacklistedBuffs.Add(RoR2Content.Buffs.LunarShell);
+            blacklistedBuffs.Add(DLC2Content.Buffs.SoulSurge);
+            blacklistedBuffs.Add(RoR2Content.Buffs.ElephantArmorBoost);
+            blacklistedBuffs.Add(DLC2Content.Buffs.KnockUpHitEnemies);
+            blacklistedBuffs.Add(DLC2Content.Buffs.KnockUpHitEnemiesJuggleCount);
+            blacklistedBuffs.Add(DLC2Content.Buffs.KnockBackUnavailable);
+            blacklistedBuffs.Add(DLC2Content.Buffs.KnockBackActiveWindow);
+            blacklistedBuffs.Add(DLC2Content.Buffs.SeekerAnimaBuff);
+            blacklistedBuffs.Add(DLC1Content.Buffs.BearVoidCooldown);
+            blacklistedBuffs.Add(DLC2Content.Buffs.StunAndPierceBuff);
+        }
+
+        public void WhitelistedBuffs()
+        {
+
         }
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()
@@ -813,5 +850,6 @@ namespace DeltaruneMod.Elites
             });
             return itemDisplayRules;
         }
+    
     }
 }
