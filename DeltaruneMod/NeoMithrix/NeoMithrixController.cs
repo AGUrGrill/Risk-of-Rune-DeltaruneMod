@@ -39,7 +39,7 @@ namespace DeltaruneMod.NeoMithrix
                 self.inventory.GiveItem(NeoMithrixLeftWing.instance.ItemDef);
                 self.inventory.GiveItem(NeoMithrixRightWing.instance.ItemDef);
                 self.inventory.GiveItem(NeoMithrixLimb.instance.ItemDef);
-                self.inventory.SetEquipmentIndex(NeoElite.AffixNeoEquipment.equipmentIndex);
+                self.inventory.SetEquipmentIndex(NeoElite.instance.EliteEquip.equipmentIndex);
                 Debug.Log("Giving basic mithrix item.");
             }
 
@@ -49,7 +49,7 @@ namespace DeltaruneMod.NeoMithrix
                 self.inventory.GiveItem(NeoMithrixLeftWing.instance.ItemDef);
                 self.inventory.GiveItem(NeoMithrixRightWing.instance.ItemDef);
                 self.inventory.GiveItem(NeoMithrixLimb.instance.ItemDef);
-                self.inventory.SetEquipmentIndex(NeoElite.AffixNeoEquipment.equipmentIndex);
+                self.inventory.SetEquipmentIndex(NeoElite.instance.EliteEquip.equipmentIndex);
                 Debug.Log("Giving glass mithrix item.");
             }
 
@@ -59,7 +59,7 @@ namespace DeltaruneMod.NeoMithrix
                 self.inventory.GiveItem(NeoMithrixLeftWing.instance.ItemDef);
                 self.inventory.GiveItem(NeoMithrixRightWing.instance.ItemDef);
                 self.inventory.GiveItem(NeoMithrixLimb.instance.ItemDef);
-                self.inventory.SetEquipmentIndex(NeoElite.AffixNeoEquipment.equipmentIndex);
+                self.inventory.SetEquipmentIndex(NeoElite.instance.EliteEquip.equipmentIndex);
                 Debug.Log("Giving hurt mithrix item.");
             }
 
@@ -69,7 +69,7 @@ namespace DeltaruneMod.NeoMithrix
                 self.inventory.GiveItem(NeoMithrixLeftWing.instance.ItemDef);
                 self.inventory.GiveItem(NeoMithrixRightWing.instance.ItemDef);
                 self.inventory.GiveItem(NeoMithrixLimb.instance.ItemDef);
-                self.inventory.SetEquipmentIndex(NeoElite.AffixNeoEquipment.equipmentIndex);
+                self.inventory.SetEquipmentIndex(NeoElite.instance.EliteEquip.equipmentIndex);
                 Debug.Log("Giving IT mithrix item.");
             }
         }

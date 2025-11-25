@@ -343,10 +343,11 @@ namespace DeltaruneMod.Items.VoidTier3
             target.healthComponent.Suicide();
 
             // Setup target copy
-            targetCopy.rigidbody.velocity = Vector3.zero;
+            targetCopy.rigidbody.linearVelocity = Vector3.zero;
             targetCopy.master.teamIndex = TeamIndex.Void;
             targetCopy.teamComponent.teamIndex = TeamIndex.Void;
             targetCopy.inventory.SetEquipmentIndex(DLC1Content.Elites.Void.eliteEquipmentDef.equipmentIndex, true);
+            //targetCopy.AddBuff(DLC1Content.Buffs.EliteVoid);
 
             var ai = targetCopy.master.GetComponent<BaseAI>();
             if (ai)
@@ -378,7 +379,7 @@ namespace DeltaruneMod.Items.VoidTier3
 
         public void CreateEffect()
         {
-            CorruptedEffect = MainAssets.LoadAsset<GameObject>("wingshit_animated").InstantiateClone("gaster_corrupt_effect", false);
+            CorruptedEffect = MainAssets.LoadAsset<GameObject>("wingdingeffect").InstantiateClone("gaster_corrupt_effect", false);
             CorruptedEffect.transform.localScale = new Vector3(1f, 1f, 1f);
             Util.Helpers.CreateEffectPrefab(CorruptedEffect, true);
         }

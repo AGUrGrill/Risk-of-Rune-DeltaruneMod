@@ -77,7 +77,7 @@ namespace DeltaruneMod.NeoMithrix
                     } 
                 }
                 
-                args.healthMultAdd += 6f;
+                args.healthMultAdd += 8f;
                 args.armorTotalMult += 0.5f;
                 args.attackSpeedMultAdd += 2f;
                 args.critDamageMultAdd += 2f;

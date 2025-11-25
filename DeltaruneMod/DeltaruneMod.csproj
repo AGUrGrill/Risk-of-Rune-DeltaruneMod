@@ -8,6 +8,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="AssetBundle\deltarune_mod" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <EmbeddedResource Include="AssetBundle\deltarune_mod" />
 	</ItemGroup>
 

@@ -22,9 +22,9 @@ namespace DeltaruneMod.Util
             if (body.isPlayerControlled || body.isRemoteOp || body.IsDrone) return;
 
             numOfEnemiesSpawned++;
-            if (numOfEnemiesSpawned % 60 == 0)
+            if (numOfEnemiesSpawned % 100 == 0)
             {
-                //body.inventory.SetEquipmentIndex(NeoElite.instance.EliteEquip.equipmentIndex, true);
+                body.inventory.SetEquipmentIndex(NeoElite.instance.EliteEquip.equipmentIndex, true);
             }
         }
     }

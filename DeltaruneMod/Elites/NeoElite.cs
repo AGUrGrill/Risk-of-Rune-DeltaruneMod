@@ -45,7 +45,7 @@ namespace DeltaruneMod.Elites
 
         public override EliteTier EliteTierDef => EliteTier.T1;
 
-        private int maxBuffs = 3;
+        private int maxBuffs = 2;
         private List<RoR2.BuffDef> allBuffs = new List<RoR2.BuffDef>();
         private List<RoR2.BuffDef> currBuffs = new List<RoR2.BuffDef>();
         private List<BuffDef> blacklistedBuffs = new List<BuffDef>();
@@ -56,7 +56,6 @@ namespace DeltaruneMod.Elites
             CreateBuff("N.E.O. Armor");
             CreateEquip("Armor of N.E.O.");
             CreateElite();
-            AddContent();
             AddRamp();
             AddCrown();
             Hooks();
@@ -72,24 +71,7 @@ namespace DeltaruneMod.Elites
         private void CombatDirector_Init(On.RoR2.CombatDirector.orig_Init orig)
         {
             orig();
-            if (EliteAPI.VanillaEliteTiers.Length >= 1)
-            {
-                CombatDirector.EliteTierDef targetTier = EliteAPI.VanillaEliteTiers[1];
-                List<EliteDef> elites = targetTier.eliteTypes.ToList();
-                EliteDefinition.healthBoostCoefficient = 2f;
-                EliteDefinition.damageBoostCoefficient = 5f;
-                elites.Add(EliteDefinition);
-                targetTier.eliteTypes = elites.ToArray();
-            }
-            else if (EliteAPI.VanillaEliteTiers.Length >= 0)
-            {
-                CombatDirector.EliteTierDef targetTier = EliteAPI.VanillaEliteTiers[0];
-                List<EliteDef> elites = targetTier.eliteTypes.ToList();
-                EliteDefinition.healthBoostCoefficient = 1f;
-                EliteDefinition.damageBoostCoefficient = 3f;
-                elites.Add(EliteDefinition);
-                targetTier.eliteTypes = elites.ToArray();
-            }
+            AddContent();
         }
 
         private void CharacterBody_OnBuffFirstStackGained(On.RoR2.CharacterBody.orig_OnBuffFirstStackGained orig, CharacterBody self, BuffDef buffDef)
@@ -154,6 +136,11 @@ namespace DeltaruneMod.Elites
             blacklistedBuffs.Add(DLC2Content.Buffs.SeekerAnimaBuff);
             blacklistedBuffs.Add(DLC1Content.Buffs.BearVoidCooldown);
             blacklistedBuffs.Add(DLC2Content.Buffs.StunAndPierceBuff);
+            blacklistedBuffs.Add(RoR2Content.Buffs.CrocoRegen);
+            blacklistedBuffs.Add(DLC2Content.Buffs.HealAndReviveRegenBuff);
+            blacklistedBuffs.Add(DLC2Content.Buffs.AurelioniteBlessing);
+            blacklistedBuffs.Add(DLC2Content.Buffs.EliteBeadCorruption);
+            blacklistedBuffs.Add(RoR2Content.Buffs.EngiShield);
         }
 
         public void WhitelistedBuffs()

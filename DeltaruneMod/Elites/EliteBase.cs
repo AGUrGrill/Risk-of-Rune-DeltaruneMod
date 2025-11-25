@@ -72,40 +72,38 @@ namespace DeltaruneMod.Elite
 
         protected void AddContent()
         {
-            ContentAddition.AddEliteDef(EliteDefinition);
+            List<CombatDirector.EliteTierDef> tiers = new();
+            EliteDef knownT1 = Addressables.LoadAssetAsync<EliteDef>("RoR2/Base/EliteFire/edFire.asset").WaitForCompletion();
+            EliteDef knownT1H = Addressables.LoadAssetAsync<EliteDef>("RoR2/Base/EliteFire/edFireHonor.asset").WaitForCompletion();
+
+            switch (EliteTierDef)
+            {
+                case (EliteTier.T1):
+                    AddAllTiersThatContain(knownT1);
+                    break;
+                case (EliteTier.T1Honor):
+                    AddAllTiersThatContain(knownT1H);
+                    break;
+            }
+
+            void AddAllTiersThatContain(EliteDef def)
+            {
+                var ctiers = EliteAPI.GetCombatDirectorEliteTiers();
+
+                foreach (CombatDirector.EliteTierDef tier in ctiers)
+                {
+                    if (tier.eliteTypes.Contains(def))
+                    {
+                        tiers.Add(tier);
+                        Debug.Log("Tier " + def.name + " added to " + EliteName + ".");
+                    }
+                }
+            }
+
+            CustomEliteDef = new CustomElite(EliteDefinition, tiers.ToArray(), EliteRamp);
+            EliteAPI.Add(CustomEliteDef);
             ContentAddition.AddBuffDef(EliteBuff);
             ContentAddition.AddEquipmentDef(EliteEquip);
-            /*
-            var tierDefs = GetVanillaEliteTierDef(EliteTierDef);
-            if (tierDefs is null)
-                return;
-
-            CustomEliteDef = new CustomElite($"Elite{EliteName}", EliteEquip, EliteColor, $"ELITE_MODIFIER_{EliteName}", tierDefs, EliteRamp);
-            EliteBuff.eliteDef = CustomEliteDef.EliteDef;
-            EliteAPI.Add(CustomEliteDef);
-
-            var honorTierDefs = GetVanillaEliteHonorTierDef(EliteTierDef);
-            if (honorTierDefs is not null)
-            {
-                CustomEliteDefHonor = new CustomElite($"Elite{EliteName}Honor", EliteEquip, EliteColor, $"ELITE_MODIFIER_{EliteEquip}", honorTierDefs, EliteRamp);
-                EliteAPI.Add(CustomEliteDefHonor);
-            }
-            // Get tiers from addressables
-            CombatDirector.EliteTierDef tier1 = EliteAPI.VanillaEliteTiers[0];
-            CombatDirector.EliteTierDef tier2 = EliteAPI.VanillaEliteTiers[1];
-            List<EliteDef> tier1Elites = tier1.eliteTypes.ToList();
-            tier1Elites.Add(EliteDefinition);
-            tier1.eliteTypes = tier1Elites.ToArray();
-            List<EliteDef> tier2Elites = tier1.eliteTypes.ToList();
-            tier2Elites.Add(EliteDefinition);
-            tier2.eliteTypes = tier2Elites.ToArray();
-
-            var eliteList = new List<RoR2.CombatDirector.EliteTierDef>();
-            eliteList.Add(tier1);
-            eliteList.Add(tier2);
-
-            EliteAPI.Add(new CustomElite(EliteName, EliteEquip, EliteColor, null, eliteList, EliteRamp));
-            */
         }
 
         protected void AddCrown()
@@ -173,30 +171,6 @@ namespace DeltaruneMod.Elite
             EliteDefinition.healthBoostCoefficient = EliteHealthMult;
             EliteDefinition.damageBoostCoefficient = EliteDamageMult;
             EliteBuff.eliteDef = EliteDefinition;
-
-            List<CombatDirector.EliteTierDef> tiers = new();
-
-            EliteDef knownT1 = Addressables.LoadAssetAsync<EliteDef>("RoR2/Base/EliteFire/edFire.asset").WaitForCompletion();
-            EliteDef knownT1H = Addressables.LoadAssetAsync<EliteDef>("RoR2/Base/EliteFire/edFireHonor.asset").WaitForCompletion();
-            //EliteDef knownT2 = Addressables.LoadAssetAsync<EliteDef>("RoR2/Base/EliteHaunted/bdEliteHaunted.asset").WaitForCompletion();
-
-            AddAllTiersThatContain(knownT1);
-            AddAllTiersThatContain(knownT1H);
-            //AddAllTiersThatContain(knownT2);
-            CustomNeoElite = new CustomElite(AffixNeoElite, tiers.ToArray(), eliteRamp);
-
-            void AddAllTiersThatContain(EliteDef def)
-            {
-                var ctiers = EliteAPI.GetCombatDirectorEliteTiers();
-
-                foreach (var tier in ctiers)
-                {
-                    if (tier.eliteTypes.Contains(def))
-                    {
-                        tiers.Add(tier);
-                    }
-                }
-            }
         }
 
         public virtual void Hooks() { }

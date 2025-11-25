@@ -110,8 +110,9 @@ namespace DeltaruneMod.Interactables.SusExchange
             #endregion
 
             #region Picker UI
-            var pickerUIPrefab = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Scrapper/ScrapperPickerPanel.prefab").WaitForCompletion(), "TrashcanPickerPanel");
+            var pickerUIPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Scrapper/ScrapperPickerPanel.prefab").WaitForCompletion().InstantiateClone("TrashcanPickerPanel");
 
+            /*
             var imagePanel = pickerUIPrefab.transform.Find("MainPanel/Juice/BG");
             if (imagePanel != null)
             {
@@ -124,6 +125,7 @@ namespace DeltaruneMod.Interactables.SusExchange
                 tempColor.a = 0.0f;
                 img.color = tempColor;
             }
+            */
             var label = pickerUIPrefab.transform.Find("MainPanel/Juice/Label");
             if (label != null)
             {

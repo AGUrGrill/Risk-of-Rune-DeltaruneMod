@@ -1,5 +1,6 @@
 using BepInEx;
 using BepInEx.Configuration;
+using DeltaruneMod.Elite;
 using DeltaruneMod.Elites;
 using DeltaruneMod.Interactables;
 using DeltaruneMod.Interactables.SusExchange.TradingItems;
@@ -53,7 +54,7 @@ namespace DeltaruneMod
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "AGU";
         public const string PluginName = "DeltaruneMod";
-        public const string PluginVersion = "2.0.5";
+        public const string PluginVersion = "2.0.6";
 
         public static DeltarunePlugin Instance;
         public static CharacterMaster characterMaster;
@@ -135,18 +136,14 @@ namespace DeltaruneMod
             #endregion
 
             #region Elite Initialization
-            
-            /*
+           
             var EliteTypes = Assembly.GetExecutingAssembly().GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(EliteBase)));
             foreach (var eliteType in EliteTypes)
             {
                 EliteBase elites = (EliteBase)System.Activator.CreateInstance(eliteType);
                 elites.Init();
-              Debug.Log("Interactable: " + elites.EliteName + " Initialized!");
+              Debug.Log("Elite: " + elites.EliteName + " Initialized!");
             }
-            */
-            //new NeoElite();
-            new NeoElite();
             #endregion
 
             StartCoroutine(LoadSoundBankWhenReady());
