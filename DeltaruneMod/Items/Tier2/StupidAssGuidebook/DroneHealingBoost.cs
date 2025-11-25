@@ -98,7 +98,7 @@ namespace DeltaruneMod.Items
         private static void CreateEffect()
         {
             HealEffectPrefab = MainAssets.LoadAsset<GameObject>("guide_book_heal.prefab").InstantiateClone("guidebook_heal", true);
-            Util.Helpers.CreateNetworkedEffectPrefab(HealEffectPrefab, true);
+            Util.Helpers.CreateEffectPrefab(HealEffectPrefab, true);
         }
 
         public override void Init()

@@ -19,35 +19,48 @@
 
 		<PackageReference Include="BepInEx.Core" Version="5.*" />
 
-		<PackageReference Include="R2API.Items" Version="1.*" />
-		<PackageReference Include="R2API.Language" Version="1.*" />
-		<PackageReference Include="R2API.RecalculateStats" Version="1.*" />
-		<PackageReference Include="R2API.Prefab" Version="1.*" />
-		<PackageReference Include="R2API.ContentManagement" Version="1.*" />
-		<PackageReference Include="R2API.Networking" Version="1.*" />
-		<PackageReference Include="R2API.DamageType" Version="1.*" />
-		<PackageReference Include="R2API.Difficulty" Version="1.*" />
-		<PackageReference Include="R2API.Orb" Version="1.*" />
-		<PackageReference Include="R2API.LobbyConfig" Version="1.*" />
-		<PackageReference Include="R2API.Dot" Version="1.*" />
-		<PackageReference Include="R2API.Deployable" Version="1.*" />
-		<PackageReference Include="R2API.CommandHelper" Version="1.*" />
-		<PackageReference Include="R2API.ArtifactCode" Version="1.*" />
-		<PackageReference Include="R2API.Director" Version="1.*" />
-		<PackageReference Include="R2API.Unlockable" Version="1.*" />
-		<PackageReference Include="R2API.TempVisualEffect" Version="1.*" />
-		<PackageReference Include="R2API.Sound" Version="1.*" />
-		<PackageReference Include="R2API.Loadout" Version="1.*" />
-		<PackageReference Include="R2API.Elites" Version="1.0.7" />
-		<PackageReference Include="R2API.SceneAsset" Version="1.*" />
-		<PackageReference Include="R2API.Core" Version="5.*" />
-
-		<PackageReference Include="UnityEngine.Modules" Version="2021.3.33" IncludeAssets="compile" />
-		<PackageReference Include="RiskOfRain2.GameLibs" Version="1.4.0-r.0" />
 		<PackageReference Include="MMHOOK.RoR2" Version="2025.11.19" />
-		
-	</ItemGroup>
 
+		<PackageReference Include="R2API.ContentManagement" Version="1.0.10" />
+
+		<PackageReference Include="R2API.Core" Version="5.2.0" />
+
+		<PackageReference Include="R2API.DamageType" Version="1.1.7" />
+
+		<PackageReference Include="R2API.Deployable" Version="1.0.1" />
+
+		<PackageReference Include="R2API.Difficulty" Version="1.1.2" />
+
+		<PackageReference Include="R2API.Director" Version="2.3.6" />
+
+		<PackageReference Include="R2API.Dot" Version="1.1.2" />
+
+		<PackageReference Include="R2API.Elites" Version="1.0.7" />
+
+		<PackageReference Include="R2API.Items" Version="1.0.7" />
+
+		<PackageReference Include="R2API.Language" Version="1.0.1" />
+
+		<PackageReference Include="R2API.Networking" Version="1.0.4" />
+
+		<PackageReference Include="R2API.Orb" Version="1.0.1" />
+
+		<PackageReference Include="R2API.Prefab" Version="1.1.1" />
+
+		<PackageReference Include="R2API.ProcType" Version="1.0.2" />
+
+		<PackageReference Include="R2API.RecalculateStats" Version="1.6.4" />
+
+		<PackageReference Include="R2API.Sound" Version="1.0.3" />
+
+		<PackageReference Include="R2API.Stages" Version="1.0.3" />
+
+		<PackageReference Include="R2API.Unlockable" Version="1.0.2" />
+
+		<PackageReference Include="UnityEngine.Modules" Version="6000.2.13" IncludeAssets="compile" />
+		<PackageReference Include="RiskOfRain2.GameLibs" Version="1.4.0-r.0" />
+	</ItemGroup>
+	
 	<ItemGroup>
 	  <Reference Include="RiskOfOptions">
 	    <HintPath>libs\RiskOfOptions.dll</HintPath>

@@ -42,14 +42,25 @@ namespace DeltaruneMod.Util
             }
             return items;
         }
-        public static List<ItemDef> GetAllItemsFromInventory(Inventory inv)
+        public static List<ItemDef> GetAllPermenantItemsFromInventory(Inventory inv)
         {
             List<ItemDef> items = new List<ItemDef>();
             for (ItemIndex i = 0; i < (ItemIndex)ItemCatalog.itemCount; i++)
             {
                 ItemDef item = ItemCatalog.GetItemDef(i);
                 if (item == null) continue;
-                if (inv.GetItemCount(i) > 0) items.Add(item);
+                if (inv.GetItemCountPermanent(i) > 0) items.Add(item);
+            }
+            return items;
+        }
+        public static List<ItemDef> GetAllTempItemsFromInventory(Inventory inv)
+        {
+            List<ItemDef> items = new List<ItemDef>();
+            for (ItemIndex i = 0; i < (ItemIndex)ItemCatalog.itemCount; i++)
+            {
+                ItemDef item = ItemCatalog.GetItemDef(i);
+                if (item == null) continue;
+                if (inv.GetItemCountTemp(i) > 0) items.Add(item);
             }
             return items;
         }
@@ -105,9 +116,8 @@ namespace DeltaruneMod.Util
         #endregion
 
         #region Make Prefabs
-        public static void CreateNetworkedEffectPrefab(GameObject obj, bool isFollower)
+        public static void CreateEffectPrefab(GameObject obj, bool isFollower)
         {
-            //if (!obj.GetComponent<NetworkIdentity>()) obj.AddComponent<NetworkIdentity>();
             var effect = obj.GetComponent<EffectComponent>();
             if (!effect) effect = obj.AddComponent<EffectComponent>();
             effect.applyScale = isFollower;
@@ -115,7 +125,6 @@ namespace DeltaruneMod.Util
             effect.parentToReferencedTransform = isFollower;
             effect.positionAtReferencedTransform = isFollower;
 
-            //PrefabAPI.RegisterNetworkPrefab(obj);
             ContentAddition.AddEffect(obj);
         }
         public static void AddEffectPrefabToContentAddition(GameObject obj)

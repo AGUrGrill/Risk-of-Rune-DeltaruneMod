@@ -381,7 +381,7 @@ namespace DeltaruneMod.Items.Tier3
             var effectController = SwoonModelPrefab.GetComponent<SwoonEffectController>();
             if (!effectController) effectController = SwoonModelPrefab.AddComponent<SwoonEffectController>();
 
-            Util.Helpers.CreateNetworkedEffectPrefab(SwoonModelPrefab, false);
+            Util.Helpers.CreateEffectPrefab(SwoonModelPrefab, false);
 
             SwoonEffectPrefabL = PrefabAPI.InstantiateClone(MainAssets.LoadAsset<GameObject>("swoon_left.prefab"), "swoon_left", true);
             SwoonEffectPrefabR = PrefabAPI.InstantiateClone(MainAssets.LoadAsset<GameObject>("swoon_right.prefab"), "swoon_right", true);

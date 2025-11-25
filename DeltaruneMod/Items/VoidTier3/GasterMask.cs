@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using static DeltaruneMod.DeltarunePlugin;
 using static DeltaruneMod.Util.Components;
@@ -49,15 +50,19 @@ namespace DeltaruneMod.Items.VoidTier3
 
         public override bool isChapter4 => false;
 
-        public static GameObject CorruptedEffect;
+        public static GameObject? CorruptedEffect;
 
-        public static GameObject CorruptedEffectHolder;
+        public static GameObject? CorruptedEffectHolder;
 
-        public static BuffDef CorruptedBuff;
+        public static BuffDef? CorruptedBuff;
 
         private static Dictionary<CharacterBody, float> lastTimeCloneSpawned = [];
 
         private static int CorruptConversionTime;
+
+        private const int CorruptionBaseTime = 10;
+        private const int CorruptionMultTime = 10;
+
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {
@@ -275,103 +280,75 @@ namespace DeltaruneMod.Items.VoidTier3
         
         public override void Hooks()
         {
-            RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
             On.RoR2.GlobalEventManager.OnHitEnemy += GlobalEventManager_OnHitEnemy;
         }
-
-        private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
-        {
-            try
-            {
-                // Convert item if happiest mask is present (item index 77)
-                var itemCount = GetCount(sender);
-                var happiestItemCount = sender.inventory.GetItemCount((ItemIndex)77);
-
-                if (itemCount > 0 && happiestItemCount > 0)
-                {
-                    sender.inventory.RemoveItem((ItemIndex)77);
-                    sender.inventory.GiveItem(ItemDef);
-                }
-            } catch { }
-            
-        }
-        
         private void GlobalEventManager_OnHitEnemy(On.RoR2.GlobalEventManager.orig_OnHitEnemy orig, GlobalEventManager self, DamageInfo damageInfo, GameObject victim)
         {
             orig(self, damageInfo, victim);
 
             #region Convert enemy effect
-            try
+            //try
+            //{
+            
+            // Null check vitals
+            var attacker = damageInfo.attacker;
+            if (!attacker) return;
+            var attackerBody = attacker.GetComponent<CharacterBody>();
+            if (!attackerBody) return;
+            var victimBody = victim.GetComponent<CharacterBody>();
+            if (!victimBody || victimBody.bodyFlags.HasFlag(CharacterBody.BodyFlags.Mechanical) || victimBody.isPlayerControlled) return;
+
+            // if meets conditions, apply effect
+            if (NetworkServer.active && GetCount(attackerBody) > 0)
             {
-                
-                // Null check vitals
-                var attacker = damageInfo.attacker;
-                if (!attacker) return;
-                var attackerBody = attacker.GetComponent<CharacterBody>();
-                if (!attackerBody) return;
-                var victimBody = victim.GetComponent<CharacterBody>();
-                if (!victimBody) return;
+                var itemCount = GetCount(attackerBody);
+                var thresholdHP = 0.1f;
 
-                if (NetworkServer.active && attackerBody && victimBody)
+                // Add buff
+                if (!victimBody.HasBuff(CorruptedBuff)) victimBody.AddBuff(CorruptedBuff);
+
+                // Convert if hp is low enough
+                if (victimBody.healthComponent.health <= victimBody.maxHealth * thresholdHP)
                 {
-                    var itemCount = GetCount(attackerBody);
-                    var thresholdHP = 0.1f;
-
-                    if (itemCount <= 0) return;
-
-                    // Add visual buff
-                    if (!victimBody.HasBuff(CorruptedBuff)) victimBody.AddBuff(CorruptedBuff);
-
-                    // Convert is hp is low enough
-                    if (victimBody.healthComponent.health <= victimBody.maxHealth * thresholdHP)
+                    float time = Time.time; // Make sure clone dosent spawn twice
+                    if (lastTimeCloneSpawned.TryGetValue(attackerBody, out float lastTime))
                     {
-                        float time = Time.time; // Make sure clone dosent spawn twice
-                        if (lastTimeCloneSpawned.TryGetValue(attackerBody, out float lastTime))
-                        {
-                            if (time - lastTime < 0.05f) return;
-                        }
-                        lastTimeCloneSpawned[attackerBody] = time;
-
-                        // Get this guy outta here!!
-                        if (victimBody.name != "VoidInfestorBody(Clone)" && victimBody.name != "VoidInfestorBody"
-                            && victimBody.master.name != "VoidInfestorMaster(Clone)" && victimBody.master.name != "VoidInfestorMaster")
-                            ConvertEnemy(victimBody, attackerBody);
+                        if (time - lastTime < 0.05f) return;
                     }
+                    lastTimeCloneSpawned[attackerBody] = time;
+
+                    // Get this guy outta here!!
+                    if (victimBody.name != "VoidInfestorBody(Clone)" && victimBody.name != "VoidInfestorBody"
+                        && victimBody.master.name != "VoidInfestorMaster(Clone)" && victimBody.master.name != "VoidInfestorMaster")
+                    {
+                        ConvertEnemy(victimBody, attackerBody);
+                    }      
                 }
             }
-            catch { Debug.Log("Please check gaster effect DeltaruneMod"); }
+            //}
+            //catch { Debug.Log("Please check gaster effect DeltaruneMod"); }
             #endregion
         }
 
         private void ConvertEnemy(CharacterBody target, CharacterBody owner)
         {
-            var baseConversionTime = 10;
-            var multConversionTime = 5;
-
-            if (!NetworkServer.active) return;
-
-            if (target.isPlayerControlled || target.bodyFlags.HasFlag(CharacterBody.BodyFlags.Mechanical)) return;
+            // Add check to know if target is marked for conversion already
             if (target.GetComponent<ThingyMaBobber>()) return;
-
             target.gameObject.AddComponent<ThingyMaBobber>();
 
             // Destroy old target and set models to not release on death
             var targetCopy = target;
             var modelLocator = target.modelLocator;
             if (modelLocator) modelLocator.dontReleaseModelOnDeath = true;
-            modelLocator = targetCopy.modelLocator;
-            if (modelLocator) modelLocator.dontReleaseModelOnDeath = true;
             target.healthComponent.Suicide();
-            UnityEngine.Object.Destroy(target);
 
             // Setup target copy
             targetCopy.rigidbody.velocity = Vector3.zero;
             targetCopy.master.teamIndex = TeamIndex.Void;
             targetCopy.teamComponent.teamIndex = TeamIndex.Void;
+            targetCopy.inventory.SetEquipmentIndex(DLC1Content.Elites.Void.eliteEquipmentDef.equipmentIndex, true);
 
-            targetCopy.inventory.SetEquipmentIndex(DLC1Content.Elites.Void.eliteEquipmentDef.equipmentIndex);
-
-            BaseAI ai = targetCopy.master.GetComponent<BaseAI>();
+            var ai = targetCopy.master.GetComponent<BaseAI>();
             if (ai)
             {
                 ai.enemyAttention = 0f;
@@ -379,40 +356,31 @@ namespace DeltaruneMod.Items.VoidTier3
             }
 
             // Create ally
-            CorruptConversionTime = baseConversionTime + ((GetCount(owner)-1) * multConversionTime);
-            var voidAlly = RoR2.Util.TryToCreateGhost(targetCopy, owner, CorruptConversionTime);
+            CorruptConversionTime = CorruptionBaseTime + ((GetCount(owner)-1) * CorruptionMultTime);
+            CharacterBody voidAlly = RoR2.Util.TryToCreateGhost(targetCopy, owner, CorruptConversionTime);
             
             // Stop corpse from spawning
-            modelLocator = voidAlly.modelLocator;
-            if (modelLocator) modelLocator.dontReleaseModelOnDeath = true;
+            var voidAllyModelLocator = voidAlly.modelLocator;
+            if (voidAllyModelLocator) voidAllyModelLocator.dontReleaseModelOnDeath = true;
 
             // Spawn effect on enemy
-            try
+            EffectData effectData = new EffectData
             {
-                if (voidAlly.gameObject)
-                {
-                    EffectData effectData = new EffectData
-                    {
-                        scale = 1f
-                    };
-                    effectData.SetNetworkedObjectReference(voidAlly.gameObject);
+                scale = 1f
+            };
+            effectData.SetNetworkedObjectReference(voidAlly.gameObject);
 
-                    EffectManager.SpawnEffect(CorruptedEffect, effectData, true);
-                    Debug.Log("Spawned Wingding effect.");
-                }
-            }
-            catch { Debug.Log("Could not apply wing ding effect."); }
+            EffectManager.SpawnEffect(CorruptedEffect, effectData, true);
 
             // Destroy old target copy
-            if (targetCopy) targetCopy.healthComponent.Suicide();
-            
+            targetCopy.healthComponent.Suicide();
         }
 
         public void CreateEffect()
         {
-            CorruptedEffect = MainAssets.LoadAsset<GameObject>("wingshit_animated.prefab").InstantiateClone("gaster_corrupt_effect", false);
+            CorruptedEffect = MainAssets.LoadAsset<GameObject>("wingshit_animated").InstantiateClone("gaster_corrupt_effect", false);
             CorruptedEffect.transform.localScale = new Vector3(1f, 1f, 1f);
-            Util.Helpers.CreateNetworkedEffectPrefab(CorruptedEffect, true);
+            Util.Helpers.CreateEffectPrefab(CorruptedEffect, true);
         }
 
         public void CreateBuff()
@@ -426,9 +394,29 @@ namespace DeltaruneMod.Items.VoidTier3
             ContentAddition.AddBuffDef(CorruptedBuff);
         }
 
+        public void SetupVoidItemConversion()
+        {
+            ItemDef happiestMask = Addressables.LoadAssetAsync<ItemDef>("RoR2/Base/GhostOnKill/GhostOnKill.asset").WaitForCompletion();
+
+            var provider = ScriptableObject.CreateInstance<ItemRelationshipProvider>();
+            provider.name = "HappiestMaskToMysterMansMaskConversion";
+            provider.relationshipType = Addressables.LoadAssetAsync<ItemRelationshipType>("RoR2/DLC1/Common/ContagiousItem.asset").WaitForCompletion();
+            provider.relationships =
+            [
+                new ItemDef.Pair
+                {
+                    itemDef1 = happiestMask,
+                    itemDef2 = this.ItemDef
+                }
+            ];
+
+            ContentAddition.AddItemRelationshipProvider(provider);
+        }
+
         public override void Init()
         {
             CreateItem();
+            SetupVoidItemConversion();
             CreateLang();
             CreateEffect();
             CreateBuff();
@@ -445,7 +433,7 @@ namespace DeltaruneMod.Items.VoidTier3
         {
             void Start()
             { 
-                Debug.Log("bleh :P");
+                //Debug.Log("bleh :P");
             }
         }
     }

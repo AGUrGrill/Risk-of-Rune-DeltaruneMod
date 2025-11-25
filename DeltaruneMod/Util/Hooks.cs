@@ -11,7 +11,7 @@ namespace DeltaruneMod.Util
         int numOfEnemiesSpawned = 0;
         public Hooks()
         {
-            On.RoR2.CharacterMaster.OnBodyStart += CharacterMaster_OnBodyStart;
+            //On.RoR2.CharacterMaster.OnBodyStart += CharacterMaster_OnBodyStart;
         }
 
         private void CharacterMaster_OnBodyStart(On.RoR2.CharacterMaster.orig_OnBodyStart orig, RoR2.CharacterMaster self, RoR2.CharacterBody body)
@@ -24,7 +24,7 @@ namespace DeltaruneMod.Util
             numOfEnemiesSpawned++;
             if (numOfEnemiesSpawned % 60 == 0)
             {
-                body.inventory.SetEquipmentIndex(NeoElite.instance.EliteEquip.equipmentIndex, true);
+                //body.inventory.SetEquipmentIndex(NeoElite.instance.EliteEquip.equipmentIndex, true);
             }
         }
     }

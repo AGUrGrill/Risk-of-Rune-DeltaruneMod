@@ -72,8 +72,8 @@ namespace DeltaruneMod.Interactables.SusExchange
             purchaseInteraction.isShrine = true;
             purchaseInteraction.isGoldShrine = false;
 
-            var purchaseManager = InteractableBodyModelPrefab.AddComponent<TrashcanPurchaseManager>();
-            purchaseManager.purchaseInteraction = purchaseInteraction;
+            //var purchaseManager = InteractableBodyModelPrefab.AddComponent<TrashcanPurchaseManager>();
+            //purchaseManager.purchaseInteraction = purchaseInteraction;
             #endregion
 
             #region Interactable Settings
@@ -110,9 +110,8 @@ namespace DeltaruneMod.Interactables.SusExchange
             #endregion
 
             #region Picker UI
-            var pickerUIPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Scrapper/ScrapperPickerPanel.prefab").WaitForCompletion().InstantiateClone("TrashcanPickerPanel", false);
+            var pickerUIPrefab = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Scrapper/ScrapperPickerPanel.prefab").WaitForCompletion(), "TrashcanPickerPanel");
 
-            Util.Helpers.GetAllTransformNames(pickerUIPrefab);
             var imagePanel = pickerUIPrefab.transform.Find("MainPanel/Juice/BG");
             if (imagePanel != null)
             {
@@ -134,21 +133,21 @@ namespace DeltaruneMod.Interactables.SusExchange
                     text.token = "SHOP FOR BIG [[Big] DEALS. NOW!!!!";
                 }
             }
-
-            var transImage = pickerUIPrefab.GetComponent<TranslucentImage>();
-
-            //MainAssets.LoadAsset<Sprite>("balatro");
+;
+            /*
             var scrapperInfo = pickerUIPrefab.GetComponent<ScrapperInfoPanelHelper>();
             var repairInfo = pickerUIPrefab.AddComponent<TrashcanInfoPanelHelper>();
             var cont = repairInfo.inspectPanelController = scrapperInfo.inspectPanelController;
             repairInfo.correspondingScrapImage = scrapperInfo.correspondingScrapImage;
             UnityEngine.Object.DestroyImmediate(scrapperInfo);
+            
 
             var panel = pickerUIPrefab.GetComponent<PickupPickerPanel>();
             panel.pickupSelected.AddPersistentListener(repairInfo.ShowInfo);
             panel.pickupBaseContentReady.AddPersistentListener(repairInfo.AddQuantityToPickerButton);
 
             repairInfo.panel = panel;
+            */
             #endregion
 
             #region Picker Controller

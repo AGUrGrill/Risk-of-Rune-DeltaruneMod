@@ -111,25 +111,27 @@ namespace DeltaruneMod.Items.Tier2
 
         public void CreateProjectile()
         {
-            ProjectilePrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/ShurikenProjectile").InstantiateClone("SusieAxeProjectile", false);
+            ProjectilePrefab = Helpers.ModifyVanillaPrefab("RoR2/DLC1/PrimarySkillShuriken/ShurikenProjectile.prefab", "SusieAxeProjectile", false,
+                (orig) => {
+                    var ghost = MainAssets.LoadAsset<GameObject>("rude_buster.prefab").InstantiateClone("SusieAxeGhost", false);
+                    ghost.AddComponent<ProjectileGhostController>();
+                    ghost.AddComponent<NetworkIdentity>();
+                    ghost.transform.localScale = new Vector3(150f, 150f, 150f);
 
-            var ghost = MainAssets.LoadAsset<GameObject>("rude_buster.prefab").InstantiateClone("SusieAxeGhost", false);
-            ghost.AddComponent<ProjectileGhostController>();
-            ghost.AddComponent<NetworkIdentity>();
-            ghost.transform.localScale = new Vector3(150f, 150f, 150f);
+                    var projCont = orig.GetComponent<ProjectileController>();
+                    if (projCont.ghostPrefab) UnityEngine.Object.Destroy(projCont.ghostPrefab);
+                    projCont.shouldPlaySounds = false;
+                    projCont.startSound = "";
+                    projCont.ghostPrefab = ghost;
 
-            var projCont = ProjectilePrefab.GetComponent<ProjectileController>();
-            if (projCont.ghostPrefab) UnityEngine.Object.Destroy(projCont.ghostPrefab);
-            projCont.shouldPlaySounds = false;
-            projCont.startSound = "";
-            projCont.ghostPrefab = ghost;
+                    var projSimp = orig.GetComponent<ProjectileSimple>();
+                    projSimp.desiredForwardSpeed *= 0.5f;
+                    projSimp.GetComponent<Rigidbody>().useGravity = false;
 
-            var projSimp = ProjectilePrefab.GetComponent<ProjectileSimple>();
-            projSimp.desiredForwardSpeed *= 0.5f;
-            projSimp.GetComponent<Rigidbody>().useGravity = false;
-
-            UnityEngine.Object.Destroy(ProjectilePrefab.GetComponent<ProjectileSteerTowardTarget>());
-            UnityEngine.Object.Destroy(ProjectilePrefab.GetComponent<ProjectileTargetComponent>());
+                    UnityEngine.Object.Destroy(orig.GetComponent<ProjectileSteerTowardTarget>());
+                    UnityEngine.Object.Destroy(orig.GetComponent<ProjectileTargetComponent>());
+                    return orig;
+                });
 
             Util.Helpers.CreateNetworkedProjectilePrefab(ProjectilePrefab);
         }

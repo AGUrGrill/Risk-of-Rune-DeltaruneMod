@@ -173,22 +173,32 @@ namespace DeltaruneMod.Elite
             EliteDefinition.healthBoostCoefficient = EliteHealthMult;
             EliteDefinition.damageBoostCoefficient = EliteDamageMult;
             EliteBuff.eliteDef = EliteDefinition;
+
+            List<CombatDirector.EliteTierDef> tiers = new();
+
+            EliteDef knownT1 = Addressables.LoadAssetAsync<EliteDef>("RoR2/Base/EliteFire/edFire.asset").WaitForCompletion();
+            EliteDef knownT1H = Addressables.LoadAssetAsync<EliteDef>("RoR2/Base/EliteFire/edFireHonor.asset").WaitForCompletion();
+            //EliteDef knownT2 = Addressables.LoadAssetAsync<EliteDef>("RoR2/Base/EliteHaunted/bdEliteHaunted.asset").WaitForCompletion();
+
+            AddAllTiersThatContain(knownT1);
+            AddAllTiersThatContain(knownT1H);
+            //AddAllTiersThatContain(knownT2);
+            CustomNeoElite = new CustomElite(AffixNeoElite, tiers.ToArray(), eliteRamp);
+
+            void AddAllTiersThatContain(EliteDef def)
+            {
+                var ctiers = EliteAPI.GetCombatDirectorEliteTiers();
+
+                foreach (var tier in ctiers)
+                {
+                    if (tier.eliteTypes.Contains(def))
+                    {
+                        tiers.Add(tier);
+                    }
+                }
+            }
         }
 
-        internal IEnumerable<CombatDirector.EliteTierDef> GetVanillaEliteTierDef(EliteTier tier) => tier switch
-        {
-            EliteTier.None => null,
-            EliteTier.T1 => [EliteAPI.VanillaEliteTiers[(int)EliteTier.T1], EliteAPI.VanillaEliteTiers[(int)EliteTier.T1Guilded]],
-            EliteTier.T1Honor => [EliteAPI.VanillaEliteTiers[(int)EliteTier.T1Honor], EliteAPI.VanillaEliteTiers[(int)EliteTier.T1GuildedHonor]],
-            _ => [EliteAPI.VanillaEliteTiers[(int)tier]]
-        };
-
-        internal IEnumerable<CombatDirector.EliteTierDef> GetVanillaEliteHonorTierDef(EliteTier tier) => tier switch
-        {
-            EliteTier.T1 => [EliteAPI.VanillaEliteTiers[(int)EliteTier.T1Honor], EliteAPI.VanillaEliteTiers[(int)EliteTier.T1GuildedHonor]],
-            EliteTier.T1Guilded => [EliteAPI.VanillaEliteTiers[(int)EliteTier.T1GuildedHonor]],
-            _ => null
-        };
         public virtual void Hooks() { }
     }
 }

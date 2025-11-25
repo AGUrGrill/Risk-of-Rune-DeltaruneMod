@@ -59,7 +59,7 @@ namespace DeltaruneMod.Interactables.Grave
             mgr.purchaseInteraction = purchaseInteraction;
 
             var pingInfoProvider = InteractableBodyModelPrefab.AddComponent<PingInfoProvider>();
-            pingInfoProvider.pingIconOverride = MainAssets.LoadAsset<Sprite>("grave_icon.png");
+            pingInfoProvider.pingIconOverride = MainAssets.LoadAsset<Sprite>("dess_grave_icon.png");
 
             var highlightController = InteractableBodyModelPrefab.GetComponent<Highlight>();
             highlightController.targetRenderer = InteractableBodyModelPrefab.GetComponentsInChildren<MeshRenderer>().Where(x => x.gameObject.name.Contains("Combined_Graved")).Single();
@@ -83,8 +83,8 @@ namespace DeltaruneMod.Interactables.Grave
             InteractableSpawnCard.hullSize = HullClassification.Golem;
             InteractableSpawnCard.nodeGraphType = RoR2.Navigation.MapNodeGroup.GraphType.Ground;
             InteractableSpawnCard.requiredFlags = RoR2.Navigation.NodeFlags.None;
-            InteractableSpawnCard.forbiddenFlags = RoR2.Navigation.NodeFlags.NoShrineSpawn | RoR2.Navigation.NodeFlags.NoChestSpawn;
-            InteractableSpawnCard.directorCreditCost = 0;
+            InteractableSpawnCard.forbiddenFlags = RoR2.Navigation.NodeFlags.None;
+            InteractableSpawnCard.directorCreditCost = 1;
             InteractableSpawnCard.occupyPosition = true;
             InteractableSpawnCard.orientToFloor = false;
             InteractableSpawnCard.maxSpawnsPerStage = 1;
@@ -92,17 +92,18 @@ namespace DeltaruneMod.Interactables.Grave
 
             DirectorCard directorCard = new DirectorCard
             {
-                selectionWeight = 300, // 230 = Normal Chest
+                selectionWeight = 200, // 230 = Normal Chest
                 spawnCard = InteractableSpawnCard,
             };
 
             DirectorAPI.DirectorCardHolder directorCardHolder = new DirectorAPI.DirectorCardHolder
             {
                 Card = directorCard,
-                InteractableCategory = DirectorAPI.InteractableCategory.Shrines,
+                InteractableCategory = DirectorAPI.InteractableCategory.Barrels,
             };
 
-            DirectorAPI.Helpers.AddNewInteractable(directorCardHolder);
+            DirectorAPI.Helpers.AddNewInteractableToStage(directorCardHolder, DirectorAPI.Stage.RallypointDelta);
+            DirectorAPI.Helpers.AddNewInteractableToStage(directorCardHolder, DirectorAPI.Stage.RallypointDeltaSimulacrum);
         }
     }
 }

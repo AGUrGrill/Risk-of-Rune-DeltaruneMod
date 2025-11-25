@@ -111,7 +111,7 @@ namespace DeltaruneMod.Interactables.SusExchange
             #region Making vars
             CharacterBody body = interactor.GetComponent<CharacterBody>();
             Transform dropletOrigin = body.transform;
-            List<ItemDef> allInventoryItems = Util.Helpers.GetAllItemsFromInventory(body.inventory);
+            List<ItemDef> allInventoryItems = Util.Helpers.GetAllPermenantItemsFromInventory(body.inventory);
             List<ItemDef> allTakeableInvItems = new List<ItemDef>();
             ItemDef randomTier2 = allTier2[Random.Range(0, allTier2.Count)];
             ItemDef randomTier3 = allTier3[Random.Range(0, allTier3.Count)];

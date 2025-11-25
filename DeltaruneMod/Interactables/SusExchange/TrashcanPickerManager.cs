@@ -72,6 +72,7 @@ namespace DeltaruneMod.Interactables.SusExchange
         public List<ItemDef> ListTakeableInventoryItems(List<ItemDef> allInventoryItems)
         {
             List<ItemDef> returnList = new List<ItemDef>();
+            CharacterBody body = interactor.GetComponent<CharacterBody>();
             for (int i = 0; i < allTakeableItems.Count; i++)
             {
                 if (allInventoryItems.Contains(allTakeableItems[i]))
@@ -94,7 +95,7 @@ namespace DeltaruneMod.Interactables.SusExchange
                 var choosenItem = pickupDef.itemIndex;
                 //var isItem = pickupDef.itemTier == ItemTier.Tier1 || pickupDef.itemTier == ItemTier.Tier2;
                 ItemTier tier = ItemCatalog.GetItemDef(choosenItem).tier;
-                List<ItemDef> allInventoryItems = Util.Helpers.GetAllItemsFromInventory(body.inventory);
+                List<ItemDef> allInventoryItems = Util.Helpers.GetAllPermenantItemsFromInventory(body.inventory);
                 List<ItemDef> allTakeableInvItems = new List<ItemDef>();
                 var numOfTakeableItems = 0;
                 ItemDef randomTier2 = allTier2[UnityEngine.Random.Range(0, allTier2.Count)];
@@ -246,7 +247,7 @@ namespace DeltaruneMod.Interactables.SusExchange
 
             var charBody = interactor.GetComponent<CharacterBody>();
 
-            List<ItemDef> allInventoryItems = Util.Helpers.GetAllItemsFromInventory(charBody.inventory);
+            List<ItemDef> allInventoryItems = Util.Helpers.GetAllPermenantItemsFromInventory(charBody.inventory);
             List<ItemDef> allTakeableInvItems = ListTakeableInventoryItems(allInventoryItems);
 
             // Add items to screen

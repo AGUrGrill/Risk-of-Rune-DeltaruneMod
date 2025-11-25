@@ -7,10 +7,14 @@ using DeltaruneMod.Items;
 using DeltaruneMod.Items.Lunar;
 using DeltaruneMod.Items.Spamton;
 using DeltaruneMod.Items.VoidTier3;
+using DeltaruneMod.Items.Yellow;
 using DeltaruneMod.NeoMithrix;
 using DeltaruneMod.Util;
 using R2API;
 using R2API.Networking;
+using R2API.Utils;
+using RiskOfOptions;
+using RiskOfOptions.Options;
 using RoR2;
 using System;
 using System.Collections;
@@ -20,18 +24,15 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using RiskOfOptions;
 using UnityEngine.Networking;
 using static DeltaruneMod.Util.Components;
-using RiskOfOptions.Options;
-using DeltaruneMod.Elite;
-using DeltaruneMod.Items.Yellow;
 
 namespace DeltaruneMod
 {
     // BIG thanks to Aetherium mod github page and Risk of Rain modding discord for providing me with the knowledge
     // to actually learn how to use all of this stuff!!
 
+    [BepInDependency(EliteAPI.PluginGUID)]
     [BepInDependency(ItemAPI.PluginGUID)]
     [BepInDependency(LanguageAPI.PluginGUID)]
     [BepInDependency(RecalculateStatsAPI.PluginGUID)]
@@ -46,14 +47,13 @@ namespace DeltaruneMod
     [BepInDependency(NetworkingAPI.PluginGUID)]
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
 
-    //[BepInDependency("droppod.lookingglass")]
     [BepInDependency("com.rune580.riskofoptions")]
     public class DeltarunePlugin : BaseUnityPlugin
     {
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "AGU";
         public const string PluginName = "DeltaruneMod";
-        public const string PluginVersion = "2.0.1";
+        public const string PluginVersion = "2.0.5";
 
         public static DeltarunePlugin Instance;
         public static CharacterMaster characterMaster;
@@ -63,7 +63,7 @@ namespace DeltaruneMod
 
         public List<ItemBase> Items = new List<ItemBase>();
         public List<InteractableBase> Interactables = new List<InteractableBase>();
-        public List<EliteBase> Elites = new List<EliteBase>();
+        //public List<EliteBase> Elites = new List<EliteBase>();
 
         public static HashSet<ItemDef> BlacklistedFromPrinter = new HashSet<ItemDef>();
 
@@ -71,8 +71,9 @@ namespace DeltaruneMod
         public ConfigEntry<bool> useChapter2;
         public ConfigEntry<bool> useChapter3;
         public ConfigEntry<bool> useChapter4;
+        public ConfigEntry<bool> antiFunMode;
 
-        public const short TextSyncMsgId = 4242;
+        //public const short TextSyncMsgId = 4242;
 
         public static Material malachiteOverlayMat = new Material(Addressables.LoadAssetAsync<Material>("RoR2/Base/ElitePoison/matElitePoisonOverlay.mat").WaitForCompletion());
 
@@ -134,6 +135,8 @@ namespace DeltaruneMod
             #endregion
 
             #region Elite Initialization
+            
+            /*
             var EliteTypes = Assembly.GetExecutingAssembly().GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(EliteBase)));
             foreach (var eliteType in EliteTypes)
             {
@@ -141,6 +144,9 @@ namespace DeltaruneMod
                 elites.Init();
               Debug.Log("Interactable: " + elites.EliteName + " Initialized!");
             }
+            */
+            //new NeoElite();
+            new NeoElite();
             #endregion
 
             StartCoroutine(LoadSoundBankWhenReady());
@@ -150,6 +156,11 @@ namespace DeltaruneMod
             new NeoMithrixController();
 
             new Hooks();
+
+            antiFunMode = Config.Bind("Additional Settings", "(NOT RECOMMENDED!) Allow Suspicious Exchange items in Lootpool?", false,
+                "(Use only with command, otherwise it just ruins the fun!)");
+            ModSettingsManager.AddOption(new CheckBoxOption(antiFunMode));
+            antiFunMode.SettingChanged += ToggleItemsForCommand;
 
             Log.Debug(PluginName + " loaded successfully!");
         }
@@ -255,14 +266,50 @@ namespace DeltaruneMod
             return enabled.Value;
         }
 
+        public void ToggleItemsForCommand(object sender, EventArgs e)
+        {
+            List<ItemDef> toggleableItems = new List<ItemDef>();
+            toggleableItems.Add(BrokenHeart.instance.ItemDef);
+            toggleableItems.Add(CommRing.instance.ItemDef);
+            toggleableItems.Add(LightBulb.instance.ItemDef);
+            toggleableItems.Add(MalfunctiongCore.instance.ItemDef);
+            toggleableItems.Add(Pipis.instance.ItemDef);
+            toggleableItems.Add(MrPipis.instance.ItemDef);
+
+            Run.onRunSetRuleBookGlobal += (run, rulebook) =>
+            {
+                foreach (ItemDef item in toggleableItems)
+                {
+                    if (antiFunMode.Value)
+                    {
+                        try
+                        {
+                            run.availableItems.Add(item.itemIndex);
+                        }
+                        catch { Debug.Log(item + " is already disabled!"); }
+                    }
+                    else if (!antiFunMode.Value)
+                    {
+                        try
+                        {
+                            run.availableItems.Remove(item.itemIndex);
+                        }
+                        catch { Debug.Log(item + " is already enabled!"); }
+                    }
+                }
+            };
+        }
+
         public void RemoveFromLootPool()
         {
             List<ItemDef> blacklistedItems = new List<ItemDef>();
             blacklistedItems.Add(BrokenHeart.instance.ItemDef);
             blacklistedItems.Add(CommRing.instance.ItemDef);
-            blacklistedItems.Add(Kromer.instance.ItemDef);
             blacklistedItems.Add(LightBulb.instance.ItemDef);
             blacklistedItems.Add(MalfunctiongCore.instance.ItemDef);
+            blacklistedItems.Add(Pipis.instance.ItemDef);
+            blacklistedItems.Add(MrPipis.instance.ItemDef);
+            blacklistedItems.Add(Kromer.instance.ItemDef);
             blacklistedItems.Add(BrokenHeartTradingItem.instance.ItemDef);
             blacklistedItems.Add(CommRingTradingItem.instance.ItemDef);
             blacklistedItems.Add(LightBulbTradingItem.instance.ItemDef);
@@ -272,14 +319,16 @@ namespace DeltaruneMod
             blacklistedItems.Add(ThornRing.instance.ItemDef);
             blacklistedItems.Add(PipisTradingItem.instance.ItemDef);
             blacklistedItems.Add(MrPipisTradingItem.instance.ItemDef);
-            blacklistedItems.Add(Pipis.instance.ItemDef);
-            blacklistedItems.Add(MrPipis.instance.ItemDef);
 
             Run.onRunSetRuleBookGlobal += (run, rulebook) =>
             {
                 foreach (ItemDef item in blacklistedItems)
                 {
-                    run.availableItems.Remove(item.itemIndex);
+                    try
+                    {
+                        run.availableItems.Remove(item.itemIndex);
+                    }
+                    catch { Debug.Log(item + " is already disabled!"); }
                 }
                 PickupDropTable.RegenerateAll(run);
             };
@@ -287,7 +336,8 @@ namespace DeltaruneMod
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F2))
+            /*
+            if (Input.GetKeyDown(KeyCode.F10))
             {
                 //var testing_item = GasterMask.instance.ItemDef.itemIndex;
 
@@ -298,6 +348,7 @@ namespace DeltaruneMod
                     PickupDropletController.CreatePickupDroplet(PickupCatalog.FindPickupIndex(item.ItemDef.itemIndex), transform.position, transform.forward * 20f);
                 }
             }
+            */
         }
     }
 }
