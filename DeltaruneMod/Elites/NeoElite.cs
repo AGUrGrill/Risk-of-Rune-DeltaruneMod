@@ -19,20 +19,22 @@ namespace DeltaruneMod.Elites
     {
         public override string EliteName => "N.E.O.";
 
-        public override string EliteAffixDesc => "Gain N.E.O. armor. HP is lower but DMG is higher. Gain 3 random buffs.";
+        public override string EliteAffixDesc => "Gain N.E.O. armor. 50% less armor & hp, 200% more damage. Gain 2 random buffs.";
 
         public override Color EliteColor => Color.magenta;
 
         public override float EliteHealthMult => 0.5f;
-        public override float EliteDamageMult => 5f;
+        public override float EliteDamageMult => 3f;
         public override float EliteAffixDropChance => 0.00025f;
 
         public override Material EliteAffixMaterial => Addressables.LoadAssetAsync<Material>("RoR2/Base/WardOnLevel/matWarbannerBuffRing.mat").WaitForCompletion();
 
-        public override Texture2D EliteRamp => Helpers.CreateGradientTexture(new Color32[3] {
-            new Color32(198,0,242,1),
-            new Color32(226,0,231,1),
-            new Color32(255,0,26,1)
+        public override Texture2D EliteRamp => Helpers.CreateGradientTexture(new Color32[5] {
+            new Color32(192, 67, 133, 1),
+            new Color32(157, 78, 165, 1),
+            new Color32(123, 90, 198, 1),
+            new Color32(189, 166, 99, 1),
+            new Color32(255, 242, 0, 1)
         }, 256, 8);
 
         public override Sprite EliteIcon => MainAssets.LoadAsset<Sprite>("neo_affix_icon.png");
@@ -65,12 +67,26 @@ namespace DeltaruneMod.Elites
             On.RoR2.CharacterBody.OnBuffFirstStackGained += CharacterBody_OnBuffFirstStackGained;
             On.RoR2.CharacterBody.OnBuffFinalStackLost += CharacterBody_OnBuffFinalStackLost;
             On.RoR2.CombatDirector.Init += CombatDirector_Init;
+            RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
         }
 
         private void CombatDirector_Init(On.RoR2.CombatDirector.orig_Init orig)
         {
             orig();
             AddElite();
+        }
+
+        private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
+        {
+            #region Add Stat Buffs
+            if (sender.name.Contains("Brother")) return;
+            if (sender.HasBuff(EliteBuff))
+            {
+                args.armorTotalMult += 0.5f;
+                args.healthTotalMult += 0.5f;
+                args.damageTotalMult += 2.0f;
+            }
+            #endregion
         }
 
         private void CharacterBody_OnBuffFirstStackGained(On.RoR2.CharacterBody.orig_OnBuffFirstStackGained orig, CharacterBody self, BuffDef buffDef)
@@ -836,6 +852,5 @@ namespace DeltaruneMod.Elites
             });
             return itemDisplayRules;
         }
-    
     }
 }
