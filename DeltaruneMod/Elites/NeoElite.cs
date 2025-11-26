@@ -29,12 +29,10 @@ namespace DeltaruneMod.Elites
 
         public override Material EliteAffixMaterial => Addressables.LoadAssetAsync<Material>("RoR2/Base/WardOnLevel/matWarbannerBuffRing.mat").WaitForCompletion();
 
-        public override Texture2D EliteRamp => Helpers.CreateGradientTexture(new Color32[5] {
-            new Color32(192,67,133,1),
-            new Color32(157,78,165,1),
-            new Color32(123,90,198,1),
-            new Color32(189,166,99,1),
-            new Color32(255,242,0,1),
+        public override Texture2D EliteRamp => Helpers.CreateGradientTexture(new Color32[3] {
+            new Color32(198,0,242,1),
+            new Color32(226,0,231,1),
+            new Color32(255,0,26,1)
         }, 256, 8);
 
         public override Sprite EliteIcon => MainAssets.LoadAsset<Sprite>("neo_affix_icon.png");

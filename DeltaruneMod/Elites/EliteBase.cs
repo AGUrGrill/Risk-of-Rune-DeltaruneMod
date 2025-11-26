@@ -155,7 +155,7 @@ namespace DeltaruneMod.Elite
             EliteEquip.dropOnDeathChance = EliteAffixDropChance;
             EliteEquip.enigmaCompatible = false;
             EliteEquip.pickupIconSprite = EliteAspectIcon;
-            EliteEquip.pickupModelPrefab = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/EliteFire/PickupEliteFire.prefab").WaitForCompletion(), "PickupAffixEmpowering", false);
+            EliteEquip.pickupModelPrefab = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/EliteFire/PickupEliteFire.prefab").WaitForCompletion(), "PickupAffixNeo", false);
             foreach (Renderer componentsInChild in EliteEquip.pickupModelPrefab.GetComponentsInChildren<Renderer>())
                 componentsInChild.material = EliteAffixMaterial;
             EliteEquip.nameToken = equipmentName;
