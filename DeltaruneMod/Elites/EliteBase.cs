@@ -70,7 +70,7 @@ namespace DeltaruneMod.Elite
             R2API.EliteRamp.AddRamp(EliteDefinition, EliteRamp);
         }
 
-        protected void AddContent()
+        protected void AddElite()
         {
             List<CombatDirector.EliteTierDef> tiers = new();
             EliteDef knownT1 = Addressables.LoadAssetAsync<EliteDef>("RoR2/Base/EliteFire/edFire.asset").WaitForCompletion();
@@ -101,7 +101,11 @@ namespace DeltaruneMod.Elite
             }
 
             CustomEliteDef = new CustomElite(EliteDefinition, tiers.ToArray(), EliteRamp);
-            EliteAPI.Add(CustomEliteDef);
+            EliteAPI.Add(CustomEliteDef);   
+        }
+
+        protected void AddContent()
+        {
             ContentAddition.AddBuffDef(EliteBuff);
             ContentAddition.AddEquipmentDef(EliteEquip);
         }

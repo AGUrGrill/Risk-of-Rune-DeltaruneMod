@@ -58,6 +58,7 @@ namespace DeltaruneMod.Elites
             CreateElite();
             AddRamp();
             AddCrown();
+            AddContent();
             Hooks();
         }
 
@@ -71,7 +72,7 @@ namespace DeltaruneMod.Elites
         private void CombatDirector_Init(On.RoR2.CombatDirector.orig_Init orig)
         {
             orig();
-            AddContent();
+            AddElite();
         }
 
         private void CharacterBody_OnBuffFirstStackGained(On.RoR2.CharacterBody.orig_OnBuffFirstStackGained orig, CharacterBody self, BuffDef buffDef)

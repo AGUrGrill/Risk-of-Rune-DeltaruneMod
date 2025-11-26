@@ -33,43 +33,43 @@ namespace DeltaruneMod.NeoMithrix
             if (!playerHadThornRing) return;
 
             // Give mithrix funny item 
-            if (body.name == "BrotherBody(Clone)" && body.inventory.GetItemCount(NeoMithrixItem.instance.ItemDef) <= 0)
+            if (body.name == "BrotherBody(Clone)" && body.inventory.GetItemCountPermanent(NeoMithrixItem.instance.ItemDef) <= 0)
             {
-                self.inventory.GiveItem(NeoMithrixItem.instance.ItemDef);
-                self.inventory.GiveItem(NeoMithrixLeftWing.instance.ItemDef);
-                self.inventory.GiveItem(NeoMithrixRightWing.instance.ItemDef);
-                self.inventory.GiveItem(NeoMithrixLimb.instance.ItemDef);
-                self.inventory.SetEquipmentIndex(NeoElite.instance.EliteEquip.equipmentIndex);
+                self.inventory.GiveItemPermanent(NeoMithrixItem.instance.ItemDef);
+                self.inventory.GiveItemPermanent(NeoMithrixLeftWing.instance.ItemDef);
+                self.inventory.GiveItemPermanent(NeoMithrixRightWing.instance.ItemDef);
+                self.inventory.GiveItemPermanent(NeoMithrixLimb.instance.ItemDef);
+                self.inventory.SetEquipmentIndex(NeoElite.instance.EliteEquip.equipmentIndex, true);
                 Debug.Log("Giving basic mithrix item.");
             }
 
-            else if (body.name == "BrotherGlassBody(Clone)" && body.inventory.GetItemCount(NeoMithrixItem.instance.ItemDef) <= 0)
+            else if (body.name == "BrotherGlassBody(Clone)" && body.inventory.GetItemCountPermanent(NeoMithrixItem.instance.ItemDef) <= 0)
             {
-                self.inventory.GiveItem(NeoMithrixItem.instance.ItemDef);
-                self.inventory.GiveItem(NeoMithrixLeftWing.instance.ItemDef);
-                self.inventory.GiveItem(NeoMithrixRightWing.instance.ItemDef);
-                self.inventory.GiveItem(NeoMithrixLimb.instance.ItemDef);
-                self.inventory.SetEquipmentIndex(NeoElite.instance.EliteEquip.equipmentIndex);
+                self.inventory.GiveItemPermanent(NeoMithrixItem.instance.ItemDef);
+                self.inventory.GiveItemPermanent(NeoMithrixLeftWing.instance.ItemDef);
+                self.inventory.GiveItemPermanent(NeoMithrixRightWing.instance.ItemDef);
+                self.inventory.GiveItemPermanent(NeoMithrixLimb.instance.ItemDef);
+                self.inventory.SetEquipmentIndex(NeoElite.instance.EliteEquip.equipmentIndex, true);
                 Debug.Log("Giving glass mithrix item.");
             }
 
-            else if (body.name == "BrotherHurtBody(Clone)" && body.inventory.GetItemCount(NeoMithrixItem.instance.ItemDef) <= 0)
+            else if (body.name == "BrotherHurtBody(Clone)" && body.inventory.GetItemCountPermanent(NeoMithrixItem.instance.ItemDef) <= 0)
             {
-                self.inventory.GiveItem(NeoMithrixItem.instance.ItemDef);
-                self.inventory.GiveItem(NeoMithrixLeftWing.instance.ItemDef);
-                self.inventory.GiveItem(NeoMithrixRightWing.instance.ItemDef);
-                self.inventory.GiveItem(NeoMithrixLimb.instance.ItemDef);
-                self.inventory.SetEquipmentIndex(NeoElite.instance.EliteEquip.equipmentIndex);
+                self.inventory.GiveItemPermanent(NeoMithrixItem.instance.ItemDef);
+                self.inventory.GiveItemPermanent(NeoMithrixLeftWing.instance.ItemDef);
+                self.inventory.GiveItemPermanent(NeoMithrixRightWing.instance.ItemDef);
+                self.inventory.GiveItemPermanent(NeoMithrixLimb.instance.ItemDef);
+                self.inventory.SetEquipmentIndex(NeoElite.instance.EliteEquip.equipmentIndex, true);
                 Debug.Log("Giving hurt mithrix item.");
             }
 
-            else if (body.name == "ITBrotherBody(Clone)" && body.inventory.GetItemCount(NeoMithrixItem.instance.ItemDef) <= 0)
+            else if (body.name == "ITBrotherBody(Clone)" && body.inventory.GetItemCountPermanent(NeoMithrixItem.instance.ItemDef) <= 0)
             {
-                self.inventory.GiveItem(NeoMithrixItem.instance.ItemDef);
-                self.inventory.GiveItem(NeoMithrixLeftWing.instance.ItemDef);
-                self.inventory.GiveItem(NeoMithrixRightWing.instance.ItemDef);
-                self.inventory.GiveItem(NeoMithrixLimb.instance.ItemDef);
-                self.inventory.SetEquipmentIndex(NeoElite.instance.EliteEquip.equipmentIndex);
+                self.inventory.GiveItemPermanent(NeoMithrixItem.instance.ItemDef);
+                self.inventory.GiveItemPermanent(NeoMithrixLeftWing.instance.ItemDef);
+                self.inventory.GiveItemPermanent(NeoMithrixRightWing.instance.ItemDef);
+                self.inventory.GiveItemPermanent(NeoMithrixLimb.instance.ItemDef);
+                self.inventory.SetEquipmentIndex(NeoElite.instance.EliteEquip.equipmentIndex, true);
                 Debug.Log("Giving IT mithrix item.");
             }
         }
