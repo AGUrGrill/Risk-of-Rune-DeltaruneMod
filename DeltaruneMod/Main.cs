@@ -68,11 +68,11 @@ namespace DeltaruneMod
 
         public static HashSet<ItemDef> BlacklistedFromPrinter = new HashSet<ItemDef>();
 
-        public ConfigEntry<bool> useChapter1;
-        public ConfigEntry<bool> useChapter2;
-        public ConfigEntry<bool> useChapter3;
-        public ConfigEntry<bool> useChapter4;
-        public ConfigEntry<bool> antiFunMode;
+        public static ConfigEntry<bool> useChapter1;
+        public static ConfigEntry<bool> useChapter2;
+        public static ConfigEntry<bool> useChapter3;
+        public static ConfigEntry<bool> useChapter4;
+        public static ConfigEntry<bool> antiFunMode;
 
         //public const short TextSyncMsgId = 4242;
 

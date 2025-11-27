@@ -24,17 +24,14 @@ namespace DeltaruneMod.Elites
         public override Color EliteColor => Color.magenta;
 
         public override float EliteHealthMult => 0.5f;
-        public override float EliteDamageMult => 3f;
+        public override float EliteDamageMult => 2f;
         public override float EliteAffixDropChance => 0.00025f;
 
         public override Material EliteAffixMaterial => Addressables.LoadAssetAsync<Material>("RoR2/Base/WardOnLevel/matWarbannerBuffRing.mat").WaitForCompletion();
 
-        public override Texture2D EliteRamp => Helpers.CreateGradientTexture(new Color32[5] {
-            new Color32(192, 67, 133, 1),
-            new Color32(157, 78, 165, 1),
-            new Color32(123, 90, 198, 1),
-            new Color32(189, 166, 99, 1),
-            new Color32(255, 242, 0, 1)
+        public override Texture2D EliteRamp => Helpers.CreateGradientTexture(new Color32[2] {
+            new Color32(25, 25, 164, 1),
+            new Color32(25, 25, 164, 1)
         }, 256, 8);
 
         public override Sprite EliteIcon => MainAssets.LoadAsset<Sprite>("neo_affix_icon.png");
@@ -82,9 +79,9 @@ namespace DeltaruneMod.Elites
             if (sender.name.Contains("Brother")) return;
             if (sender.HasBuff(EliteBuff))
             {
-                args.armorTotalMult += 0.5f;
-                args.healthTotalMult += 0.5f;
-                args.damageTotalMult += 2.0f;
+                args.armorTotalMult += EliteHealthMult;
+                args.healthTotalMult += EliteHealthMult;
+                args.damageTotalMult += EliteDamageMult;
             }
             #endregion
         }

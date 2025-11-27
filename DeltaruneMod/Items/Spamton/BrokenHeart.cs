@@ -266,11 +266,14 @@ namespace DeltaruneMod.Items.Spamton
                 var bulbCount = sender.inventory.GetItemCount(LightBulb.instance.ItemDef);
                 if (heartCount > 0 && coreCount > 0 && bulbCount > 0)
                 {
-                    sender.inventory.RemoveItem(ItemDef);
-                    sender.inventory.RemoveItem(MalfunctiongCore.instance.ItemDef);
-                    sender.inventory.RemoveItem(LightBulb.instance.ItemDef);
+                    sender.inventory.RemoveItemPermanent(ItemDef);
+                    sender.inventory.RemoveItemPermanent(MalfunctiongCore.instance.ItemDef);
+                    sender.inventory.RemoveItemPermanent(LightBulb.instance.ItemDef);
                     // Pickup for logbook entry
-                    PickupDropletController.CreatePickupDroplet(new PickupIndex(FinalForm.instance.ItemDef.itemIndex), sender.transform.position, sender.transform.forward * 1f);
+                    if (DeltaruneMod.DeltarunePlugin.antiFunMode.Value)
+                        sender.inventory.GiveItemPermanent(FinalForm.instance.ItemDef);
+                    else
+                        PickupDropletController.CreatePickupDroplet(new PickupIndex(FinalForm.instance.ItemDef.itemIndex), sender.transform.position, sender.transform.forward * 1f);
                     //sender.inventory.GiveItem(FinalForm.instance.ItemDef);
                 }
             }

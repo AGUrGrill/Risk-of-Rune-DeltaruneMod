@@ -51,7 +51,7 @@ namespace DeltaruneMod.Interactables.Grave
         {
             if (!NetworkServer.active) return;
             var player = interactor.GetComponent<CharacterBody>();
-            var commRingCount = player.inventory.GetItemCount(CommRing.instance.ItemDef);
+            var commRingCount = player.inventory.GetItemCountPermanent(CommRing.instance.ItemDef);
             if (commRingCount <= 0) return;
 
             EffectManager.SpawnEffect(shrineUseEffect, new EffectData()
@@ -71,15 +71,18 @@ namespace DeltaruneMod.Interactables.Grave
             var commRing = CommRing.instance.ItemDef;
             var thornRing = ThornRing.instance.ItemDef;
 
-            if (body.inventory.GetItemCount(commRing) > 0)
+            if (body.inventory.GetItemCountPermanent(commRing) > 0)
             {
-                body.inventory.RemoveItem(commRing);
+                body.inventory.RemoveItemPermanent(commRing);
                 Transform dropletOrigin = body.transform;
                 PickupIndex take = new PickupIndex(commRing.itemIndex);
                 PickupIndex give = new PickupIndex(thornRing.itemIndex);
                 PickupDef pickupDef = take.pickupDef;
                 ScrapperController.CreateItemTakenOrb(body.corePosition, gameObject, pickupDef.itemIndex);
-                PickupDropletController.CreatePickupDroplet(give, dropletOrigin.position + new Vector3(0, 0.5f, 0), dropletOrigin.forward * 20f);
+                if (DeltaruneMod.DeltarunePlugin.antiFunMode.Value)
+                    body.inventory.GiveItemPermanent(thornRing);
+                else
+                    PickupDropletController.CreatePickupDroplet(give, dropletOrigin.position + new Vector3(0, 0.5f, 0), dropletOrigin.forward * 20f);
                 //body.inventory.GiveItem(thornRing);
                 Chat.SendBroadcastChat(new Chat.SimpleChatMessage() { baseToken = "You will never wake from this nightmare..." });
                 purchaseInteraction.available = false;
