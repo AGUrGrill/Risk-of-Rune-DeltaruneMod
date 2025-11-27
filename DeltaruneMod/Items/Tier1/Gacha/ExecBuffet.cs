@@ -78,7 +78,7 @@ namespace DeltaruneMod.Items.Tier1.Gacha
                         Debug.Log(characterBody.name + " healed!");
                     }
                 }
-                self.inventory.RemoveItem(ExecBuffet.instance.ItemDef);
+                self.inventory.RemoveItemTemp(ExecBuffet.instance.ItemDef.itemIndex);
             }
 
             #endregion

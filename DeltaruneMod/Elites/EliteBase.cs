@@ -72,42 +72,45 @@ namespace DeltaruneMod.Elite
 
         protected void AddElite()
         {
-            List<CombatDirector.EliteTierDef> tiers = new();
-            EliteDef knownT1 = Addressables.LoadAssetAsync<EliteDef>("RoR2/Base/EliteIce/edIce.asset").WaitForCompletion();
-            EliteDef knownT1H = Addressables.LoadAssetAsync<EliteDef>("RoR2/Base/EliteIce/edIceHonor.asset").WaitForCompletion();
-
-            switch (EliteTierDef)
-            {
-                case (EliteTier.T1):
-                    AddAllTiersThatContain(knownT1);
-                    break;
-                case (EliteTier.T1Honor):
-                    AddAllTiersThatContain(knownT1H);
-                    break;
-            }
-
-            void AddAllTiersThatContain(EliteDef def)
-            {
-                var ctiers = EliteAPI.GetCombatDirectorEliteTiers();
-
-                foreach (CombatDirector.EliteTierDef tier in ctiers)
-                {
-                    if (tier.eliteTypes.Contains(def))
-                    {
-                        tiers.Add(tier);
-                        Debug.Log("Tier " + def.name + " added to " + EliteName + ".");
-                    }
-                }
-            }
-
-            CustomEliteDef = new CustomElite(EliteDefinition, tiers.ToArray(), EliteRamp);
-            EliteAPI.Add(CustomEliteDef);   
+            ContentAddition.AddEliteDef(EliteDefinition);
         }
 
         protected void AddContent()
         {
+            AddElite();
             ContentAddition.AddBuffDef(EliteBuff);
             ContentAddition.AddEquipmentDef(EliteEquip);
+            /*
+            var tierDefs = GetVanillaEliteTierDef(EliteTierDef);
+            if (tierDefs is null)
+                return;
+
+            CustomEliteDef = new CustomElite($"Elite{EliteName}", EliteEquip, EliteColor, $"ELITE_MODIFIER_{EliteName}", tierDefs, EliteRamp);
+            EliteBuff.eliteDef = CustomEliteDef.EliteDef;
+            EliteAPI.Add(CustomEliteDef);
+
+            var honorTierDefs = GetVanillaEliteHonorTierDef(EliteTierDef);
+            if (honorTierDefs is not null)
+            {
+                CustomEliteDefHonor = new CustomElite($"Elite{EliteName}Honor", EliteEquip, EliteColor, $"ELITE_MODIFIER_{EliteEquip}", honorTierDefs, EliteRamp);
+                EliteAPI.Add(CustomEliteDefHonor);
+            }
+            // Get tiers from addressables
+            CombatDirector.EliteTierDef tier1 = EliteAPI.VanillaEliteTiers[0];
+            CombatDirector.EliteTierDef tier2 = EliteAPI.VanillaEliteTiers[1];
+            List<EliteDef> tier1Elites = tier1.eliteTypes.ToList();
+            tier1Elites.Add(EliteDefinition);
+            tier1.eliteTypes = tier1Elites.ToArray();
+            List<EliteDef> tier2Elites = tier1.eliteTypes.ToList();
+            tier2Elites.Add(EliteDefinition);
+            tier2.eliteTypes = tier2Elites.ToArray();
+
+            var eliteList = new List<RoR2.CombatDirector.EliteTierDef>();
+            eliteList.Add(tier1);
+            eliteList.Add(tier2);
+
+            EliteAPI.Add(new CustomElite(EliteName, EliteEquip, EliteColor, null, eliteList, EliteRamp));
+            */
         }
 
         protected void AddCrown()
@@ -155,7 +158,7 @@ namespace DeltaruneMod.Elite
             EliteEquip.dropOnDeathChance = EliteAffixDropChance;
             EliteEquip.enigmaCompatible = false;
             EliteEquip.pickupIconSprite = EliteAspectIcon;
-            EliteEquip.pickupModelPrefab = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/EliteFire/PickupEliteFire.prefab").WaitForCompletion(), "PickupAffixNeo", false);
+            EliteEquip.pickupModelPrefab = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/EliteFire/PickupEliteFire.prefab").WaitForCompletion(), "PickupAffixEmpowering", false);
             foreach (Renderer componentsInChild in EliteEquip.pickupModelPrefab.GetComponentsInChildren<Renderer>())
                 componentsInChild.material = EliteAffixMaterial;
             EliteEquip.nameToken = equipmentName;
@@ -177,6 +180,20 @@ namespace DeltaruneMod.Elite
             EliteBuff.eliteDef = EliteDefinition;
         }
 
+        internal IEnumerable<CombatDirector.EliteTierDef> GetVanillaEliteTierDef(EliteTier tier) => tier switch
+        {
+            EliteTier.None => null,
+            EliteTier.T1 => [EliteAPI.VanillaEliteTiers[(int)EliteTier.T1], EliteAPI.VanillaEliteTiers[(int)EliteTier.T1Guilded]],
+            EliteTier.T1Honor => [EliteAPI.VanillaEliteTiers[(int)EliteTier.T1Honor], EliteAPI.VanillaEliteTiers[(int)EliteTier.T1GuildedHonor]],
+            _ => [EliteAPI.VanillaEliteTiers[(int)tier]]
+        };
+
+        internal IEnumerable<CombatDirector.EliteTierDef> GetVanillaEliteHonorTierDef(EliteTier tier) => tier switch
+        {
+            EliteTier.T1 => [EliteAPI.VanillaEliteTiers[(int)EliteTier.T1Honor], EliteAPI.VanillaEliteTiers[(int)EliteTier.T1GuildedHonor]],
+            EliteTier.T1Guilded => [EliteAPI.VanillaEliteTiers[(int)EliteTier.T1GuildedHonor]],
+            _ => null
+        };
         public virtual void Hooks() { }
     }
 }

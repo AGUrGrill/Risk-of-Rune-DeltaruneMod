@@ -50,6 +50,7 @@ namespace DeltaruneMod.Items.Tier1.Gacha
         {
             var player = damageReport.attackerBody;
             var xp = self.expReward;
+
             #region Give player increased xp
             if (GetCount(player) > 0)
             {

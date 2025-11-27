@@ -14,9 +14,9 @@ namespace DeltaruneMod.Items.Tier1.Gacha
 
         public override string ItemLangTokenName => "GACHA_BALL";
 
-        public override string ItemPickupDesc => "On stage start, gain a temporary random item.";
+        public override string ItemPickupDesc => "Gain a random gacha item every 90 seconds.";
 
-        public override string ItemFullDescription => "";
+        public override string ItemFullDescription => "Gain a random item from the gacha item pool every 90 seconds <style=sStack>(+1 item per stack)</style>.";
 
         public override string ItemLore => "";
 
@@ -34,7 +34,7 @@ namespace DeltaruneMod.Items.Tier1.Gacha
 
         public override bool isChapter4 => false;
 
-        public List<ItemDef> gachaItems = new List<ItemDef>();
+        public static List<ItemDef> gachaItems = new List<ItemDef>();
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {
@@ -43,10 +43,36 @@ namespace DeltaruneMod.Items.Tier1.Gacha
 
         public override void Hooks()
         {
-            On.RoR2.CharacterMaster.OnBodyStart += CharacterMaster_OnBodyStart;
+            On.RoR2.CharacterBody.OnInventoryChanged += CharacterBody_OnInventoryChanged;
+            //On.RoR2.CharacterMaster.OnBodyStart += CharacterMaster_OnBodyStart;
         }
 
-        private void CharacterMaster_OnBodyStart(On.RoR2.CharacterMaster.orig_OnBodyStart orig, CharacterMaster self, CharacterBody body)
+        private void CharacterBody_OnInventoryChanged(On.RoR2.CharacterBody.orig_OnInventoryChanged orig, CharacterBody self)
+        {
+            orig(self);
+
+            #region Add Timer
+            var timer = self.GetComponent<GachaBallTimer>();
+            if (GetCount(self) > 0 && !timer)
+            {
+                timer = self.gameObject.AddComponent<GachaBallTimer>();
+                timer.player = self;
+                timer.stackCount = GetCount(self);
+                timer.enabled = true;
+            }
+            else if (GetCount(self) <= 0 && timer)
+            {
+                timer.enabled = false;
+            }
+            else if (timer && timer.stackCount != GetCount(self))
+            {
+                timer.stackCount = GetCount(self);
+            }
+            #endregion
+        }
+
+
+        /*private void CharacterMaster_OnBodyStart(On.RoR2.CharacterMaster.orig_OnBodyStart orig, CharacterMaster self, CharacterBody body)
         {
             orig(self, body);
 
@@ -81,6 +107,7 @@ namespace DeltaruneMod.Items.Tier1.Gacha
                 }
             }
         }
+        */
 
         private void GetGachaItems()
         {
@@ -95,5 +122,51 @@ namespace DeltaruneMod.Items.Tier1.Gacha
             //CreateLang();
             //Hooks();
         }
+        private class GachaBallTimer : MonoBehaviour
+        {
+            // Temp items last 80sec, 90sec with substandard dup
+
+            readonly float timerInterval = 90f;
+            float timer = 0f;
+
+            public int stackCount = 0;
+            public CharacterBody player;
+
+            private void Awake()
+            {
+                base.enabled = false;
+            }
+            private void OnEnable()
+            {
+                if (!player)
+                {
+                    Debug.Log("Player not found! Destroying...");
+                    Destroy(this);
+                }
+
+                timer = timerInterval;
+            }
+            // Timer
+            private void FixedUpdate()
+            {
+                timer -= Time.fixedDeltaTime;
+                if (timer <= 0)
+                {
+                    GAMBLE();
+                    timer = timerInterval;
+                }
+            }
+            // Add buff to increase speed
+            private void GAMBLE()
+            {
+                for (int i = 0; i < stackCount; i++)
+                {
+                    var ranGachaItem = gachaItems[UnityEngine.Random.Range(0, gachaItems.Count)];
+                    player.inventory.GiveItemTemp(ranGachaItem.itemIndex);
+                    Debug.Log("Gave " + player.name + " " + ranGachaItem.name);
+                }
+            }
+        }
+
     }
 }

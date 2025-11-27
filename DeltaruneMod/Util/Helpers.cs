@@ -107,10 +107,12 @@ namespace DeltaruneMod.Util
                     else if (type == 99) buffs.Add(buff);
                 }
             }
+            /*
             foreach (var buff in buffs)
             {
                 Debug.Log("BuffNameTest: " + buff);
             }
+            */
             return buffs;
         }
         #endregion

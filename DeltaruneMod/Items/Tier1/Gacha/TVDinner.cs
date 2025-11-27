@@ -67,12 +67,12 @@ namespace DeltaruneMod.Items.Tier1.Gacha
                 if (wontOverheal)
                 {
                     self.healthComponent.health += healAmount;
-                    self.inventory.RemoveItem(TVDinner.instance.ItemDef);
                 }
                 else
                 {
                     self.healthComponent.health = playerMaxHealth;
                 }
+                self.inventory.RemoveItemTemp(TVDinner.instance.ItemDef.itemIndex);
                 Debug.Log(self.name + " healed!");
             }
             #endregion

@@ -19,7 +19,7 @@ namespace DeltaruneMod.Elites
     {
         public override string EliteName => "N.E.O.";
 
-        public override string EliteAffixDesc => "Gain N.E.O. armor. 50% less armor & hp, 200% more damage. Gain 2 random buffs.";
+        public override string EliteAffixDesc => "Gain N.E.O. armor. HP & ARMOR is halfed, but DAMAGE is doubled. Gain 2 random buffs.";
 
         public override Color EliteColor => Color.magenta;
 
@@ -29,9 +29,12 @@ namespace DeltaruneMod.Elites
 
         public override Material EliteAffixMaterial => Addressables.LoadAssetAsync<Material>("RoR2/Base/WardOnLevel/matWarbannerBuffRing.mat").WaitForCompletion();
 
-        public override Texture2D EliteRamp => Helpers.CreateGradientTexture(new Color32[2] {
-            new Color32(25, 25, 164, 1),
-            new Color32(25, 25, 164, 1)
+        public override Texture2D EliteRamp => Helpers.CreateGradientTexture(new Color32[5] {
+            new Color32(192,67,133,1),
+            new Color32(157,78,165,1),
+            new Color32(123,90,198,1),
+            new Color32(189,166,99,1),
+            new Color32(255,242,0,1),
         }, 256, 8);
 
         public override Sprite EliteIcon => MainAssets.LoadAsset<Sprite>("neo_affix_icon.png");
@@ -53,9 +56,9 @@ namespace DeltaruneMod.Elites
             CreateBuff("N.E.O. Armor");
             CreateEquip("Armor of N.E.O.");
             CreateElite();
+            AddContent();
             AddRamp();
             AddCrown();
-            AddContent();
             Hooks();
         }
 
@@ -65,12 +68,6 @@ namespace DeltaruneMod.Elites
             On.RoR2.CharacterBody.OnBuffFinalStackLost += CharacterBody_OnBuffFinalStackLost;
             On.RoR2.CombatDirector.Init += CombatDirector_Init;
             RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
-        }
-
-        private void CombatDirector_Init(On.RoR2.CombatDirector.orig_Init orig)
-        {
-            orig();
-            AddElite();
         }
 
         private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
@@ -84,6 +81,30 @@ namespace DeltaruneMod.Elites
                 args.damageTotalMult += EliteDamageMult;
             }
             #endregion
+        }
+
+        private void CombatDirector_Init(On.RoR2.CombatDirector.orig_Init orig)
+        {
+            orig();
+            if (EliteAPI.VanillaEliteTiers.Length > 2)
+            {
+                CombatDirector.EliteTierDef targetTier = EliteAPI.VanillaEliteTiers[1];
+                List<EliteDef> elites = targetTier.eliteTypes.ToList();
+                EliteDefinition.healthBoostCoefficient = EliteHealthMult * 2;
+                EliteDefinition.damageBoostCoefficient = EliteDamageMult * 2;
+                elites.Add(EliteDefinition);
+                targetTier.eliteTypes = elites.ToArray();
+            }
+            else if (EliteAPI.VanillaEliteTiers.Length > 1)
+            {
+                CombatDirector.EliteTierDef targetTier = EliteAPI.VanillaEliteTiers[0];
+                List<EliteDef> elites = targetTier.eliteTypes.ToList();
+                EliteDefinition.healthBoostCoefficient = EliteHealthMult;
+                EliteDefinition.damageBoostCoefficient = EliteDamageMult;
+                elites.Add(EliteDefinition);
+                targetTier.eliteTypes = elites.ToArray();
+            }
+            //AddElite();
         }
 
         private void CharacterBody_OnBuffFirstStackGained(On.RoR2.CharacterBody.orig_OnBuffFirstStackGained orig, CharacterBody self, BuffDef buffDef)
@@ -849,5 +870,6 @@ namespace DeltaruneMod.Elites
             });
             return itemDisplayRules;
         }
+    
     }
 }
