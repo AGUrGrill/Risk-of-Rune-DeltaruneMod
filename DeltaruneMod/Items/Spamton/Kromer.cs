@@ -15,13 +15,13 @@ namespace DeltaruneMod.Items.Spamton
 
         public override string ItemLangTokenName => "KROMER";
 
-        public override string ItemPickupDesc => "DON'T WORRY! FOR OUR <style=cShrine>[No Money Back Guaranttee]</style>";
+        public override string ItemPickupDesc => "DON'T WORRY! FOR OUR <style=cShrine>[No Money Back Guarantee]</style>";
 
         public override string ItemFullDescription => "Does nothing...\n\n\nWhy are you still reading??";
 
         public override string ItemLore => "Smells like <style=cKeywordName>KROMER</style>.";
 
-        public override ItemTier Tier => ItemTier.AssignedAtRuntime;
+        public override ItemTier Tier => ItemTier.NoTier;
 
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("kromer.prefab");
 
