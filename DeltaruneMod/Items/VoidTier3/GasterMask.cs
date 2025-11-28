@@ -343,7 +343,7 @@ namespace DeltaruneMod.Items.VoidTier3
             target.healthComponent.Suicide();
 
             // Setup target copy
-            targetCopy.rigidbody.linearVelocity = Vector3.zero;
+            targetCopy.rigidbody.velocity = Vector3.zero;
             targetCopy.master.teamIndex = TeamIndex.Void;
             targetCopy.teamComponent.teamIndex = TeamIndex.Void;
             targetCopy.inventory.SetEquipmentIndex(DLC1Content.Elites.Void.eliteEquipmentDef.equipmentIndex, true);
