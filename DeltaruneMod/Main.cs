@@ -73,6 +73,7 @@ namespace DeltaruneMod
         public static ConfigEntry<bool> useChapter3;
         public static ConfigEntry<bool> useChapter4;
         public static ConfigEntry<bool> antiFunMode;
+        public static ConfigEntry<bool> eliteDisable;
 
         //public const short TextSyncMsgId = 4242;
 
@@ -145,6 +146,10 @@ namespace DeltaruneMod
               Debug.Log("Elite: " + elites.EliteName + " Initialized!");
             }
             #endregion
+
+            eliteDisable = Config.Bind("Additional Settings", "Disable N.E.O. Elite", false,
+                "Disables N.E.O. Elite from spawning.");
+            ModSettingsManager.AddOption(new CheckBoxOption(eliteDisable));
 
             StartCoroutine(LoadSoundBankWhenReady());
 
