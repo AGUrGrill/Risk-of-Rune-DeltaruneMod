@@ -258,10 +258,11 @@ namespace DeltaruneMod.Items.Tier1
         {
             JackBuff = ScriptableObject.CreateInstance<BuffDef>();
             JackBuff.name = "JackBuff";
+            JackBuff.iconSprite = ItemIcon;
             JackBuff.buffColor = Color.green;
             JackBuff.canStack = true;
             JackBuff.isDebuff = false;
-            JackBuff.isHidden = true;
+            JackBuff.isHidden = false;
 
             ContentAddition.AddBuffDef(JackBuff);
         }

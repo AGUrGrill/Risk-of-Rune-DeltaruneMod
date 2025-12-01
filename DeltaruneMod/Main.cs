@@ -15,6 +15,7 @@ using R2API;
 using R2API.Networking;
 using R2API.Utils;
 using RiskOfOptions;
+using RiskOfOptions.OptionConfigs;
 using RiskOfOptions.Options;
 using RoR2;
 using System;
@@ -68,12 +69,21 @@ namespace DeltaruneMod
 
         public static HashSet<ItemDef> BlacklistedFromPrinter = new HashSet<ItemDef>();
 
+        // Chapter Settings
         public static ConfigEntry<bool> useChapter1;
         public static ConfigEntry<bool> useChapter2;
         public static ConfigEntry<bool> useChapter3;
         public static ConfigEntry<bool> useChapter4;
+
+        // Elite Settings
+        public static ConfigEntry<bool> neoEliteDisable;
+        public static ConfigEntry<int> neoEliteMaxBuffs;
+        public static ConfigEntry<float> neoEliteDamageMult;
+        public static ConfigEntry<bool> allEnemiesNEO;
+
+        // Additional Settings
         public static ConfigEntry<bool> antiFunMode;
-        public static ConfigEntry<bool> eliteDisable;
+        
 
         //public const short TextSyncMsgId = 4242;
 
@@ -136,8 +146,19 @@ namespace DeltaruneMod
             Log.Debug("Trashcan full!");
             #endregion
 
+            neoEliteDisable = Config.Bind("Elite Settings", "Disable N.E.O. Elite", false,
+                "Disables N.E.O. Elites from spawning.");
+            ModSettingsManager.AddOption(new CheckBoxOption(neoEliteDisable));
+            neoEliteMaxBuffs = Config.Bind("Elite Settings", "Change N.E.O. Elite Max Buffs", 2,
+                "[REQUIRES RESTART] Changes the maximum buffs N.E.O. Elites spawn with.");
+            ModSettingsManager.AddOption(new IntFieldOption(neoEliteMaxBuffs));
+            neoEliteDamageMult = Config.Bind("Elite Settings", "Change N.E.O. Elite DMG Multiplyer", 1.3f,
+                "[REQUIRES RESTART] Changes the damage multiplayer of N.E.O. Elites.");
+            ModSettingsManager.AddOption(new FloatFieldOption(neoEliteDamageMult));
+            allEnemiesNEO = Config.Bind("Elite Settings", "Make (almost) all enemies N.E.O. Elites.", false,
+                "Makes all possible enemies N.E.O. Elites.");
+            ModSettingsManager.AddOption(new CheckBoxOption(allEnemiesNEO));
             #region Elite Initialization
-           
             var EliteTypes = Assembly.GetExecutingAssembly().GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(EliteBase)));
             foreach (var eliteType in EliteTypes)
             {
@@ -146,10 +167,6 @@ namespace DeltaruneMod
               Debug.Log("Elite: " + elites.EliteName + " Initialized!");
             }
             #endregion
-
-            eliteDisable = Config.Bind("Additional Settings", "Disable N.E.O. Elite", false,
-                "Disables N.E.O. Elite from spawning.");
-            ModSettingsManager.AddOption(new CheckBoxOption(eliteDisable));
 
             StartCoroutine(LoadSoundBankWhenReady());
 

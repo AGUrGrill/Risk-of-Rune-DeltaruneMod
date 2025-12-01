@@ -24,7 +24,7 @@ namespace DeltaruneMod.Elites
         public override Color EliteColor => Color.magenta;
 
         public override float EliteHealthMult => 0.5f;
-        public override float EliteDamageMult => 1.3f;
+        public override float EliteDamageMult => DeltarunePlugin.neoEliteDamageMult.Value;
         public override float EliteAffixDropChance => 0.00025f;
 
         public override Material EliteAffixMaterial => Addressables.LoadAssetAsync<Material>("RoR2/Base/WardOnLevel/matWarbannerBuffRing.mat").WaitForCompletion();
@@ -45,7 +45,7 @@ namespace DeltaruneMod.Elites
 
         public override EliteTier EliteTierDef => EliteTier.T1;
 
-        private int maxBuffs = 2;
+        private static int maxBuffs = DeltarunePlugin.neoEliteMaxBuffs.Value;
         private List<RoR2.BuffDef> allBuffs = new List<RoR2.BuffDef>();
         private List<RoR2.BuffDef> currBuffs = new List<RoR2.BuffDef>();
         private List<BuffDef> blacklistedBuffs = new List<BuffDef>();

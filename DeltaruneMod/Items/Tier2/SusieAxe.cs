@@ -434,8 +434,10 @@ namespace DeltaruneMod.Items.Tier2
 
                     float healCalc = body.maxHealth * healPercent;
                     //Debug.Log(body.maxHealth + " | Heal: " + healCalc);
-                    if (body.healthComponent.health + healCalc > body.maxHealth) body.healthComponent.health = body.maxHealth;
-                    else body.healthComponent.health += healCalc;
+                    if ((body.healthComponent.health + healCalc) > body.maxHealth) 
+                        body.healthComponent.health = body.maxHealth;
+                    else 
+                        body.healthComponent.health += healCalc;
                 }
             }
             private void FixedUpdate()
