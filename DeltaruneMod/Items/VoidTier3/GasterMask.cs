@@ -347,7 +347,7 @@ namespace DeltaruneMod.Items.VoidTier3
             targetCopy.master.teamIndex = TeamIndex.Void;
             targetCopy.teamComponent.teamIndex = TeamIndex.Void;
             //targetCopy.inventory.SetEquipmentIndex(DLC1Content.Elites.Void.eliteEquipmentDef.equipmentIndex, true);
-            targetCopy.AddBuff(DLC1Content.Buffs.EliteVoid);
+            //targetCopy.AddBuff(DLC1Content.Buffs.EliteVoid);
 
             var ai = targetCopy.master.GetComponent<BaseAI>();
             if (ai)
@@ -359,7 +359,8 @@ namespace DeltaruneMod.Items.VoidTier3
             // Create ally
             CorruptConversionTime = CorruptionBaseTime + ((GetCount(owner)-1) * CorruptionMultTime);
             CharacterBody voidAlly = RoR2.Util.TryToCreateGhost(targetCopy, owner, CorruptConversionTime);
-            
+            voidAlly.AddBuff(DLC1Content.Buffs.EliteVoid);
+
             // Stop corpse from spawning
             var voidAllyModelLocator = voidAlly.modelLocator;
             if (voidAllyModelLocator) voidAllyModelLocator.dontReleaseModelOnDeath = true;
