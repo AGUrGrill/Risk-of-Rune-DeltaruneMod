@@ -20,11 +20,11 @@ namespace DeltaruneMod.Util
 
             // Simulate NEO Elite
             if (DeltaruneMod.DeltarunePlugin.neoEliteDisable.Value) return;
-            if (body.isPlayerControlled || body.isRemoteOp || body.IsDrone) return;
-
-            numOfEnemiesSpawned++;
             if (DeltarunePlugin.allEnemiesNEO.Value)
             {
+                if (body.isPlayerControlled || body.isRemoteOp || body.IsDrone) return;
+
+                numOfEnemiesSpawned++;
                 body.inventory.SetEquipmentIndex(NeoElite.instance.EliteEquip.equipmentIndex, true);
             }    
         }

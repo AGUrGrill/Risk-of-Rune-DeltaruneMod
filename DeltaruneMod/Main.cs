@@ -147,7 +147,7 @@ namespace DeltaruneMod
             #endregion
 
             neoEliteDisable = Config.Bind("Elite Settings", "Disable N.E.O. Elite", false,
-                "Disables N.E.O. Elites from spawning.");
+                "[REQUIRES RESTART] Disables N.E.O. Elites from spawning.");
             ModSettingsManager.AddOption(new CheckBoxOption(neoEliteDisable));
             neoEliteMaxBuffs = Config.Bind("Elite Settings", "Change N.E.O. Elite Max Buffs", 2,
                 "[REQUIRES RESTART] Changes the maximum buffs N.E.O. Elites spawn with.");
@@ -158,13 +158,17 @@ namespace DeltaruneMod
             allEnemiesNEO = Config.Bind("Elite Settings", "Make (almost) all enemies N.E.O. Elites.", false,
                 "Makes all possible enemies N.E.O. Elites.");
             ModSettingsManager.AddOption(new CheckBoxOption(allEnemiesNEO));
+
             #region Elite Initialization
-            var EliteTypes = Assembly.GetExecutingAssembly().GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(EliteBase)));
-            foreach (var eliteType in EliteTypes)
+            if (!neoEliteDisable.Value)
             {
-                EliteBase elites = (EliteBase)System.Activator.CreateInstance(eliteType);
-                elites.Init();
-              Debug.Log("Elite: " + elites.EliteName + " Initialized!");
+                var EliteTypes = Assembly.GetExecutingAssembly().GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(EliteBase)));
+                foreach (var eliteType in EliteTypes)
+                {
+                    EliteBase elites = (EliteBase)System.Activator.CreateInstance(eliteType);
+                    elites.Init();
+                    Debug.Log("Elite: " + elites.EliteName + " Initialized!");
+                }
             }
             #endregion
 

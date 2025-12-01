@@ -346,8 +346,8 @@ namespace DeltaruneMod.Items.VoidTier3
             targetCopy.rigidbody.velocity = Vector3.zero;
             targetCopy.master.teamIndex = TeamIndex.Void;
             targetCopy.teamComponent.teamIndex = TeamIndex.Void;
-            targetCopy.inventory.SetEquipmentIndex(DLC1Content.Elites.Void.eliteEquipmentDef.equipmentIndex, true);
-            //targetCopy.AddBuff(DLC1Content.Buffs.EliteVoid);
+            //targetCopy.inventory.SetEquipmentIndex(DLC1Content.Elites.Void.eliteEquipmentDef.equipmentIndex, true);
+            targetCopy.AddBuff(DLC1Content.Buffs.EliteVoid);
 
             var ai = targetCopy.master.GetComponent<BaseAI>();
             if (ai)
