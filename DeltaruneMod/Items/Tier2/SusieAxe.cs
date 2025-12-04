@@ -50,7 +50,7 @@ namespace DeltaruneMod.Items.Tier2
 
         public override bool isChapter4 => false;
 
-        public static GameObject ProjectilePrefab;
+        internal GameObject ProjectilePrefab;
 
         public static BuffDef SusieAxeBuff;
 
@@ -58,6 +58,7 @@ namespace DeltaruneMod.Items.Tier2
 
         public override void Init()
         {
+            /*
             CreateItem();
             CreateLang();
             CreateBuff();
@@ -69,6 +70,7 @@ namespace DeltaruneMod.Items.Tier2
             pickupModel.transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
 
             ItemDef.pickupModelPrefab = pickupModel;
+            */
         }
 
         public override void Hooks()
@@ -86,6 +88,7 @@ namespace DeltaruneMod.Items.Tier2
                 existing = sender.gameObject.AddComponent<PrimarySkillSusieAxeBehavior>();
                 existing.body = sender;
                 existing.stack = itemCount;
+                existing.projectilePrefab = ProjectilePrefab;
                 existing.SusieAxeBuff = SusieAxeBuff;
             }
             else if (existing && itemCount <= 0) existing.enabled = false;
@@ -111,26 +114,21 @@ namespace DeltaruneMod.Items.Tier2
 
         public void CreateProjectile()
         {
-            ProjectilePrefab = Helpers.ModifyVanillaPrefab("RoR2/DLC1/PrimarySkillShuriken/ShurikenProjectile.prefab", "SusieAxeProjectile", false,
-                (orig) => {
-                    var ghost = MainAssets.LoadAsset<GameObject>("rude_buster.prefab").InstantiateClone("SusieAxeGhost", false);
-                    ghost.AddComponent<ProjectileGhostController>();
-                    ghost.AddComponent<NetworkIdentity>();
-                    ghost.transform.localScale = new Vector3(150f, 150f, 150f);
+            var ghost = MainAssets.LoadAsset<GameObject>("rude_buster.prefab").InstantiateClone("SusieAxeGhost", false);
+            ghost.AddComponent<ProjectileGhostController>();
+            ghost.AddComponent<NetworkIdentity>();
+            ghost.transform.localScale = new Vector3(150f, 150f, 150f);
 
-                    var projCont = orig.GetComponent<ProjectileController>();
-                    if (projCont.ghostPrefab) UnityEngine.Object.Destroy(projCont.ghostPrefab);
-                    projCont.shouldPlaySounds = false;
-                    projCont.startSound = "";
-                    projCont.ghostPrefab = ghost;
+            ProjectilePrefab = Helpers.ModifyVanillaPrefab("RoR2/DLC1/PrimarySkillShuriken/ShurikenProjectile.prefab", "SusieAxeProjectile", true,
+                (shurikenPrefab) => {
+                    shurikenPrefab.GetComponent<ProjectileController>().ghostPrefab = ghost;
+                    shurikenPrefab.GetComponent<ProjectileController>().startSound = "";
 
-                    var projSimp = orig.GetComponent<ProjectileSimple>();
-                    projSimp.desiredForwardSpeed *= 0.5f;
-                    projSimp.GetComponent<Rigidbody>().useGravity = false;
+                    shurikenPrefab.GetComponent<ProjectileSimple>().desiredForwardSpeed *= 0.5f;
 
-                    UnityEngine.Object.Destroy(orig.GetComponent<ProjectileSteerTowardTarget>());
-                    UnityEngine.Object.Destroy(orig.GetComponent<ProjectileTargetComponent>());
-                    return orig;
+                    //UnityEngine.Object.Destroy(shurikenPrefab.GetComponent<ProjectileSteerTowardTarget>());
+                    //UnityEngine.Object.Destroy(shurikenPrefab.GetComponent<ProjectileTargetComponent>());
+                    return shurikenPrefab;
                 });
 
             Util.Helpers.CreateNetworkedProjectilePrefab(ProjectilePrefab);
@@ -388,7 +386,6 @@ namespace DeltaruneMod.Items.Tier2
             }
             private void Start()
             {
-                projectilePrefab = ProjectilePrefab;
             }
 
             private void OnEnable()

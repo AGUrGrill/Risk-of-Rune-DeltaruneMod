@@ -25,7 +25,7 @@ namespace DeltaruneMod.Util
             {
                 ItemDef item = ItemCatalog.GetItemDef(i);
 
-                if (item == null) continue;
+                if (item == null || item.ContainsTag(ItemTag.WorldUnique)) continue;
 
                 if (tierIndex == 99) items.Add(item);
                 else if (tierIndex == 0 && item.tier == ItemTier.Tier1) items.Add(item);
