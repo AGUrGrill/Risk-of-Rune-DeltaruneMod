@@ -44,6 +44,8 @@ namespace DeltaruneMod.Items.Spamton
 
         public override bool isChapter4 => false;
 
+        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility };
+
         public static float critPercent = 0.25f;
 
         public static bool critReady = false;

@@ -24,7 +24,7 @@ namespace DeltaruneMod.Items.Tier1
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("tenna_buckle.prefab");
         public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("tenna_buckle_icon.png");
 
-        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility };
+        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility, ItemTag.CanBeTemporary };
 
         public override bool isChapter1 => false;
 

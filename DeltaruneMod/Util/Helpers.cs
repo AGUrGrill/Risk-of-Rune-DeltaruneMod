@@ -146,8 +146,8 @@ namespace DeltaruneMod.Util
             if (!obj.GetComponent<ProjectileController>()) obj.AddComponent<ProjectileController>();
             if (!obj.GetComponent<ProjectileSimple>()) obj.AddComponent<ProjectileSimple>();
             if (!obj.GetComponent<NetworkIdentity>()) obj.AddComponent<NetworkIdentity>();
-            if (obj) PrefabAPI.RegisterNetworkPrefab(obj);
-            ContentAddition.AddProjectile(obj);
+            PrefabAPI.RegisterNetworkPrefab(obj);
+            ContentAddition.AddProjectile(obj); 
         }
         /// <summary>
         /// Loads a prefab from RoR2 addressable assets, clones it without awakening it, applies a modifier function to the clone, then performs a second InstantiateClone operation to freeze the modified version into a new named prefab.

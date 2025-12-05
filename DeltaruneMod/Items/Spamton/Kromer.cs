@@ -35,6 +35,8 @@ namespace DeltaruneMod.Items.Spamton
 
         public override bool isChapter4 => false;
 
+        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.WorldUnique };
+
         public override void Init()
         {
             CreateLang();

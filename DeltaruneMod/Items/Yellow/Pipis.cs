@@ -29,7 +29,7 @@ namespace DeltaruneMod.Items.Yellow
 
         public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("pipis_icon.png");
 
-        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility, ItemTag.Damage };
+        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility, ItemTag.Damage, ItemTag.CanBeTemporary };
 
         public override bool PrinterBlacklisted 
         { 

@@ -34,6 +34,8 @@ namespace DeltaruneMod.Items.Tier1.Gacha
 
         public override bool isChapter4 => false;
 
+        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility, ItemTag.CanBeTemporary };
+
         public static List<ItemDef> gachaItems = new List<ItemDef>();
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()

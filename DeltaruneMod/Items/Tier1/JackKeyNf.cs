@@ -48,6 +48,8 @@ namespace DeltaruneMod.Items.Tier1
 
         public static BuffDef JackBuff;
 
+        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility, ItemTag.MobilityRelated };
+
         // Numbers for stuff
         private readonly float multi = 0.05f;
 

@@ -63,6 +63,7 @@ namespace DeltaruneMod.Items.VoidTier3
         private const int CorruptionBaseTime = 10;
         private const int CorruptionMultTime = 10;
 
+        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.CanBeTemporary, ItemTag.Utility };
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {

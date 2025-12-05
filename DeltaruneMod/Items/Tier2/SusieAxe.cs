@@ -40,7 +40,7 @@ namespace DeltaruneMod.Items.Tier2
 
         public Sprite BuffIcon = MainAssets.LoadAsset<Sprite>("rude_buster_effect_icon.png");
 
-        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Damage };
+        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Damage, ItemTag.CanBeTemporary };
 
         public override bool isChapter1 => true;
 
@@ -58,7 +58,6 @@ namespace DeltaruneMod.Items.Tier2
 
         public override void Init()
         {
-            /*
             CreateItem();
             CreateLang();
             CreateBuff();
@@ -70,7 +69,6 @@ namespace DeltaruneMod.Items.Tier2
             pickupModel.transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
 
             ItemDef.pickupModelPrefab = pickupModel;
-            */
         }
 
         public override void Hooks()
@@ -119,15 +117,11 @@ namespace DeltaruneMod.Items.Tier2
             ghost.AddComponent<NetworkIdentity>();
             ghost.transform.localScale = new Vector3(150f, 150f, 150f);
 
-            ProjectilePrefab = Helpers.ModifyVanillaPrefab("RoR2/DLC1/PrimarySkillShuriken/ShurikenProjectile.prefab", "SusieAxeProjectile", true,
+            ProjectilePrefab = Helpers.ModifyVanillaPrefab("RoR2/DLC1/PrimarySkillShuriken/ShurikenProjectile.prefab", "SusieAxeProjectile", false,
                 (shurikenPrefab) => {
                     shurikenPrefab.GetComponent<ProjectileController>().ghostPrefab = ghost;
                     shurikenPrefab.GetComponent<ProjectileController>().startSound = "";
-
                     shurikenPrefab.GetComponent<ProjectileSimple>().desiredForwardSpeed *= 0.5f;
-
-                    //UnityEngine.Object.Destroy(shurikenPrefab.GetComponent<ProjectileSteerTowardTarget>());
-                    //UnityEngine.Object.Destroy(shurikenPrefab.GetComponent<ProjectileTargetComponent>());
                     return shurikenPrefab;
                 });
 

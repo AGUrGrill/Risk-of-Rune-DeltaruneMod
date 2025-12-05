@@ -22,7 +22,7 @@ namespace DeltaruneMod.Interactables.SusExchange
 
         private Interactor interactor;
 
-        public readonly static int maxUses = 10;
+        public readonly static int maxUses = DeltarunePlugin.susExchangeMaxUses.Value;
 
         public static int uses;
 
@@ -176,7 +176,7 @@ namespace DeltaruneMod.Interactables.SusExchange
                 else if (choosenItem == RandomTradingItem.instance.ItemDef.itemIndex)
                 {
                     var commRingCount = body.inventory.GetItemCount(CommRing.instance.ItemDef);
-                    var roll_chance = 40 + (commRingCount * 10);
+                    var roll_chance = DeltarunePlugin.susExchangeChance.Value + (commRingCount * 10);
 
                     // Choose Random Item
                     var getRandomItem = allTakeableInvItems[UnityEngine.Random.Range(0, numOfTakeableItems)];

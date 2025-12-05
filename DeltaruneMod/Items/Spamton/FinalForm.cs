@@ -1,4 +1,5 @@
 ﻿using DeltaruneMod.Items;
+using DeltaruneMod.Util;
 using R2API;
 using RoR2;
 using RoR2.Orbs;
@@ -54,6 +55,8 @@ namespace DeltaruneMod.Items.Spamton
         public override bool isChapter3 => false;
 
         public override bool isChapter4 => false;
+
+        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Damage, ItemTag.Utility };
 
         public static GameObject orbProjectile;
 
@@ -392,31 +395,24 @@ namespace DeltaruneMod.Items.Spamton
             ghost.AddComponent<NetworkIdentity>();
             ghost.transform.localScale = new Vector3(10f, 10f, 10f);
 
-            var projCont = orbProjectile.GetComponent<ProjectileController>();
-            if (projCont.ghostPrefab) UnityEngine.Object.Destroy(projCont.ghostPrefab);
-            projCont.shouldPlaySounds = false;
-            projCont.startSound = "";
-            projCont.ghostPrefab = ghost;
+            // Projectile Stuff
+            orbProjectile = Helpers.ModifyVanillaPrefab("RoR2/DLC1/LunarSun/LunarSunProjectile.prefab", "NeoProjectile", false,
+                (lunarSunProjectile) => {
+                    lunarSunProjectile.GetComponent<ProjectileController>().ghostPrefab = ghost;
+                    lunarSunProjectile.GetComponent<ProjectileController>().startSound = "";
+                    // Change Proj Simple
+                    var fwrdSpd = lunarSunProjectile.GetComponent<ProjectileSimple>().desiredForwardSpeed;
+                    lunarSunProjectile.GetComponent<ProjectileSimple>().desiredForwardSpeed = fwrdSpd * 5;
+                    lunarSunProjectile.GetComponent<ProjectileSimple>().oscillate = false;
+                    // Change Deployable Type
+                    lunarSunProjectile.GetComponent<ProjectileDeployToOwner>().deployableSlot = FinalFormOrbs;
+                    // Replace Controller
+                    UnityEngine.Object.DestroyImmediate(lunarSunProjectile.GetComponent<LunarSunProjectileController>());
+                    lunarSunProjectile.AddComponent<BeadProjectileController>();
 
-            // Replace Special Controller
-            var lunarSunProjCont = orbProjectile.GetComponent<LunarSunProjectileController>();
-            if (lunarSunProjCont)
-            {
-                Debug.Log("Deleting old controller!");
-                UnityEngine.Object.DestroyImmediate(orbProjectile.GetComponent<LunarSunProjectileController>());
-            }
-           var beadProjCont = orbProjectile.AddComponent<BeadProjectileController>();
+                    return lunarSunProjectile;
+                });
 
-            // Change Deployable Type
-            var projectileDeployToOwner = orbProjectile.GetComponent<ProjectileDeployToOwner>();
-            projectileDeployToOwner.deployableSlot = FinalFormOrbs;
-
-            var projSimple = orbProjectile.GetComponent<ProjectileSimple>();
-            var fwrdSpd = projSimple.desiredForwardSpeed;
-            projSimple.desiredForwardSpeed = fwrdSpd * 5;
-            projSimple.oscillate = false;
-
-            Util.Helpers.GetAllComponentNames(orbProjectile);
             Util.Helpers.CreateNetworkedProjectilePrefab(orbProjectile);
         }
 

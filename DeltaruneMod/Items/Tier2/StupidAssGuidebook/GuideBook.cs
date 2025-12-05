@@ -37,6 +37,8 @@ namespace DeltaruneMod.Items.Tier3
 
         public override bool isChapter4 => false;
 
+        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Healing };
+
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {
             ItemDisplayRuleDict rules = new ItemDisplayRuleDict();

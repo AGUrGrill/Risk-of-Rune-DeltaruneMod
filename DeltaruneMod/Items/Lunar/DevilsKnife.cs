@@ -28,7 +28,7 @@ namespace DeltaruneMod.Items.Lunar
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("devils_knife.prefab");
 
         public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("devils_knife_icon.png");
-        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility };
+        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility, ItemTag.CanBeTemporary };
 
         public override bool isChapter1 => true;
 

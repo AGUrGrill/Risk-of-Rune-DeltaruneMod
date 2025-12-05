@@ -31,7 +31,7 @@ namespace DeltaruneMod.Items.Tier3
 
         public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("roaring_blade_icon.png");
 
-        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Damage };
+        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Damage, ItemTag.CanBeTemporary };
 
         public override bool isChapter1 => false;
 

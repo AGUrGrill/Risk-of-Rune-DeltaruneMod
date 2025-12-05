@@ -42,6 +42,7 @@ namespace DeltaruneMod.Items.Spamton
 
         public static float damageMultiplier = 0.25f;
 
+        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility };
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {
             ItemDisplayRuleDict rules = new ItemDisplayRuleDict();

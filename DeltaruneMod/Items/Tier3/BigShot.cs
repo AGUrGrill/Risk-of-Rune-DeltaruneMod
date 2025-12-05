@@ -27,7 +27,7 @@ namespace DeltaruneMod.Items.Tier3
         public override ItemTier Tier => ItemTier.Tier3;
         public override GameObject ItemModel => MainAssets.LoadAsset<GameObject>("big_shot.prefab");
         public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("big_shot_icon.png");
-        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Damage };
+        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Damage, ItemTag.CanBeTemporary };
 
         public override bool isChapter1 => false;
 
@@ -45,7 +45,7 @@ namespace DeltaruneMod.Items.Tier3
 
         public uint GoldIncreasePerStage = 25;
 
-        public static GameObject ProjectilePrefab;
+        internal GameObject ProjectilePrefab;
 
         public static NetworkSoundEventDef BigShotSFX;
 
@@ -114,6 +114,7 @@ namespace DeltaruneMod.Items.Tier3
                 existing.body = sender;
                 existing.stack = itemCount;
                 existing.BigShotBuff = BigShotBuff;
+                existing.projectilePrefab = ProjectilePrefab;
             }
             else if (existing && itemCount <= 0) existing.enabled = false;
             else if (existing && itemCount > 0 && !existing.enabled) existing.enabled = true;
@@ -138,26 +139,16 @@ namespace DeltaruneMod.Items.Tier3
 
         public void CreateProjectile()
         {
-            ProjectilePrefab = Helpers.ModifyVanillaPrefab("RoR2/DLC1/PrimarySkillShuriken/ShurikenProjectile.prefab", "BigShotProjectile", false,
-                (orig) => {
-                    var ghost = MainAssets.LoadAsset<GameObject>("big_shot_projectile.prefab").InstantiateClone("BigShotGhost", false);
-                    ghost.AddComponent<ProjectileGhostController>();
-                    ghost.AddComponent<NetworkIdentity>();
-                    ghost.transform.localScale = new Vector3(180f, 180f, 180f);
+            var ghost = MainAssets.LoadAsset<GameObject>("big_shot_projectile.prefab").InstantiateClone("BigShotGhost", false);
+            ghost.AddComponent<ProjectileGhostController>();
+            ghost.AddComponent<NetworkIdentity>();
+            ghost.transform.localScale = new Vector3(180f, 180f, 180f);
 
-                    var projCont = orig.GetComponent<ProjectileController>();
-                    if (projCont.ghostPrefab) UnityEngine.Object.Destroy(projCont.ghostPrefab);
-                    projCont.shouldPlaySounds = false;
-                    projCont.startSound = "";
-                    projCont.ghostPrefab = ghost;
-
-                    var projSimp = orig.GetComponent<ProjectileSimple>();
-                    projSimp.desiredForwardSpeed *= 1f;
-                    projSimp.GetComponent<Rigidbody>().useGravity = false;
-
-                    UnityEngine.Object.Destroy(orig.GetComponent<ProjectileSteerTowardTarget>());
-                    UnityEngine.Object.Destroy(orig.GetComponent<ProjectileTargetComponent>());
-                    return orig;
+            ProjectilePrefab = Helpers.ModifyVanillaPrefab("RoR2/DLC1/PrimarySkillShuriken/ShurikenProjectile.prefab", "SusieAxeProjectile", false,
+                (shurikenPrefab) => {
+                    shurikenPrefab.GetComponent<ProjectileController>().ghostPrefab = ghost;
+                    shurikenPrefab.GetComponent<ProjectileController>().startSound = "";
+                    return shurikenPrefab;
                 });
 
             Util.Helpers.CreateNetworkedProjectilePrefab(ProjectilePrefab);
@@ -430,7 +421,6 @@ namespace DeltaruneMod.Items.Tier3
             }
             private void Start()
             {
-                projectilePrefab = BigShot.ProjectilePrefab;
             }
             private void OnEnable()
             {

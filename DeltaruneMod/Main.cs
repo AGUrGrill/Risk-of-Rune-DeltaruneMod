@@ -81,6 +81,10 @@ namespace DeltaruneMod
         public static ConfigEntry<float> neoEliteDamageMult;
         public static ConfigEntry<bool> allEnemiesNEO;
 
+        // Interactable Settings
+        public static ConfigEntry<int> susExchangeChance;
+        public static ConfigEntry<int> susExchangeMaxUses;
+
         // Additional Settings
         public static ConfigEntry<bool> antiFunMode;
         
@@ -131,6 +135,13 @@ namespace DeltaruneMod
             Debug.Log("Item Intialization for " + PluginName + " successful!");
             #endregion
 
+            susExchangeChance = Config.Bind("Interactable Settings", "Change Exchange Rate", 40,
+                "[REQUIRES RESTART] Changes the exchange rate at the Susipicous Exchange. Default: 40");
+            ModSettingsManager.AddOption(new IntFieldOption(susExchangeChance));
+            susExchangeMaxUses = Config.Bind("Interactable Settings", "Change Max Uses", 10,
+               "[REQUIRES RESTART] Changes the maximum uses at the Susipicous Exchange. Default: 10");
+            ModSettingsManager.AddOption(new IntFieldOption(susExchangeMaxUses));
+
             #region Interactable Initialization
             Log.Debug("Trashcan empty... loading!");
             var InteractableTypes = Assembly.GetExecutingAssembly().GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(InteractableBase)));
@@ -150,10 +161,10 @@ namespace DeltaruneMod
                 "[REQUIRES RESTART] Disables N.E.O. Elites from spawning.");
             ModSettingsManager.AddOption(new CheckBoxOption(neoEliteDisable));
             neoEliteMaxBuffs = Config.Bind("Elite Settings", "Change N.E.O. Elite Max Buffs", 2,
-                "[REQUIRES RESTART] Changes the maximum buffs N.E.O. Elites spawn with.");
+                "[REQUIRES RESTART] Changes the maximum buffs N.E.O. Elites spawn with. Default: 2");
             ModSettingsManager.AddOption(new IntFieldOption(neoEliteMaxBuffs));
             neoEliteDamageMult = Config.Bind("Elite Settings", "Change N.E.O. Elite DMG Multiplyer", 1.3f,
-                "[REQUIRES RESTART] Changes the damage multiplayer of N.E.O. Elites.");
+                "[REQUIRES RESTART] Changes the damage multiplayer of N.E.O. Elites. Default: 1.3x");
             ModSettingsManager.AddOption(new FloatFieldOption(neoEliteDamageMult));
             allEnemiesNEO = Config.Bind("Elite Settings", "Make (almost) all enemies N.E.O. Elites.", false,
                 "Makes all possible enemies N.E.O. Elites.");
