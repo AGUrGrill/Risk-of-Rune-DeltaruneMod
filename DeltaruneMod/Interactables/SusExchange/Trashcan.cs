@@ -112,20 +112,21 @@ namespace DeltaruneMod.Interactables.SusExchange
             #region Picker UI
             var pickerUIPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Scrapper/ScrapperPickerPanel.prefab").WaitForCompletion().InstantiateClone("TrashcanPickerPanel");
 
-            /*
             var imagePanel = pickerUIPrefab.transform.Find("MainPanel/Juice/BG");
             if (imagePanel != null)
             {
                 var img = imagePanel.GetComponent<Image>();
                 var backgroundRoll = UnityEngine.Random.Range(0, 100);
+
                 img.sprite = common_bg;
                 if (backgroundRoll >= 66 && backgroundRoll < 93) img.sprite = uncommon_bg;
                 else if (backgroundRoll >= 93) img.sprite = rare_bg;
+
                 var tempColor = img.color;
-                tempColor.a = 0.0f;
+                tempColor.a = 1.0f;
                 img.color = tempColor;
             }
-            */
+
             var label = pickerUIPrefab.transform.Find("MainPanel/Juice/Label");
             if (label != null)
             {
