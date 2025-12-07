@@ -20,7 +20,7 @@ namespace DeltaruneMod.Items.Tier1.Gacha
 
         public override string ItemLore => "";
 
-        public override ItemTier Tier => ItemTier.AssignedAtRuntime;
+        public override ItemTier Tier => ItemTier.NoTier;
 
         public override GameObject ItemModel => null;
 
@@ -35,6 +35,8 @@ namespace DeltaruneMod.Items.Tier1.Gacha
         public override bool isChapter4 => false;
 
         private readonly float healAmount = 100f;
+
+        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Healing, ItemTag.WorldUnique };
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {
@@ -77,8 +79,9 @@ namespace DeltaruneMod.Items.Tier1.Gacha
                         }
                         Debug.Log(characterBody.name + " healed!");
                     }
+                    Debug.Log(characterBody + " found.");
                 }
-                self.inventory.RemoveItemTemp(ExecBuffet.instance.ItemDef.itemIndex);
+                self.inventory.RemoveItemPermanent(ExecBuffet.instance.ItemDef.itemIndex);
             }
 
             #endregion

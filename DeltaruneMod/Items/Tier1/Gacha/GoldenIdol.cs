@@ -20,7 +20,7 @@ namespace DeltaruneMod.Items.Tier1.Gacha
 
         public override string ItemLore => "";
 
-        public override ItemTier Tier => ItemTier.AssignedAtRuntime;
+        public override ItemTier Tier => ItemTier.NoTier;
 
         public override GameObject ItemModel => null;
 
@@ -35,6 +35,8 @@ namespace DeltaruneMod.Items.Tier1.Gacha
         public override bool isChapter4 => false;
 
         private readonly float xpGainMult = 0.2f;
+
+        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility, ItemTag.WorldUnique };
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {

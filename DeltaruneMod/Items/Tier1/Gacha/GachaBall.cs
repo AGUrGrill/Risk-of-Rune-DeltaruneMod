@@ -14,9 +14,9 @@ namespace DeltaruneMod.Items.Tier1.Gacha
 
         public override string ItemLangTokenName => "GACHA_BALL";
 
-        public override string ItemPickupDesc => "Gain a random gacha item every 90 seconds.";
+        public override string ItemPickupDesc => "Gain a temporary gacha pull on stage start.";
 
-        public override string ItemFullDescription => "Gain a random item from the gacha item pool every 90 seconds <style=sStack>(+1 item per stack)</style>.";
+        public override string ItemFullDescription => "Gain a random item from the gacha item pool on stage start <style=sStack>(+1 item per stack)</style>.";
 
         public override string ItemLore => "";
 
@@ -34,7 +34,7 @@ namespace DeltaruneMod.Items.Tier1.Gacha
 
         public override bool isChapter4 => false;
 
-        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility, ItemTag.CanBeTemporary };
+        public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility };
 
         public static List<ItemDef> gachaItems = new List<ItemDef>();
 
@@ -45,10 +45,10 @@ namespace DeltaruneMod.Items.Tier1.Gacha
 
         public override void Hooks()
         {
-            On.RoR2.CharacterBody.OnInventoryChanged += CharacterBody_OnInventoryChanged;
-            //On.RoR2.CharacterMaster.OnBodyStart += CharacterMaster_OnBodyStart;
+            //On.RoR2.CharacterBody.OnInventoryChanged += CharacterBody_OnInventoryChanged;
+            On.RoR2.CharacterMaster.OnBodyStart += CharacterMaster_OnBodyStart;
         }
-
+        /*
         private void CharacterBody_OnInventoryChanged(On.RoR2.CharacterBody.orig_OnInventoryChanged orig, CharacterBody self)
         {
             orig(self);
@@ -72,9 +72,10 @@ namespace DeltaruneMod.Items.Tier1.Gacha
             }
             #endregion
         }
+        */
 
 
-        /*private void CharacterMaster_OnBodyStart(On.RoR2.CharacterMaster.orig_OnBodyStart orig, CharacterMaster self, CharacterBody body)
+        private void CharacterMaster_OnBodyStart(On.RoR2.CharacterMaster.orig_OnBodyStart orig, CharacterMaster self, CharacterBody body)
         {
             orig(self, body);
 
@@ -85,10 +86,10 @@ namespace DeltaruneMod.Items.Tier1.Gacha
             {
                 foreach (var item in gachaItems)
                 {
-                    var itemCount = self.inventory.GetItemCount(item);
+                    var itemCount = self.inventory.GetItemCountEffective(item);
                     for (int i = 0; i < itemCount; i++)
                     {
-                        self.inventory.RemoveItem(item);
+                        self.inventory.RemoveItemPermanent(item);
                         Debug.Log("Removed " + item.name + " from " + self.name);
                     }
                 }
@@ -104,12 +105,11 @@ namespace DeltaruneMod.Items.Tier1.Gacha
                 for (int i = 0; i < GetCount(self); i++)
                 {
                     var ranGachaItem = gachaItems[UnityEngine.Random.Range(0, gachaItems.Count)];
-                    self.inventory.GiveItem(ranGachaItem);
+                    self.inventory.GiveItemPermanent(ranGachaItem);
                     Debug.Log("Gave " + self.name + " " + ranGachaItem.name);
                 }
             }
         }
-        */
 
         private void GetGachaItems()
         {
@@ -120,9 +120,9 @@ namespace DeltaruneMod.Items.Tier1.Gacha
 
         public override void Init()
         {
-            //CreateItem();
-            //CreateLang();
-            //Hooks();
+            CreateItem();
+            CreateLang();
+            Hooks();
         }
         private class GachaBallTimer : MonoBehaviour
         {
