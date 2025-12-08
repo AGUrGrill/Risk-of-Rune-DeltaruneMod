@@ -1,5 +1,7 @@
 using BepInEx;
 using BepInEx.Configuration;
+using DeltaruneMod.Characters;
+using DeltaruneMod.Characters.RoaringKnight;
 using DeltaruneMod.Elite;
 using DeltaruneMod.Elites;
 using DeltaruneMod.Interactables;
@@ -70,23 +72,24 @@ namespace DeltaruneMod
         public static HashSet<ItemDef> BlacklistedFromPrinter = new HashSet<ItemDef>();
 
         // Chapter Settings
-        public static ConfigEntry<bool> useChapter1;
-        public static ConfigEntry<bool> useChapter2;
-        public static ConfigEntry<bool> useChapter3;
-        public static ConfigEntry<bool> useChapter4;
+        public static ConfigEntry<bool> ?useChapter1;
+        public static ConfigEntry<bool> ?useChapter2;
+        public static ConfigEntry<bool> ?useChapter3;
+        public static ConfigEntry<bool> ?useChapter4;
 
         // Elite Settings
-        public static ConfigEntry<bool> neoEliteDisable;
-        public static ConfigEntry<int> neoEliteMaxBuffs;
-        public static ConfigEntry<float> neoEliteDamageMult;
-        public static ConfigEntry<bool> allEnemiesNEO;
+        public static ConfigEntry<bool> ?neoEliteDisable;
+        public static ConfigEntry<int> ?neoEliteMaxBuffs;
+        public static ConfigEntry<float> ?neoEliteDamageMult;
+        public static ConfigEntry<bool> ?allEnemiesNEO;
 
         // Interactable Settings
-        public static ConfigEntry<int> susExchangeChance;
-        public static ConfigEntry<int> susExchangeMaxUses;
+        public static ConfigEntry<int> ?susExchangeChance;
+        public static ConfigEntry<int> ?susExchangeMaxUses;
+        public static ConfigEntry<bool>? susExchangeMusicDisabled;
 
         // Additional Settings
-        public static ConfigEntry<bool> antiFunMode;
+        public static ConfigEntry<bool> ?antiFunMode;
         
 
         //public const short TextSyncMsgId = 4242;
@@ -141,6 +144,9 @@ namespace DeltaruneMod
             susExchangeMaxUses = Config.Bind("Interactable Settings", "Change Max Uses", 10,
                "[REQUIRES RESTART] Changes the maximum uses at the Susipicous Exchange. Default: 10");
             ModSettingsManager.AddOption(new IntFieldOption(susExchangeMaxUses));
+            susExchangeMusicDisabled = Config.Bind("Interactable Settings", "Disable Suspicious Exchange Music", false,
+               "[REQUIRES RESTART] Disables the music at the Susipicious Exchange.");
+            ModSettingsManager.AddOption(new CheckBoxOption(susExchangeMusicDisabled));
 
             #region Interactable Initialization
             Log.Debug("Trashcan empty... loading!");
@@ -195,6 +201,10 @@ namespace DeltaruneMod
                 "(Use only with command, otherwise it just ruins the fun!)");
             ModSettingsManager.AddOption(new CheckBoxOption(antiFunMode));
             antiFunMode.SettingChanged += ToggleItemsForCommand;
+
+            new TestingSkillAddition();
+            new RoaringKnightStates();
+            Debug.Log("Test Skill Loaded!");
 
             Log.Debug(PluginName + " loaded successfully!");
         }

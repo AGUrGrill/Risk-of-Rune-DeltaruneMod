@@ -23,7 +23,7 @@ namespace DeltaruneMod.Items.Tier1.Gacha
 
         public override GameObject ItemModel => null;
 
-        public override Sprite ItemIcon => DeltarunePlugin.MainAssets.LoadAsset<Sprite>("");
+        public override Sprite ItemIcon => DeltarunePlugin.MainAssets.LoadAsset<Sprite>("fake.png");
 
         public override bool isChapter1 => false;
 

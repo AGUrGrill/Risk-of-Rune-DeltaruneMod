@@ -45,7 +45,7 @@ namespace DeltaruneMod.Interactables.SusExchange
 
         public void Start()
         {
-            AkSoundEngine.PostEvent(3865094552, gameObject);
+            if (!DeltarunePlugin.susExchangeMusicDisabled.Value) AkSoundEngine.PostEvent(3865094552, gameObject);
 
             uses = maxUses;
             allItems = Util.Helpers.GetItems(99);
