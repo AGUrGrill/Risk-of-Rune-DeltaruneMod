@@ -4,12 +4,10 @@ using RoR2.Audio;
 using RoR2.Skills;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
-using static EntityStates.BaseState;
 
-namespace DeltaruneMod.Characters.BaseContent
+namespace HenryMod.Modules.BaseStates
 {
     public abstract class BaseMeleeAttack : BaseSkillState, SteppedSkillDef.IStepSetter
     {
@@ -104,7 +102,7 @@ namespace DeltaruneMod.Characters.BaseContent
 
         protected virtual void OnHitEnemyAuthority()
         {
-            RoR2.Util.PlaySound(hitSoundString, gameObject);
+            Util.PlaySound(hitSoundString, gameObject);
 
             if (!hasHopped)
             {
@@ -144,7 +142,7 @@ namespace DeltaruneMod.Characters.BaseContent
         private void EnterAttack()
         {
             hasFired = true;
-            RoR2.Util.PlayAttackSpeedSound(swingSoundString, gameObject, attackSpeedStat);
+            Util.PlayAttackSpeedSound(swingSoundString, gameObject, attackSpeedStat);
 
             PlaySwingEffect();
 
