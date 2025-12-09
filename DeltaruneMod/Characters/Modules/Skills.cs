@@ -1,12 +1,12 @@
-﻿using EntityStates;
+﻿using DeltaruneMod.Util;
+using EntityStates;
 using RoR2;
 using RoR2.Skills;
 using System;
 using System.Collections.Generic;
-using HenryMod;
 using UnityEngine;
 
-namespace HenryMod.Modules
+namespace DeltaruneMod.Characters.Modules
 {
     internal static class Skills
     {
@@ -185,7 +185,7 @@ namespace HenryMod.Modules
 
             skillDef.keywordTokens = skillDefInfo.keywordTokens;
 
-            HenryMod.Modules.Content.AddSkillDef(skillDef);
+            Modules.Content.AddSkillDef(skillDef);
 
 
             return skillDef;

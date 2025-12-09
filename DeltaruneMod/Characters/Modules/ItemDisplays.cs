@@ -1,8 +1,9 @@
-﻿using RoR2;
+﻿using DeltaruneMod.Util;
+using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace HenryMod.Modules
+namespace DeltaruneMod.Characters.Modules
 {
     internal static class ItemDisplays
     {

@@ -1,10 +1,11 @@
-﻿using R2API;
+﻿using DeltaruneMod.Util;
+using R2API;
 using RoR2;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace HenryMod.Modules
+namespace DeltaruneMod.Characters.Modules
 {
     internal static class Skins
     {

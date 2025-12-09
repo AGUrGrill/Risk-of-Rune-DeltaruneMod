@@ -5,7 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace HenryMod.Modules {
+namespace DeltaruneMod.Characters.Modules
+{
     internal static class Language
     {
         public static string TokensOutput = "";

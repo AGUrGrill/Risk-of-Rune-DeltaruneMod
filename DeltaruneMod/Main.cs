@@ -1,7 +1,9 @@
 using BepInEx;
 using BepInEx.Configuration;
 using DeltaruneMod.Characters;
+using DeltaruneMod.Characters.Modules;
 using DeltaruneMod.Characters.RoaringKnight;
+using DeltaruneMod.Characters.RoaringKnight.Content;
 using DeltaruneMod.Elite;
 using DeltaruneMod.Elites;
 using DeltaruneMod.Interactables;
@@ -202,8 +204,8 @@ namespace DeltaruneMod
             ModSettingsManager.AddOption(new CheckBoxOption(antiFunMode));
             antiFunMode.SettingChanged += ToggleItemsForCommand;
 
-            new TestingSkillAddition();
-            new RoaringKnightStates();
+            new RoaringKnightSurvivor().TestInit();
+            new ContentPacks().Initialize();
             Debug.Log("Test Skill Loaded!");
 
             Log.Debug(PluginName + " loaded successfully!");

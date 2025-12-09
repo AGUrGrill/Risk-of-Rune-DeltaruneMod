@@ -1,7 +1,7 @@
 ﻿using EntityStates;
 using System;
 
-namespace HenryMod.Modules.BaseStates
+namespace DeltaruneMod.Characters.Modules.BaseContent.BaseStates
 {
     //see example skills below
     public abstract class BaseTimedSkillState : BaseSkillState

@@ -1,7 +1,7 @@
 ﻿using RoR2;
 using RoR2.Achievements;
 
-namespace HenryMod.Modules.Achievements
+namespace DeltaruneMod.Characters.Modules.BaseContent.Achivements
 {
     public abstract class BaseMasteryAchievement : BaseAchievement
     {

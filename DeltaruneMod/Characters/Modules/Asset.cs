@@ -8,8 +8,9 @@ using System.Collections.Generic;
 using RoR2.UI;
 using RoR2.Projectile;
 using Path = System.IO.Path;
+using DeltaruneMod.Util;
 
-namespace HenryMod.Modules
+namespace DeltaruneMod.Characters.Modules
 {
     internal static class Asset
     {
@@ -33,7 +34,7 @@ namespace HenryMod.Modules
             AssetBundle assetBundle = null;
             try
             {
-                assetBundle = AssetBundle.LoadFromFile(Path.Combine(Path.GetDirectoryName(HenryPlugin.instance.Info.Location), "AssetBundles", bundleName));
+                assetBundle = AssetBundle.LoadFromFile(Path.Combine(Path.GetDirectoryName(DeltarunePlugin.Instance.Info.Location), "AssetBundles", bundleName));
             }
             catch (System.Exception e)
             {
@@ -112,7 +113,7 @@ namespace HenryMod.Modules
 
             if (!newEffect)
             {
-                Log.ErrorAssetBundle(resourceName, assetBundle.name);
+                //Log.Error(resourceName, assetBundle.name);
                 return null;
             }
 
@@ -157,7 +158,7 @@ namespace HenryMod.Modules
             GameObject newPrefab = assetBundle.LoadAsset<GameObject>(newPrefabName);
             if(newPrefab == null)
             {
-                Log.ErrorAssetBundle(newPrefabName, assetBundle.name);
+                //Log.ErrorAssetBundle(newPrefabName, assetBundle.name);
                 return null;
             }
 

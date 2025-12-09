@@ -1,7 +1,7 @@
 ﻿using RoR2;
 using System.Collections.Generic;
 
-namespace HenryMod.Modules.Characters
+namespace DeltaruneMod.Characters.Modules.BaseContent.Characters
 {
     public abstract class ItemDisplaysBase
     {

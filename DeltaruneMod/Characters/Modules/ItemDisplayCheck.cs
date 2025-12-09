@@ -1,10 +1,11 @@
-﻿using RoR2;
+﻿using DeltaruneMod.Util;
+using RoR2;
 using RoR2.ContentManagement;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace HenryMod.Modules
+namespace DeltaruneMod.Characters.Modules
 {
     internal static class ItemDisplayCheck
     {

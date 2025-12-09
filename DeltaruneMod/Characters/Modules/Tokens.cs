@@ -1,4 +1,4 @@
-﻿namespace HenryMod.Modules
+﻿namespace DeltaruneMod.Characters.Modules
 {
     internal static class Tokens
     {

@@ -1,4 +1,5 @@
-﻿using DeltaruneMod.Characters.BaseContent;
+﻿using DeltaruneMod.Characters.Modules.BaseContent.BaseStates;
+using DeltaruneMod.Characters.RoaringKnight.Content;
 using EntityStates.Bandit2.Weapon;
 using EntityStates.Croco;
 using EntityStates.Loader;
@@ -17,7 +18,7 @@ namespace DeltaruneMod.Characters.RoaringKnight.SkillStates
             hitboxGroupName = "SwordGroup";
 
             damageType = DamageTypeCombo.GenericPrimary;
-            damageCoefficient = 3f;
+            damageCoefficient = RoaringKnightStaticValues.slashDamageCoefficient;
             procCoefficient = 1f;
             pushForce = 300f;
             bonusForce = Vector3.zero;
@@ -39,19 +40,13 @@ namespace DeltaruneMod.Characters.RoaringKnight.SkillStates
             hitSoundString = Slash.slash3Sound;
             muzzleString = swingIndex % 2 == 0 ? "SwingLeft" : "SwingRight";
             playbackRateParam = "Slash.playbackRate";
-            swingEffectPrefab = SwingComboFist.overchargeImpactEffectPrefab;
-            hitEffectPrefab = SwingChargedFist.overchargeImpactEffectPrefab;
-
-            impactSound = RoR2.Audio.NetworkSoundEventIndex.Invalid;
 
             base.OnEnter();
         }
 
         protected override void PlayAttackAnimation()
         {
-            //PlayCrossfade("Gesture, Override", "Slash" + (1 + swingIndex), playbackRateParam, duration, 0.1f * duration);
-            PlayAnimation("Gesture Additive, Right", "FirePistol, Left");
-            PlayAnimation("Gesture Additive, Right", "FirePistol, Right");
+            base.PlayAttackAnimation();
         }
 
         protected override void PlaySwingEffect()

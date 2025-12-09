@@ -3,8 +3,9 @@ using RoR2;
 using UnityEngine;
 using System.Collections.Generic;
 using RoR2.Skills;
+using DeltaruneMod.Util;
 
-namespace HenryMod.Modules.Characters
+namespace DeltaruneMod.Characters.Modules.BaseContent.Characters
 {
     public abstract class SurvivorBase<T> : CharacterBase<T> where T : SurvivorBase<T>, new()
     {
