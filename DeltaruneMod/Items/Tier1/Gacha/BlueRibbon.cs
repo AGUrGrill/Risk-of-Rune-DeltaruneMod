@@ -15,7 +15,7 @@ namespace DeltaruneMod.Items.Tier1.Gacha
 
         public override string ItemPickupDesc => "Provides a boost in healing and attack speed.";
 
-        public override string ItemFullDescription => "Gives the player a 5% increase to healing and attack speed <style=cStack>(+5% per stack)</style>.";
+        public override string ItemFullDescription => "Gives the player 5% increased healing and attack speed <style=cStack>(+5% per stack)</style>.";
 
         public override string ItemLore => "";
 

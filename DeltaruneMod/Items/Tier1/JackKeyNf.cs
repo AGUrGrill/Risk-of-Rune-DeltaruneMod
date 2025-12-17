@@ -334,11 +334,15 @@ namespace DeltaruneMod.Items.Tier1
             {
                 if (!player)
                 {
-                    Debug.Log("Player not found! Destroying...");
+                    Debug.Log("Player not found! Destroying JackKeyTimer...");
                     Destroy(this);
                 }
                 
                 timer = timerInterval;
+            }
+            private void OnDisable()
+            {
+                Destroy(this);
             }
             // Jack Key N. Off Timer
             private void FixedUpdate()
@@ -353,7 +357,7 @@ namespace DeltaruneMod.Items.Tier1
             // Add buff to increase speed
             private void YourTakingTooLong()
             {
-                Debug.Log("Adding speed buff!");
+                //Debug.Log("Adding speed buff!");
                 player.AddBuff(JackBuff);
             }
         }

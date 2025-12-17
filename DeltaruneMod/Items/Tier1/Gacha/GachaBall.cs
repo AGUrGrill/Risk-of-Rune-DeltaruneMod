@@ -116,6 +116,8 @@ namespace DeltaruneMod.Items.Tier1.Gacha
             gachaItems.Add(TVDinner.instance.ItemDef);
             gachaItems.Add(ExecBuffet.instance.ItemDef);
             gachaItems.Add(GoldenIdol.instance.ItemDef);
+            gachaItems.Add(BlueRibbon.instance.ItemDef);
+            gachaItems.Add(GingerGuard.instance.ItemDef);
         }
 
         public override void Init()

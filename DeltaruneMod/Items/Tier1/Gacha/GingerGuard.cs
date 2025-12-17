@@ -15,7 +15,7 @@ namespace DeltaruneMod.Items.Tier1.Gacha
 
         public override string ItemPickupDesc => "Provides a boost in armor.";
 
-        public override string ItemFullDescription => "Gives the player a 5% increase in the armor multipliyer <style=cStack>(+5% per stack)</style>.";
+        public override string ItemFullDescription => "Gives the player a 5% increase to their armor total <style=cStack>(+5% per stack)</style>.";
 
         public override string ItemLore => "";
 
