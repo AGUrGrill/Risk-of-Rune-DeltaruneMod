@@ -3,6 +3,7 @@ using DeltaruneMod.Util;
 using R2API;
 using RoR2;
 using RoR2.Projectile;
+using RoR2BepInExPack.GameAssetPathsBetter;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -88,10 +89,10 @@ namespace DeltaruneMod.Items.Tier3
 
                 if (sender.inventory && itemCount > 0)
                 {
-                    Debug.Log($"Amount | " + amount);
+                    //Debug.Log($"Amount | " + amount);
                     uint bonus = (uint)Mathf.CeilToInt(amount * 0.3f);
                     amount += bonus;
-                    Debug.Log($"Adjusted Dealmaker Amount | " + amount);
+                    //Debug.Log($"Adjusted Dealmaker Amount | " + amount);
 
                     if (existing)
                     {
@@ -409,7 +410,7 @@ namespace DeltaruneMod.Items.Tier3
             public float TotalDamageCalc;
 
             public float TotalGoldGained = 0;
-            public uint BaseGoldThreshold = 50;
+            public int BaseCost = 25;
 
             private bool TimeForABigShot;
 
@@ -456,7 +457,7 @@ namespace DeltaruneMod.Items.Tier3
                 DifficultyDef difficultyDef = DifficultyCatalog.GetDifficultyDef(DifficultyIndex.Normal);
                 #region Gold/Buff/Dmg Calcs
                 TotalDamageCalc = body.damage * (DmgMult + StackDmgMult * (stack - 1));
-                var goldPerStack = BaseGoldThreshold * difficultyDef.scalingValue;
+                var goldPerStack = Run.instance.GetDifficultyScaledCost(BaseCost);
                 var maxGold = goldPerStack * MaxBigShotStacks;
 
                 if (body.GetBuffCount(BigShotBuff) >= MaxBigShotStacks+1) body.RemoveBuff(BigShotBuff); // Remove buff on higher than alloted stack

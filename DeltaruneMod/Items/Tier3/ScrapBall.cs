@@ -63,6 +63,7 @@ namespace DeltaruneMod.Items.Tier3
                 timer.player = self;
                 timer.stack = GetCount(self);
                 timer.enabled = true;
+                Debug.Log("Scrap timer given.");
             }
             else if (GetCount(self) > 0 && timer && timer.stack < GetCount(self)) timer.stack = GetCount(self); // Refresh stack count when needed
             else if (GetCount(self) <= 0 && timer)
@@ -83,9 +84,10 @@ namespace DeltaruneMod.Items.Tier3
             enum ScrapWeight // Out of 100
             {
                 white = 50,
-                green = 30,
-                red = 10,
-                yellow = 10, 
+                green = 80,
+                red = 90,
+                yellow = 98,
+                regen = 100
             }
 
             private void Awake()
@@ -100,6 +102,8 @@ namespace DeltaruneMod.Items.Tier3
                     Debug.Log("Player not found! Destroying scrap timer...");
                     Destroy(this);
                 }
+                GiveRandomScrap();
+                timer = timerInterval;
             }
 
             private void OnDisable()
@@ -120,12 +124,17 @@ namespace DeltaruneMod.Items.Tier3
             // Give scrap
             private void GiveRandomScrap()
             {
+                foreach (ItemIndex item in RoR2.ItemCatalog.allItems)
+                {
+                    Debug.Log(item + ": " + RoR2.ItemCatalog.GetItemDef(item));
+                }
                 int givenValue = UnityEngine.Random.Range(0, 100);
-                if (givenValue <= (int)ScrapWeight.white) player.inventory.GiveItemTemp((ItemIndex)178); // White scrap index
-                else if (givenValue <= (int)ScrapWeight.green) player.inventory.GiveItemTemp((ItemIndex)174); // Green scrap index
-                else if (givenValue <= (int)ScrapWeight.red) player.inventory.GiveItemTemp((ItemIndex)176); // Red scrap index
-                else if (givenValue <= (int)ScrapWeight.yellow) player.inventory.GiveItemTemp((ItemIndex)180); // Yellow scrap index
-                Debug.Log("Giving scrap...");
+                if (givenValue <= (int)ScrapWeight.white) player.inventory.GiveItemTemp((ItemIndex)216); // White scrap index
+                else if (givenValue <= (int)ScrapWeight.green) player.inventory.GiveItemTemp((ItemIndex)212); // Green scrap index
+                else if (givenValue <= (int)ScrapWeight.red) player.inventory.GiveItemTemp((ItemIndex)214); // Red scrap index
+                else if (givenValue <= (int)ScrapWeight.yellow) player.inventory.GiveItemTemp((ItemIndex)218); // Yellow scrap index
+                else if (givenValue <= (int)ScrapWeight.regen) player.inventory.GiveItemTemp((ItemIndex)208); // Regen scrap index
+                Debug.Log("Giving scrap (" + givenValue + ") to " + player.name + "...");
                 
             }
         }

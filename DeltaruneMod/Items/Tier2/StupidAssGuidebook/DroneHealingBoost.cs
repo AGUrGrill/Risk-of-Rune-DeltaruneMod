@@ -88,7 +88,7 @@ namespace DeltaruneMod.Items
                     healingBehavior = sender.gameObject.AddComponent<DroneHealingBehavior>();
                     healingBehavior.body = sender;
                     healingBehavior.enabled = true;
-                    Debug.Log("Gave " + sender + " " + ItemName + ".");
+                    //Debug.Log("Gave " + sender + " " + ItemName + ".");
                 }
             }
             if (itemCount <= 0 && healingBehavior) healingBehavior.enabled = false;
@@ -188,7 +188,7 @@ namespace DeltaruneMod.Items
                         // Heal target
                         float healAmount = targetBody.healthComponent.fullCombinedHealth * healFraction;
                         targetBody.healthComponent.Heal(healAmount, default, true);
-                        Debug.Log("Healed " + targetBody + " for " + healAmount + ".");
+                        //Debug.Log("Healed " + targetBody + " for " + healAmount + ".");
                     }
                 }
             }
