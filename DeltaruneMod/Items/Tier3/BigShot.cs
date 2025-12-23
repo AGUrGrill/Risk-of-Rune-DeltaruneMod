@@ -145,11 +145,12 @@ namespace DeltaruneMod.Items.Tier3
             ghost.AddComponent<NetworkIdentity>();
             ghost.transform.localScale = new Vector3(180f, 180f, 180f);
 
-            ProjectilePrefab = Helpers.ModifyVanillaPrefab("RoR2/DLC1/PrimarySkillShuriken/ShurikenProjectile.prefab", "SusieAxeProjectile", false,
-                (shurikenPrefab) => {
-                    shurikenPrefab.GetComponent<ProjectileController>().ghostPrefab = ghost;
-                    shurikenPrefab.GetComponent<ProjectileController>().startSound = "";
-                    return shurikenPrefab;
+            ProjectilePrefab = Helpers.ModifyVanillaPrefab("RoR2/DLC1/PrimarySkillShuriken/ShurikenProjectile.prefab", "BigShotProjectile", false,
+                (shurikenPrefab2) => {
+                    shurikenPrefab2.GetComponent<ProjectileController>().ghostPrefab = ghost;
+                    shurikenPrefab2.GetComponent<ProjectileController>().startSound = "";
+                    shurikenPrefab2.GetComponent<ProjectileSimple>().desiredForwardSpeed *= 1.2f;
+                    return shurikenPrefab2;
                 });
 
             Util.Helpers.CreateNetworkedProjectilePrefab(ProjectilePrefab);

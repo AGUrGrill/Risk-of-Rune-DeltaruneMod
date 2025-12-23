@@ -11,6 +11,7 @@ using DeltaruneMod.Interactables.SusExchange.TradingItems;
 using DeltaruneMod.Items;
 using DeltaruneMod.Items.Lunar;
 using DeltaruneMod.Items.Spamton;
+using DeltaruneMod.Items.Tier1.Gacha;
 using DeltaruneMod.Items.VoidTier3;
 using DeltaruneMod.Items.Yellow;
 using DeltaruneMod.NeoMithrix;
@@ -365,6 +366,11 @@ namespace DeltaruneMod
             blacklistedItems.Add(ThornRing.instance.ItemDef);
             blacklistedItems.Add(PipisTradingItem.instance.ItemDef);
             blacklistedItems.Add(MrPipisTradingItem.instance.ItemDef);
+            blacklistedItems.Add(GoldenIdol.instance.ItemDef);
+            blacklistedItems.Add(TVDinner.instance.ItemDef);
+            blacklistedItems.Add(ExecBuffet.instance.ItemDef);
+            blacklistedItems.Add(GingerGuard.instance.ItemDef);
+            blacklistedItems.Add(BlueRibbon.instance.ItemDef);
 
             Run.onRunSetRuleBookGlobal += (run, rulebook) =>
             {

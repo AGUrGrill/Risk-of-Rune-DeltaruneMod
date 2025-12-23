@@ -16,7 +16,7 @@ namespace DeltaruneMod.Items.Tier1.Gacha
 
         public override string ItemPickupDesc => "Gain a temporary gacha pull on stage start.";
 
-        public override string ItemFullDescription => "Gain a random item from the gacha item pool on stage start <style=sStack>(+1 item per stack)</style>.";
+        public override string ItemFullDescription => "Gain a random item from the gacha item pool on stage start <style=cStack>(+1 item per stack)</style>.";
 
         public override string ItemLore => "";
 
