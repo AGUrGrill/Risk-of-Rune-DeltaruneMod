@@ -205,10 +205,11 @@ namespace DeltaruneMod
             ModSettingsManager.AddOption(new CheckBoxOption(antiFunMode));
             antiFunMode.SettingChanged += ToggleItemsForCommand;
 
+            /*
             new RoaringKnightSurvivor().TestInit();
             new ContentPacks().Initialize();
             Debug.Log("Test Skill Loaded!");
-
+            */
             Log.Debug(PluginName + " loaded successfully!");
         }
 
