@@ -9,6 +9,7 @@ We plan to continue development to bring you more exciting content!
 | Showrunner's Buckle | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/tenna_buckle_icon.png?raw=true)   | 10% more gold gain.   |
 | Closet Key | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/jack_key_icon.png?raw=true)   | Every 30 seconds on stage, move 5% faster.   |
 | Fractured Light | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/light_bulb_icon.png?raw=true)   | Increase all lightning damage by 25%. |
+| Grand Prize | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/gacha_ball_icon.png?raw=true)   | Gain a temporary gacha pull on stage start. |
 | Monster's Axe | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/monster_axe_icon.png?raw=true)   | Shoot a Rude Buster on Primary or Secondary skill and activate UltimateHeal.   |
 | Sage's Manual | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/guide_book_icon.png?raw=true)   | Teaches all drones a healing prayer.   |
 | Commemorative Ring | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/comm_ring_icon.png?raw=true)   | 10% increased luck at Suspicious Exchange. |
@@ -16,11 +17,12 @@ We plan to continue development to bring you more exciting content!
 | Dealmaker | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/big_shot_icon.png?raw=true)   | Gain stacks of [[Big Shot]] on gold gain. 30% more gold gain.   |
 | Roaring Blade | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/roaring_blade_icon.png?raw=true)   | Stack swoon on hit, total damage dealt prior reapplies after 3 stacks.   |
 | Misshapen Heart | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/mis_heart_icon.png?raw=true)   | Spawn an orbiting, armor piercing projectile every 2 seconds.  |
+| Junk Ball | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/scrap_ball_icon.png?raw=true)   | Gain a boost to damage and attack speed for each consumed item you own.  |
 | Mystery Man's Mask | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/gaster_mask_icon.png?raw=true)   | Enemies that fall below 10% hp become corrupted allies. Void of Happiest Mask.   |
 | Devilsknife | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/devils_knife_icon.png?raw=true)   | Gain a random effect every 10 seconds for 10 seconds...   |
 | ??? | ??? | One wrong turn leads to a world of [PAIN] |
 | Pipis | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/pipis_icon.png?raw=true) | Increases ALL of your stats.  |
-| Mr. Pipis | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/mr_pipis_icon.png?raw=true) | "Gain [ALL] elite buffs! |
+| Mr. Pipis | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/mr_pipis_icon.png?raw=true) | Gain [ALL] elite buffs! |
 | ??? | ??? | All this power for the price of your [SOUL] |
 | Kromer | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/kromer.png?raw=true)   | It's KROMER.   |
 
@@ -31,7 +33,7 @@ We plan to continue development to bring you more exciting content!
 
 | Elites | Image    | Description    |
 | :---:   | :---: | :---: |
-| N.E.O. | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/neo_affix_icon.png?raw=true)   | Gain N.E.O. armor. HP is lower but DMG is higher. Gain 3 random buffs.  |
+| N.E.O. | ![alt text](https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod/blob/master/DeltaruneMod/Images/neo_affix_icon.png?raw=true)   | Gain N.E.O. armor. HP & ARMOR is lower but DMG is higher. Gain 2 random buffs.  |
 
 
 Have a question or wanna share your experience? Join our discord! https://discord.gg/sC68pSNGa3
