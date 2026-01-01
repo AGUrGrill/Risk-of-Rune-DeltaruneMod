@@ -48,6 +48,8 @@ namespace DeltaruneMod.Items.Tier1
 
         public static BuffDef JackBuff;
 
+        public static Sprite JackBuffIcon = MainAssets.LoadAsset<Sprite>("jack_key_buff_icon.png");
+
         public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility, ItemTag.MobilityRelated };
 
         // Numbers for stuff
@@ -260,7 +262,7 @@ namespace DeltaruneMod.Items.Tier1
         {
             JackBuff = ScriptableObject.CreateInstance<BuffDef>();
             JackBuff.name = "JackBuff";
-            JackBuff.iconSprite = ItemIcon;
+            JackBuff.iconSprite = JackBuffIcon;
             JackBuff.buffColor = Color.green;
             JackBuff.canStack = true;
             JackBuff.isDebuff = false;

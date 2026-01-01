@@ -15,7 +15,7 @@ namespace DeltaruneMod.Items.Tier1.Gacha
 
         public override string ItemPickupDesc => "Provides a boost in healing and attack speed.";
 
-        public override string ItemFullDescription => "Gives the player 5% increased healing and attack speed <style=cStack>(+5% per stack)</style>.";
+        public override string ItemFullDescription => "Gain a 5% to healing and attack speed <style=cStack>(+5% per stack)</style>.";
 
         public override string ItemLore => "";
 
@@ -23,7 +23,7 @@ namespace DeltaruneMod.Items.Tier1.Gacha
 
         public override GameObject ItemModel => null;
 
-        public override Sprite ItemIcon => DeltarunePlugin.MainAssets.LoadAsset<Sprite>("fake.png");
+        public override Sprite ItemIcon => DeltarunePlugin.MainAssets.LoadAsset<Sprite>("blue_ribbon_icon.png");
 
         public override bool isChapter1 => false;
 

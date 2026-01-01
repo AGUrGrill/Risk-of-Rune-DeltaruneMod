@@ -16,7 +16,7 @@ namespace DeltaruneMod.Items.Tier1.Gacha
 
         public override string ItemPickupDesc => "Heal party +100 HP on low health.";
 
-        public override string ItemFullDescription => "";
+        public override string ItemFullDescription => "Heal party +100 HP on low health.";
 
         public override string ItemLore => "";
 
@@ -77,11 +77,14 @@ namespace DeltaruneMod.Items.Tier1.Gacha
                         {
                             characterBody.healthComponent.health = playerMaxHealth;
                         }
+                        characterBody.AddTimedBuff(RoR2.RoR2Content.Buffs.Immune, 0.5f);
                         Debug.Log(characterBody.name + " healed!");
                     }
                     Debug.Log(characterBody + " found.");
                 }
                 self.inventory.RemoveItemPermanent(ExecBuffet.instance.ItemDef.itemIndex);
+                self.inventory.GiveItemPermanent(ExecBuffetConsumed.instance.ItemDef.itemIndex);
+                CharacterMasterNotificationQueue.SendTransformNotification(self.master, ExecBuffet.instance.ItemDef.itemIndex, ExecBuffetConsumed.instance.ItemDef.itemIndex, CharacterMasterNotificationQueue.TransformationType.Default);
             }
 
             #endregion

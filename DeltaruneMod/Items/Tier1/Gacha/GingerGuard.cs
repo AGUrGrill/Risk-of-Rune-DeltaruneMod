@@ -15,7 +15,7 @@ namespace DeltaruneMod.Items.Tier1.Gacha
 
         public override string ItemPickupDesc => "Provides a boost in armor.";
 
-        public override string ItemFullDescription => "Gives the player a 5% increase to their armor total <style=cStack>(+5% per stack)</style>.";
+        public override string ItemFullDescription => "Gain a 5% increase to armor <style=cStack>(+5% per stack)</style>.";
 
         public override string ItemLore => "";
 
@@ -23,7 +23,7 @@ namespace DeltaruneMod.Items.Tier1.Gacha
 
         public override GameObject ItemModel => null;
 
-        public override Sprite ItemIcon => DeltarunePlugin.MainAssets.LoadAsset<Sprite>("fake.png");
+        public override Sprite ItemIcon => DeltarunePlugin.MainAssets.LoadAsset<Sprite>("ginger_guard_icon.png");
 
         public override bool isChapter1 => false;
 

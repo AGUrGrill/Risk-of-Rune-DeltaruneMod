@@ -16,7 +16,7 @@ namespace DeltaruneMod.Items.Tier1.Gacha
 
         public override string ItemPickupDesc => "Gain 20% more experience.";
 
-        public override string ItemFullDescription => "";
+        public override string ItemFullDescription => "Gain 20% more experience. <style=cStack>(+20% per stack)</style>";
 
         public override string ItemLore => "";
 
