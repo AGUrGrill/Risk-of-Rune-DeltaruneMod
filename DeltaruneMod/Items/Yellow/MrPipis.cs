@@ -302,7 +302,7 @@ namespace DeltaruneMod.Items.Yellow
             {
                 foreach (var affix in allAffixes)
                 {
-                    if (!body.HasBuff(affix) && affix != DLC2Content.Buffs.AurelioniteBlessing) body.AddBuff(affix);
+                    if (!body.HasBuff(affix) && affix != DLC2Content.Buffs.AurelioniteBlessing  && affix != DLC2Content.Buffs.EliteAurelionite) body.AddBuff(affix);
                 }
             }
 

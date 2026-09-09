@@ -38,6 +38,8 @@ namespace DeltaruneMod.Items.Tier1
 
         public override Sprite ItemIcon => MainAssets.LoadAsset<Sprite>("jack_key_icon.png");
 
+        public static Sprite BuffIcon = MainAssets.LoadAsset<Sprite>("jack_key_buff_icon.png");
+
         public override bool isChapter1 => false;
 
         public override bool isChapter2 => false;
@@ -48,15 +50,13 @@ namespace DeltaruneMod.Items.Tier1
 
         public static BuffDef JackBuff;
 
-        public static Sprite JackBuffIcon = MainAssets.LoadAsset<Sprite>("jack_key_buff_icon.png");
-
         public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Utility, ItemTag.MobilityRelated };
 
         // Numbers for stuff
         private readonly float multi = 0.05f;
 
         private readonly float baseMulti = 0.01f;
-        
+
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {
             ItemDisplayRuleDict rules = new ItemDisplayRuleDict();
@@ -262,8 +262,7 @@ namespace DeltaruneMod.Items.Tier1
         {
             JackBuff = ScriptableObject.CreateInstance<BuffDef>();
             JackBuff.name = "JackBuff";
-            JackBuff.iconSprite = JackBuffIcon;
-            JackBuff.buffColor = Color.green;
+            JackBuff.iconSprite = ItemIcon;
             JackBuff.canStack = true;
             JackBuff.isDebuff = false;
             JackBuff.isHidden = false;
@@ -325,7 +324,7 @@ namespace DeltaruneMod.Items.Tier1
         {
             readonly float timerInterval = 30f;
             float timer = 0f;
-            
+
             public CharacterBody player;
 
             private void Awake()
@@ -336,15 +335,11 @@ namespace DeltaruneMod.Items.Tier1
             {
                 if (!player)
                 {
-                    Debug.Log("Player not found! Destroying JackKeyTimer...");
+                    Debug.Log("Player not found! Destroying...");
                     Destroy(this);
                 }
-                
+
                 timer = timerInterval;
-            }
-            private void OnDisable()
-            {
-                Destroy(this);
             }
             // Jack Key N. Off Timer
             private void FixedUpdate()
@@ -359,7 +354,7 @@ namespace DeltaruneMod.Items.Tier1
             // Add buff to increase speed
             private void YourTakingTooLong()
             {
-                //Debug.Log("Adding speed buff!");
+                Debug.Log("Adding speed buff!");
                 player.AddBuff(JackBuff);
             }
         }

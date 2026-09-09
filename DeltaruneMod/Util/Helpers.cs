@@ -5,7 +5,9 @@ using R2API;
 using RoR2;
 using RoR2.Projectile;
 using RoR2.UI;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -292,5 +294,55 @@ namespace DeltaruneMod.Util
         }
 
         #endregion
+
+
+        #region UTIL CODE FROM THINKINVIS
+        /// <summary>
+        /// Returns a list of enemy TeamComponents given an ally team (to ignore while friendly fire is off) and a list of ignored teams (to ignore under all circumstances).
+        /// </summary>
+        /// <param name="allyIndex">The team to ignore if friendly fire is off.</param>
+        /// <param name="ignore">Additional teams to always ignore.</param>
+        /// <returns>A list of all TeamComponents that match the provided team constraints.</returns>
+        public static List<TeamComponent> GatherEnemies(TeamIndex allyIndex, params TeamIndex[] ignore)
+        {
+            var retv = new List<TeamComponent>();
+            bool isFF = FriendlyFireManager.friendlyFireMode != FriendlyFireManager.FriendlyFireMode.Off;
+            var scan = ((TeamIndex[])Enum.GetValues(typeof(TeamIndex))).Except(ignore);
+            foreach (var ind in scan)
+            {
+                if (isFF || allyIndex != ind)
+                    retv.AddRange(TeamComponent.GetTeamMembers(ind));
+            }
+            return retv;
+        }
+
+        /// <summary>
+        /// Iterates towards the root of a GameObject, including jumping through EntityLocators.
+        /// </summary>
+        /// <param name="target">The GameObject to search for the 'true' root of.</param>
+        /// <param name="maxSearch">The maximum amount of recursion to go through.</param>
+        /// <returns>Null if the given object was null; the most top-level object with the given constraints otherwise.</returns>
+        public static GameObject GetRootWithLocators(GameObject target, int maxSearch = 5)
+        {
+            if (!target) return null;
+            GameObject scan = target;
+            for (int i = 0; i < maxSearch; i++)
+            {
+                if (scan.TryGetComponent<EntityLocator>(out var eloc) && eloc.entity)
+                {
+                    scan = eloc.entity;
+                    continue;
+                }
+
+                var next = scan.transform.root;
+                if (next && next.gameObject != scan)
+                    scan = next.gameObject;
+                else
+                    return scan;
+            }
+            return scan;
+        }
+        #endregion
     }
+
 }

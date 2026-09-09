@@ -447,6 +447,7 @@ namespace DeltaruneMod.Items.Tier2
                     }
                 }
             }
+
             private void FireSusieAxe()
             {
                 Ray aimRay = GetAimRay();
